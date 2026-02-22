@@ -19,6 +19,46 @@ import frc.robot.Utils.SwerveModuleConstants;
 /** Add your docs here. */
 public class Constants {
 
+    public static class OperatorConstants {
+    public static final int driverController = 0;
+    public static final int operatorController = 1;
+  }
+
+  public static class shooterConstants {
+    public static final int shooterMotorOneID = 24;
+    public static final int shooterMotorTwoID = 25;
+    public static final int shooterAimMotorID = 26;
+    public static final int shooterRotateMotorID = 27;
+
+    public static final int shooterSpeed = 60;
+    public static final double shooterAimSpeed = .025;
+    public static final double shooterRotateSpeed = .025;
+  }
+
+  public static class uptakeConstants{
+    public static final int uptakeMotorID = 4;
+
+    public static final int uptakeSpeed = 50;
+  }
+
+  public static class spindexerConstants{
+    public static final int spindexerMotorID = 5;
+
+    public static double spindexerSpeed = 1;
+  }
+
+  public static class intakeConstants{
+    public static final int intakeMotorID = 3;
+    public static final int intakeRotationMotorID = 8;
+
+    public static final double intakeSpeed = .7;
+    public static final double intakeRotationSpeed = .4;
+  }
+
+  public static class pigeonConstants{
+    public static final int pigeonID = 1;
+  }
+
     public static class VisionConstants{
         public static final double stdCoefficient = 0.01;
 
