@@ -20,7 +20,7 @@ import edu.wpi.first.wpilibj.smartdashboard.FieldObject2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.VisionConstants;
-import frc.robot.Lib.Utils.Ball;
+import frc.robot.Utils.Ball;
 
 public class ObjectDetection extends SubsystemBase {
   public double[] ballAngles, ballDistances, weights, ballx, bally, sortedWeights;
