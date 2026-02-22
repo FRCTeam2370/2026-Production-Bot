@@ -25,6 +25,7 @@ public class IntakeSubsystem extends SubsystemBase {
 
   public static VelocityDutyCycle intakVelocityDutyCycle = new VelocityDutyCycle(0);
   public static PositionDutyCycle intakeRotatoinDutyCycle = new PositionDutyCycle(0);
+  private static VelocityDutyCycle intakePosVelCycle = new VelocityDutyCycle(0);
 
   /** Creates a new IntakeSubsystem. */
   public IntakeSubsystem() {
@@ -59,16 +60,17 @@ public class IntakeSubsystem extends SubsystemBase {
     intakeRotationMotor.setControl(intakeRotatoinDutyCycle.withPosition(position));
   }
 
+  public static void setIntakePoseVel(double vel){
+    intakeRotationMotor.setControl(intakePosVelCycle.withVelocity(vel));
+  }
+
   public static void intakeConfig() {
     intakeMotor.setNeutralMode(NeutralModeValue.Brake);
 
     intakeMotorConfig.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;
 
-    // intakeMotorConfig.Slot0.kV = 0.01;
-
-    // intakeMotorConfig.Slot0.kP = 0.01;
-    // intakeMotorConfig.Slot0.kI = 0;
-    // intakeMotorConfig.Slot0.kD = 0;
+    intakeMotorConfig.Slot0.kP = 0.01;
+    intakeMotorConfig.Slot0.kV = 0.01;
 
     intakeMotor.getConfigurator().apply(intakeMotorConfig);
   }
@@ -83,6 +85,8 @@ public class IntakeSubsystem extends SubsystemBase {
     intakeRotationMotorConfig.Slot0.kP = 0.05;
     intakeRotationMotorConfig.Slot0.kI = 0;
     intakeRotationMotorConfig.Slot0.kD = 0;
+
+    intakeRotationMotorConfig.Slot0.kG = 0.0;
 
     intakeRotationMotor.getConfigurator().apply(intakeRotationMotorConfig);
   }

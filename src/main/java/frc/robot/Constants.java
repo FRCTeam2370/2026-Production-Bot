@@ -67,7 +67,8 @@ public class Constants {
         public static final int TurretRotationID = 7;
         public static final int shooterElevationMotorID = 26;
 
-        public static final double turretRatio = 46.8;
+        public static final double turretRatio = 1125/91;//Kraken rotations : turret rotations
+        public static final double elevationRatio = 955/14;//Kraken rotations : turret rotations
 
         public static final Transform2d RobotToTurret = new Transform2d(0.2286, 0, Rotation2d.fromDegrees(0));
 
@@ -77,7 +78,7 @@ public class Constants {
         public static final Rotation2d TurretMax = Rotation2d.fromDegrees(412.5);
 
         public static final double TurretVerticalOffset = 0.425;//meters
-        public static final Rotation2d TurretMaxAngle = Rotation2d.fromDegrees(65);
+        public static final Rotation2d TurretMaxAngle = Rotation2d.fromDegrees(65);//from horizontal
         public static final Rotation2d TurretMinAngle = Rotation2d.fromDegrees(40);
     }
 
