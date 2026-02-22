@@ -4,8 +4,6 @@
 
 package frc.robot.Commands.Intake;
 
-import com.pathplanner.lib.config.RobotConfig;
-
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.RobotContainer;
 import frc.robot.Subsystems.IntakeSubsystem;

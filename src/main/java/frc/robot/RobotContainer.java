@@ -16,7 +16,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Constants.FieldConstants;
-import frc.robot.Constants.intakeConstants;
 import frc.robot.Utils.TurretLogic;
 import frc.robot.Commands.FindDriveKS;
 import frc.robot.Commands.ResetGyro;
