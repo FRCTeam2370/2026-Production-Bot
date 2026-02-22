@@ -5,39 +5,85 @@
 package frc.robot.Subsystems;
 
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
+import com.ctre.phoenix6.controls.PositionDutyCycle;
+import com.ctre.phoenix6.controls.VelocityDutyCycle;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
-import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants.intakeConstants;
 
 public class IntakeSubsystem extends SubsystemBase {
-  public static TalonFX intakeRollers = new TalonFX(4);
-  private static TalonFXConfiguration rollersConfig = new TalonFXConfiguration();
-  private static DigitalInput hallEffect = new DigitalInput(0);
+  
+  public static TalonFX intakeMotor = new TalonFX(intakeConstants.intakeMotorID, "*");
+  public static TalonFX intakeRotationMotor = new TalonFX(intakeConstants.intakeRotationMotorID, "*");
+
+  public static TalonFXConfiguration intakeMotorConfig = new TalonFXConfiguration();
+  public static TalonFXConfiguration intakeRotationMotorConfig = new TalonFXConfiguration();
+
+  public static VelocityDutyCycle intakVelocityDutyCycle = new VelocityDutyCycle(0);
+  public static PositionDutyCycle intakeRotatoinDutyCycle = new PositionDutyCycle(0);
+
   /** Creates a new IntakeSubsystem. */
   public IntakeSubsystem() {
-    configIntake();
+    intakeConfig();
+    intakeRotationConfig();
   }
-
+  
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    SmartDashboard.putBoolean("hall Effect Val", hallEffect.get());
+    SmartDashboard.putNumber("Intake Current", intakeMotor.getStatorCurrent().getValueAsDouble());
+    SmartDashboard.putNumber("Intake Pos", intakeRotationMotor.getPosition().getValueAsDouble());
   }
 
-  public static void runIntake(double speed){
-    intakeRollers.set(speed / 100);
+  public static void intakeWithVelocity(double speed) {
+    if (speed != 0) {
+      intakeMotor.setControl(intakVelocityDutyCycle.withVelocity(speed));
+    } else {
+      intakeMotor.set(speed);
+    }
   }
 
-  private static void configIntake(){
-    intakeRollers.setNeutralMode(NeutralModeValue.Coast);
-    
-    rollersConfig.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
-    rollersConfig.OpenLoopRamps.DutyCycleOpenLoopRampPeriod = 0.5;
+  public static void intakeWithoutVelocity(double speed) {
+    intakeMotor.set(speed);
+  }
 
-    intakeRollers.getConfigurator().apply(rollersConfig);
+  public static void rotateIntake(double speed) {
+    intakeRotationMotor.set(speed);
+  }
+
+  public static void intakeSetPoint(double position) {
+    intakeRotationMotor.setControl(intakeRotatoinDutyCycle.withPosition(position));
+  }
+
+  public static void intakeConfig() {
+    intakeMotor.setNeutralMode(NeutralModeValue.Brake);
+
+    intakeMotorConfig.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;
+
+    // intakeMotorConfig.Slot0.kV = 0.01;
+
+    // intakeMotorConfig.Slot0.kP = 0.01;
+    // intakeMotorConfig.Slot0.kI = 0;
+    // intakeMotorConfig.Slot0.kD = 0;
+
+    intakeMotor.getConfigurator().apply(intakeMotorConfig);
+  }
+
+  public static void intakeRotationConfig() {
+    intakeRotationMotor.setPosition(0);
+
+    intakeRotationMotor.setNeutralMode(NeutralModeValue.Coast);
+
+    intakeRotationMotorConfig.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
+
+    intakeRotationMotorConfig.Slot0.kP = 0.05;
+    intakeRotationMotorConfig.Slot0.kI = 0;
+    intakeRotationMotorConfig.Slot0.kD = 0;
+
+    intakeRotationMotor.getConfigurator().apply(intakeRotationMotorConfig);
   }
 }
