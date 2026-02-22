@@ -4,9 +4,6 @@
 
 package frc.robot;
 
-import static edu.wpi.first.units.Units.Rotation;
-
-import com.fasterxml.jackson.core.base.GeneratorBase;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 
@@ -16,14 +13,9 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Constants.FieldConstants;
-import frc.robot.Utils.TurretLogic;
-import frc.robot.Commands.FindDriveKS;
 import frc.robot.Commands.ResetGyro;
 import frc.robot.Commands.TeleopSwerve;
-import frc.robot.Commands.Intake.FindIntakeKG;
-import frc.robot.Commands.Intake.IntakeSetPosition;
 import frc.robot.Commands.TurretCommands.PointTurretAtPoint;
-import frc.robot.Commands.TurretCommands.SetElevationPos;
 import frc.robot.Commands.TurretCommands.SetTurretRotation;
 import frc.robot.Subsystems.FieldInfo;
 import frc.robot.Subsystems.IntakeSubsystem;
