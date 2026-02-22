@@ -27,12 +27,8 @@ public class Constants {
   public static class shooterConstants {
     public static final int shooterMotorOneID = 24;
     public static final int shooterMotorTwoID = 25;
-    public static final int shooterAimMotorID = 26;
-    public static final int shooterRotateMotorID = 27;
 
     public static final int shooterSpeed = 60;
-    public static final double shooterAimSpeed = .025;
-    public static final double shooterRotateSpeed = .025;
   }
 
   public static class uptakeConstants{
@@ -69,6 +65,7 @@ public class Constants {
 
     public static class TurretConstants{
         public static final int TurretRotationID = 7;
+        public static final int shooterElevationMotorID = 26;
 
         public static final double turretRatio = 46.8;
 
