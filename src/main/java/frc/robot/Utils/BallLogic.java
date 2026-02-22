@@ -4,17 +4,13 @@
 
 package frc.robot.Utils;
 
-import java.lang.reflect.Array;
-import java.time.chrono.ThaiBuddhistChronology;
 import java.util.ArrayList;
 
 import org.photonvision.PhotonUtils;
-import org.photonvision.proto.Photon;
 
 import edu.wpi.first.math.Pair;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /** Add your docs here. */
 public class BallLogic {
