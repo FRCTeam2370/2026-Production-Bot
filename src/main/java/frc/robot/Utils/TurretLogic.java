@@ -64,8 +64,8 @@ public class TurretLogic {
         double vUnajustedY = Math.cos(trueAngle) * Math.sin(angleToTarget) * flattenedInitialVel;
         double vUnajustedZ = Math.sin(trueAngle) * flattenedInitialVel;
 
-        return new Translation3d(vUnajustedX - lateralOffsetVelocityX + SwerveSubsystem.poseEstimator.getEstimatedPosition().getX(), 
-            vUnajustedY - lateralOffsetVelocityY + SwerveSubsystem.poseEstimator.getEstimatedPosition().getY(), 
+        return new Translation3d(vUnajustedX + lateralOffsetVelocityX + SwerveSubsystem.poseEstimator.getEstimatedPosition().getX(), 
+            vUnajustedY + lateralOffsetVelocityY + SwerveSubsystem.poseEstimator.getEstimatedPosition().getY(), 
             vUnajustedZ + TurretConstants.TurretVerticalOffset);
     }
 }

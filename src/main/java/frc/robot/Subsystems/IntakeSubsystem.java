@@ -4,13 +4,18 @@
 
 package frc.robot.Subsystems;
 
+import com.ctre.phoenix6.configs.CANcoderConfiguration;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
+import com.ctre.phoenix6.controls.MotionMagicDutyCycle;
 import com.ctre.phoenix6.controls.PositionDutyCycle;
 import com.ctre.phoenix6.controls.VelocityDutyCycle;
+import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
+import com.ctre.phoenix6.signals.SensorDirectionValue;
 
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.intakeConstants;
@@ -19,12 +24,14 @@ public class IntakeSubsystem extends SubsystemBase {
   
   public static TalonFX intakeMotor = new TalonFX(intakeConstants.intakeMotorID, "*");
   public static TalonFX intakeRotationMotor = new TalonFX(intakeConstants.intakeRotationMotorID, "*");
+  public static CANcoder intakeCANcoder = new CANcoder(intakeConstants.intakeCANcoderID);
 
   public static TalonFXConfiguration intakeMotorConfig = new TalonFXConfiguration();
   public static TalonFXConfiguration intakeRotationMotorConfig = new TalonFXConfiguration();
+  private static CANcoderConfiguration CANcoderConfig = new CANcoderConfiguration();
 
   public static VelocityDutyCycle intakVelocityDutyCycle = new VelocityDutyCycle(0);
-  public static PositionDutyCycle intakeRotatoinDutyCycle = new PositionDutyCycle(0);
+  public static MotionMagicDutyCycle intakeRotatoinDutyCycle = new MotionMagicDutyCycle(0);
   private static VelocityDutyCycle intakePosVelCycle = new VelocityDutyCycle(0);
 
   /** Creates a new IntakeSubsystem. */
@@ -38,6 +45,9 @@ public class IntakeSubsystem extends SubsystemBase {
     // This method will be called once per scheduler run
     SmartDashboard.putNumber("Intake Current", intakeMotor.getStatorCurrent().getValueAsDouble());
     SmartDashboard.putNumber("Intake Pos", intakeRotationMotor.getPosition().getValueAsDouble());
+    SmartDashboard.putNumber("intake position current", intakeRotationMotor.getStatorCurrent().getValueAsDouble());
+    SmartDashboard.putNumber("Intake CANcoder val", intakeCANcoder.getAbsolutePosition().getValueAsDouble());
+    SmartDashboard.putNumber("Intake Degrees", Rotation2d.fromRotations(KrakenToIntake(intakeRotationMotor.getPosition().getValueAsDouble())).getDegrees());
   }
 
   public static void intakeWithVelocity(double speed) {
@@ -56,12 +66,12 @@ public class IntakeSubsystem extends SubsystemBase {
     intakeRotationMotor.set(speed);
   }
 
-  public static void intakeSetPoint(double position) {
-    intakeRotationMotor.setControl(intakeRotatoinDutyCycle.withPosition(position));
-  }
-
   public static void setIntakePoseVel(double vel){
     intakeRotationMotor.setControl(intakePosVelCycle.withVelocity(vel));
+  }
+
+  public static void setIntakePos(double pos){
+    intakeRotationMotor.setControl(intakeRotatoinDutyCycle.withPosition(intakeToKraken(pos)));
   }
 
   public static void intakeConfig() {
@@ -76,18 +86,32 @@ public class IntakeSubsystem extends SubsystemBase {
   }
 
   public static void intakeRotationConfig() {
-    intakeRotationMotor.setPosition(0);
+    intakeRotationMotor.setPosition(intakeToKraken(intakeConstants.intakeMax.getRotations()));
 
     intakeRotationMotor.setNeutralMode(NeutralModeValue.Coast);
 
-    intakeRotationMotorConfig.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
+    intakeRotationMotorConfig.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;
+    CANcoderConfig.MagnetSensor.SensorDirection = SensorDirectionValue.CounterClockwise_Positive;
 
-    intakeRotationMotorConfig.Slot0.kP = 0.05;
+    intakeRotationMotorConfig.Feedback.RotorToSensorRatio = intakeConstants.intakeRatio;
+
+    intakeRotationMotorConfig.Slot0.kP = 0.075;
     intakeRotationMotorConfig.Slot0.kI = 0;
-    intakeRotationMotorConfig.Slot0.kD = 0;
+    intakeRotationMotorConfig.Slot0.kD = 0.0;
 
-    intakeRotationMotorConfig.Slot0.kG = 0.0;
+    intakeRotationMotorConfig.Slot0.kG = 0.035;
+
+    intakeRotationMotorConfig.MotionMagic.MotionMagicAcceleration = 100;
+    intakeRotationMotorConfig.MotionMagic.MotionMagicCruiseVelocity = 40;
 
     intakeRotationMotor.getConfigurator().apply(intakeRotationMotorConfig);
+  }
+
+  private static double intakeToKraken(double rot){
+    return rot * intakeConstants.intakeRatio;
+  }
+
+  private static double KrakenToIntake(double krak){
+    return krak / intakeConstants.intakeRatio;
   }
 }

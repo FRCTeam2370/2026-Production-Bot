@@ -32,7 +32,7 @@ public class FindIntakeKG extends Command {
       vel -= 0.01;
     }
 
-    IntakeSubsystem.setIntakePoseVel(vel);
+    IntakeSubsystem.intakeRotationMotor.set(vel);
   }
 
   // Called once the command ends or is interrupted.

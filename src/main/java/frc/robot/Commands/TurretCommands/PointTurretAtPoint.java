@@ -6,6 +6,7 @@ package frc.robot.Commands.TurretCommands;
 
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.Constants.TurretConstants;
 import frc.robot.Subsystems.SwerveSubsystem;
 import frc.robot.Subsystems.TurretSubsystem;
 
@@ -28,13 +29,15 @@ public class PointTurretAtPoint extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    TurretSubsystem.aimTurretAtPoint(mSwerve.getTurretPointTowardsPose(pose));
+    TurretSubsystem.aimTurretAtPoint(mSwerve.getTurretPointTowardsPose(pose).getFirst());
+    TurretSubsystem.setElevation(mSwerve.getTurretPointTowardsPose(pose).getSecond());
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    TurretSubsystem.aimTurretAtDegree(180);
+    TurretSubsystem.aimTurretAtDegree(360);
+    TurretSubsystem.setElevation(TurretConstants.TurretMaxAngle);
   }
 
   // Returns true when the command should end.

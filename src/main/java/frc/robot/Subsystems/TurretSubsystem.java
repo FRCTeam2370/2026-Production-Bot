@@ -17,7 +17,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.TurretConstants;
 
 public class TurretSubsystem extends SubsystemBase {
-  public static TalonFX turretRotationMotor = new TalonFX(TurretConstants.TurretRotationID);
+  public static TalonFX turretRotationMotor = new TalonFX(TurretConstants.TurretRotationID, "*");
   public static TalonFX elevationMotor = new TalonFX(TurretConstants.shooterElevationMotorID, "*");
 
   private static TalonFXConfiguration turretRotConfig = new TalonFXConfiguration();
@@ -36,9 +36,10 @@ public class TurretSubsystem extends SubsystemBase {
   public void periodic() {
     // This method will be called once per scheduler run
     SmartDashboard.putNumber("Turret Actual Position", krakenToRotation2d(Rotation2d.fromRotations(turretRotationMotor.getPosition().getValueAsDouble())).getDegrees());
-    SmartDashboard.putNumber("Turret Elevation Motor Current", elevationMotor.getStatorCurrent().getValueAsDouble());
-    SmartDashboard.putNumber("Turret Elevation Position", elevationMotor.getPosition().getValueAsDouble());
-    SmartDashboard.putNumber("Elevation degrees", krakenToElevationRotations(elevationMotor.getPosition().getValueAsDouble()));
+    //SmartDashboard.putNumber("Turret Elevation Motor Current", elevationMotor.getStatorCurrent().getValueAsDouble());
+    //SmartDashboard.putNumber("Turret Elevation Position", elevationMotor.getPosition().getValueAsDouble());
+    SmartDashboard.putNumber("Elevation degrees", Rotation2d.fromRotations(krakenToElevationRotations(elevationMotor.getPosition().getValueAsDouble())).getDegrees());
+    SmartDashboard.putNumber("Turret Ticks", turretRotationMotor.getPosition().getValueAsDouble());
   }
 
   public static void aimTurretAtPoint(Pose2d pose){
@@ -77,16 +78,16 @@ public class TurretSubsystem extends SubsystemBase {
 
   private static void configTurret(){
     turretRotationMotor.setNeutralMode(NeutralModeValue.Coast);
-    turretRotationMotor.setPosition(turretRotationsToKraken(TurretConstants.TurretStartOffset.getRotations()));
+    turretRotationMotor.setPosition(turretRotationsToKraken(TurretConstants.TurretCableChainPoint.getRotations() - TurretConstants.TurretStartOffset.getRotations()));
 
-    turretRotConfig.Slot0.kP = 0.4;
+    turretRotConfig.Slot0.kP = 0.1;
     turretRotConfig.Slot0.kI = 0.0;
     turretRotConfig.Slot0.kD = 0.0;
 
-    turretRotConfig.MotionMagic.MotionMagicAcceleration = 1000;
-    turretRotConfig.MotionMagic.MotionMagicCruiseVelocity = 125;
+    turretRotConfig.MotionMagic.MotionMagicAcceleration = 80;
+    turretRotConfig.MotionMagic.MotionMagicCruiseVelocity = 40;
 
-    turretRotConfig.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
+    turretRotConfig.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;
 
 
     turretRotationMotor.getConfigurator().apply(turretRotConfig);
@@ -97,14 +98,14 @@ public class TurretSubsystem extends SubsystemBase {
 
     elevationMotor.setNeutralMode(NeutralModeValue.Brake);
 
-    turretElevationMotorConfig.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
+    turretElevationMotorConfig.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;
 
-    turretElevationMotorConfig.Slot0.kP = 1.8;
-    turretElevationMotorConfig.Slot0.kI = 0.12;
-    turretElevationMotorConfig.Slot0.kD = 0.01;
+    turretElevationMotorConfig.Slot0.kP = 0.1;//1.8
+    turretElevationMotorConfig.Slot0.kI = 0.0;//0.12
+    turretElevationMotorConfig.Slot0.kD = 0.0;//0.01
 
-    turretElevationMotorConfig.MotionMagic.MotionMagicAcceleration = 100;
-    turretElevationMotorConfig.MotionMagic.MotionMagicCruiseVelocity = 50;
+    turretElevationMotorConfig.MotionMagic.MotionMagicAcceleration = 50;
+    turretElevationMotorConfig.MotionMagic.MotionMagicCruiseVelocity = 40;
 
     elevationMotor.getConfigurator().apply(turretElevationMotorConfig);
   }

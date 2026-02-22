@@ -68,7 +68,7 @@ public class SwerveModule {
         turnMotorConfig.Slot0.kI = Constants.SwerveConstants.TurnkI;
         turnMotorConfig.Slot0.kD = Constants.SwerveConstants.TurnkD;
 
-        turnMotorConfig.Feedback.SensorToMechanismRatio = (Constants.SwerveConstants.mk4iRotate);//turn motor to rotor raio
+        turnMotorConfig.Feedback.SensorToMechanismRatio = (Constants.SwerveConstants.RTurnRatio);//turn motor to rotor raio
 
         turnMotorConfig.ClosedLoopGeneral.ContinuousWrap = true;
 
@@ -159,19 +159,19 @@ public class SwerveModule {
         double absolutePosition = cancoderpos - moduleConstants.CANCoderOffset.getRotations();
         turnMotor.setPosition(absolutePosition);
         turnMotor.setControl(angleDutyCyle.withPosition(getState().angle.getRotations()));
-        System.out.println("abosolute Pos on Start up" + absolutePosition);
+        //System.out.println("abosolute Pos on Start up" + absolutePosition);
     }
 
 
     // CONVERSIONS
     private double krakenToRPM(double rps) {
         double motorRPM = rps * 60;// don't know what these numbers are it may be (600 / 2048) instead
-        double mechRPM = motorRPM / Constants.SwerveConstants.mk4iDriveL2;//Drive gear ratio 
+        double mechRPM = motorRPM / Constants.SwerveConstants.R2Drive;//Drive gear ratio 
         return mechRPM;
     }
 
     private double RPMToKraken(double RPM) {
-        double motorRPM = RPM * Constants.SwerveConstants.mk4iDriveL2;//Drive gear ratio
+        double motorRPM = RPM * Constants.SwerveConstants.R2Drive;//Drive gear ratio
         return motorRPM / 60;
     }
 
@@ -179,7 +179,7 @@ public class SwerveModule {
         // double wheelRPM = krakenToRPM(vel);
         // double wheelMPS = (wheelRPM * Constants.SwerveConstants.wheelCircumference) / 60;                                                           // know
         // return wheelMPS;
-        double wheelrps = krakenRPS / Constants.SwerveConstants.mk4iDriveL2;//Drive gear ratio
+        double wheelrps = krakenRPS / Constants.SwerveConstants.R2Drive;//Drive gear ratio
         double wheelMPS = wheelrps * Constants.SwerveConstants.wheelCircumferenceMeters;
         return wheelMPS;
     }
@@ -190,10 +190,10 @@ public class SwerveModule {
     }
 
     private double krakenToMeters(double rot) {
-        return rot / Constants.SwerveConstants.mk4iDriveL2 * Constants.SwerveConstants.wheelCircumferenceMeters;// was this -> rot * (Constants.SwerveConstants.wheelCircumferenceMeters / 6.12)
+        return rot / Constants.SwerveConstants.R2Drive * Constants.SwerveConstants.wheelCircumferenceMeters;// was this -> rot * (Constants.SwerveConstants.wheelCircumferenceMeters / 6.12)
     }
 
     private double metersToKraken(double meters) {
-        return meters / (Constants.SwerveConstants.wheelCircumferenceMeters / Constants.SwerveConstants.mk4iDriveL2);
+        return meters / (Constants.SwerveConstants.wheelCircumferenceMeters / Constants.SwerveConstants.R2Drive);
     }
 }

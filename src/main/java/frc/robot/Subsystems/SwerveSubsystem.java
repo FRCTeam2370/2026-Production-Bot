@@ -27,6 +27,7 @@ import com.pathplanner.lib.path.Waypoint;
 import com.pathplanner.lib.util.PathPlannerLogging;
 //import com.revrobotics.spark.SparkLowLevel.MotorType;
 
+import edu.wpi.first.math.Pair;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -49,6 +50,7 @@ import edu.wpi.first.wpilibj.smartdashboard.FieldObject2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.DeferredCommand;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.Constants.FieldConstants;
@@ -76,8 +78,6 @@ public class SwerveSubsystem extends SubsystemBase {
   public static SwerveDrivePoseEstimator poseEstimator;
 
   public static Optional<Alliance> color;
-
-  private static Transform2d RobotToTurret = TurretConstants.RobotToTurret;
   private static FieldObject2d turret = field.getObject("Turret");
   private static FieldObject2d HubFieldPose = field.getObject("HubPose");
   private static Pose2d HubPose = new Pose2d(0,0, new Rotation2d());
@@ -168,13 +168,13 @@ public class SwerveSubsystem extends SubsystemBase {
   //This method calculates the position of the turret relative to the field 
   //It uses the position of the turret relative to the robot relative to the field
   public static Pose2d turretToField(){
-    double xlocal = RobotToTurret.getX();
-    double ylocal = RobotToTurret.getY();
+    double xlocal = TurretConstants.RobotToTurret.getX();
+    double ylocal = TurretConstants.RobotToTurret.getY();
 
-    double xGlobal = xlocal * Math.cos(getRotation2d().getRadians()) + ylocal * Math.sin(getRotation2d().getRadians()) + poseEstimator.getEstimatedPosition().getX();
-    double yGlobal = ylocal * Math.cos(getRotation2d().getRadians()) + xlocal * Math.sin(getRotation2d().getRadians()) + poseEstimator.getEstimatedPosition().getY();
+    double xGlobal = xlocal * Math.cos(getgyro0to360(0).getRadians()) + ylocal * Math.sin(getgyro0to360(0).getRadians()) + poseEstimator.getEstimatedPosition().getX();
+    double yGlobal = ylocal * Math.cos(getgyro0to360(0).getRadians()) + xlocal * Math.sin(getgyro0to360(0).getRadians()) + poseEstimator.getEstimatedPosition().getY();
 
-    return new Pose2d(xGlobal, yGlobal, poseEstimator.getEstimatedPosition().getRotation());
+    return new Pose2d(xGlobal, yGlobal, new Rotation2d());
   }
 
   public static Pose2d detectionCamToField(){
@@ -191,14 +191,14 @@ public class SwerveSubsystem extends SubsystemBase {
   public static Rotation2d turretRotationToPose(Pose2d pose){
     Pose2d turretpose = turretToField();//calculates the turrets pose relative to the field
     double thetaWorldToTarget = Math.atan2((turretpose.getY() - pose.getY()), (turretpose.getX() - pose.getX()));//calculates the angle from the turret's point to the target point
-    double thetaTurretToTarget = thetaWorldToTarget + Math.PI + TurretConstants.TurretCableChainPoint.getRadians()//uses the thetaWorldToTarget and subtracts the robot's rotation to get the rotation from the turret (adding pi here is an offset)
+    double thetaTurretToTarget = thetaWorldToTarget //uses the thetaWorldToTarget and subtracts the robot's rotation to get the rotation from the turret (adding pi here is an offset)
      - getgyro0to360(0).getRadians() //subtracting the robot's rotation
      - (Math.toRadians(gyro.getAngularVelocityZWorld().getValueAsDouble()) * 0.02);//adding angular velocity lookahead
     thetaTurretToTarget = (((thetaTurretToTarget % (2*Math.PI)) + (2*Math.PI)) % (2*Math.PI));//Returns the thetaTurretToTarget value in the range of 0-360 degrees
     
     double thetaTurretToTarget2 = thetaTurretToTarget + 2*Math.PI;
 
-    double returnTheta = Math.abs(TurretSubsystem.getTurretRotation().getRadians() - thetaTurretToTarget) < Math.abs(TurretSubsystem.getTurretRotation().getRadians() - thetaTurretToTarget2) ? thetaTurretToTarget : thetaTurretToTarget2;
+    double returnTheta = TurretSubsystem.getTurretRotation().getRadians() - thetaTurretToTarget > TurretSubsystem.getTurretRotation().getRadians() - thetaTurretToTarget2 && thetaTurretToTarget2 > TurretConstants.TurretMin.getRadians() && thetaTurretToTarget2 < TurretConstants.TurretMax.getRadians() ? thetaTurretToTarget2 : thetaTurretToTarget > TurretConstants.TurretMin.getRadians() && thetaTurretToTarget < TurretConstants.TurretMax.getRadians() ? thetaTurretToTarget : 360;
 
     return Rotation2d.fromRadians(returnTheta);
   }
@@ -435,8 +435,10 @@ public class SwerveSubsystem extends SubsystemBase {
     return new DeferredCommand(()-> AutoBuilder.pathfindToPose(getClosestBall(), SwerveConstants.telePathConstraints), Set.of(this, mObjectDetection));
   }
 
-  public Pose2d getTurretPointTowardsPose(Translation3d targetPose){
+  public Pair<Pose2d, Rotation2d> getTurretPointTowardsPose(Translation3d targetPose){
     Translation3d aimPose = turretLogic.getAimPose(targetPose, 2);
-    return new Pose2d(aimPose.getX(), aimPose.getY(), new Rotation2d());
+    Rotation2d elevationAngle = Rotation2d.fromRadians(Math.atan2(aimPose.getZ() - TurretConstants.TurretVerticalOffset, Math.sqrt(Math.pow(aimPose.getX() - poseEstimator.getEstimatedPosition().getX(), 2) + Math.pow(aimPose.getY() - poseEstimator.getEstimatedPosition().getY(), 2))));
+    elevationAngle = elevationAngle.getDegrees() > TurretConstants.TurretMaxAngle.getDegrees() ? TurretConstants.TurretMaxAngle : elevationAngle.getDegrees() < TurretConstants.TurretMinAngle.getDegrees() ? TurretConstants.TurretMinAngle : elevationAngle;
+    return new Pair<Pose2d,Rotation2d>(new Pose2d(aimPose.getX(), aimPose.getY(), new Rotation2d()), elevationAngle);
   }
 }

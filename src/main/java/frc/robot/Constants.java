@@ -46,9 +46,15 @@ public class Constants {
   public static class intakeConstants{
     public static final int intakeMotorID = 3;
     public static final int intakeRotationMotorID = 8;
+    public static final int intakeCANcoderID = 22;
 
     public static final double intakeSpeed = .7;
     public static final double intakeRotationSpeed = .4;
+
+    public static final double intakeRatio = 250/21;//kraken rotations : intake rotations
+
+    public static final Rotation2d intakeMax = Rotation2d.fromDegrees(90);
+    public static final Rotation2d intakeMin = Rotation2d.fromDegrees(-68);
   }
 
   public static class pigeonConstants{
@@ -67,15 +73,15 @@ public class Constants {
         public static final int TurretRotationID = 7;
         public static final int shooterElevationMotorID = 26;
 
-        public static final double turretRatio = 1125/91;//Kraken rotations : turret rotations
+        public static final double turretRatio = 18.09912109375 - 3.68310546875;//30/12 * 150/26;//Kraken rotations : turret rotations, 14.345
         public static final double elevationRatio = 955/14;//Kraken rotations : turret rotations
 
-        public static final Transform2d RobotToTurret = new Transform2d(0.2286, 0, Rotation2d.fromDegrees(0));
+        public static final Transform2d RobotToTurret = new Transform2d(0.161925, -0.0889508, Rotation2d.fromDegrees(0));
 
-        public static final Rotation2d TurretStartOffset = Rotation2d.fromDegrees(127.5);//relative to the cable chain (counterclockwise positive)
-        public static final Rotation2d TurretCableChainPoint = Rotation2d.fromDegrees(127.5);//Relative to the front of the robot (clockwise positive)
-        public static final Rotation2d TurretMin = Rotation2d.fromDegrees(37.5);
-        public static final Rotation2d TurretMax = Rotation2d.fromDegrees(412.5);
+        public static final Rotation2d TurretStartOffset = Rotation2d.fromDegrees(0);//relative to the cable chain (counterclockwise positive)
+        public static final Rotation2d TurretCableChainPoint = Rotation2d.fromDegrees(577.5);//Relative to the front of the robot (clockwise positive)
+        public static final Rotation2d TurretMin = Rotation2d.fromDegrees(90);
+        public static final Rotation2d TurretMax = Rotation2d.fromDegrees(570);
 
         public static final double TurretVerticalOffset = 0.425;//meters
         public static final Rotation2d TurretMaxAngle = Rotation2d.fromDegrees(65);//from horizontal
@@ -83,7 +89,7 @@ public class Constants {
     }
 
     public static class FieldConstants {
-        public static final Translation3d HubFieldPose = new Translation3d(0,0, 0);  
+        public static final Translation3d HubFieldPose = new Translation3d(0,0, 2);  
         public static final Translation3d AimPose1 = new Translation3d(1, 1, 0);
         public static final Translation3d AimPose2 = new Translation3d(1, 2, 0);
         public static final Translation3d AimPose3 = new Translation3d(4, 0, 0);
@@ -118,7 +124,7 @@ public class Constants {
         public static final double maxAngularVelocity = 3.1154127;//radians per second
 
         public static final double HeadingOffset = 0;//degrees from forward
-        public static final double gyroOffset = -180;
+        public static final double gyroOffset = 90;
 
         public static final double wheelRadius = 2;
         public static final double wheelCircumference = (2 * Math.PI) * wheelRadius;

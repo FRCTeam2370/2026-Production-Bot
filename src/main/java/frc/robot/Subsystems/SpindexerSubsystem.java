@@ -41,8 +41,8 @@ public class SpindexerSubsystem extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    SmartDashboard.putNumber("Spindexer  Motor Current", spindexerMotor.getStatorCurrent().getValueAsDouble());
-    SmartDashboard.putNumber("Spindexer Velocity", spindexerMotor.getVelocity().getValueAsDouble());
+    //SmartDashboard.putNumber("Spindexer  Motor Current", spindexerMotor.getStatorCurrent().getValueAsDouble());
+    //SmartDashboard.putNumber("Spindexer Velocity", spindexerMotor.getVelocity().getValueAsDouble());
   }
 
   public static void spindexerConfiguration() {
