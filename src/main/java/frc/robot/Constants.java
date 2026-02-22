@@ -117,7 +117,7 @@ public class Constants {
         public static final double maxAngularVelocity = 3.1154127;//radians per second
 
         public static final double HeadingOffset = 0;//degrees from forward
-        public static final double gyroOffset = -90;
+        public static final double gyroOffset = -180;
 
         public static final double wheelRadius = 2;
         public static final double wheelCircumference = (2 * Math.PI) * wheelRadius;
@@ -125,8 +125,9 @@ public class Constants {
 
         public static final int pigeonID = 1;
 
-        public static final double trackWidth = 22.5;
-        public static final double wheelBase = 20.5;
+        //Track width and wheel base are measured in inches not meters 
+        public static final double trackWidth = 23.35;
+        public static final double wheelBase = 20.25;
 
         public static final SwerveDriveKinematics kinematics = new SwerveDriveKinematics(
             new Translation2d[]{
@@ -140,14 +141,14 @@ public class Constants {
 
     //MODULE 1
     public static class FRConstants {
-        public static final int driveMotorID = 21;
-        public static final int turnMotorID = 22;
-        public static final int CANCoderID = 23;
+        public static final int driveMotorID = 13;
+        public static final int turnMotorID = 14;
+        public static final int CANCoderID = 15;
 
         public static final InvertedValue driveInverted = InvertedValue.CounterClockwise_Positive;
-        public static final InvertedValue turnInverted = InvertedValue.Clockwise_Positive;
+        public static final InvertedValue turnInverted = InvertedValue.CounterClockwise_Positive;
 
-        public static final Rotation2d EncoderOffset = Rotation2d.fromDegrees(46.669921);
+        public static final Rotation2d EncoderOffset = Rotation2d.fromDegrees(355.95703125);
         public static final SensorDirectionValue EncoderReversed = SensorDirectionValue.CounterClockwise_Positive;
 
         public static final SwerveModuleConstants FRConstants = new SwerveModuleConstants(driveMotorID, turnMotorID, CANCoderID, driveInverted, turnInverted, EncoderOffset, EncoderReversed);
@@ -155,14 +156,14 @@ public class Constants {
 
     //MODULE 0
     public static class FLConstants {
-        public static final int driveMotorID = 11;
-        public static final int turnMotorID = 12;
-        public static final int CANCoderID = 13;
+        public static final int driveMotorID = 10;
+        public static final int turnMotorID = 11;
+        public static final int CANCoderID = 12;
 
         public static final InvertedValue driveInverted = InvertedValue.Clockwise_Positive;
-        public static final InvertedValue turnInverted = InvertedValue.Clockwise_Positive;
+        public static final InvertedValue turnInverted = InvertedValue.CounterClockwise_Positive;
 
-        public static final Rotation2d EncoderOffset = Rotation2d.fromDegrees(290.83007);
+        public static final Rotation2d EncoderOffset = Rotation2d.fromDegrees(176.1328125);
         public static final SensorDirectionValue EncoderReversed = SensorDirectionValue.CounterClockwise_Positive;
 
         public static final SwerveModuleConstants FLConstants = new SwerveModuleConstants(driveMotorID, turnMotorID, CANCoderID, driveInverted, turnInverted, EncoderOffset, EncoderReversed);
@@ -170,14 +171,14 @@ public class Constants {
 
     //MODULE 3
     public static class BRConstants {
-        public static final int driveMotorID = 31;
-        public static final int turnMotorID = 32;
-        public static final int CANCoderID = 33;
+        public static final int driveMotorID = 16;
+        public static final int turnMotorID = 17;
+        public static final int CANCoderID = 18;
 
         public static final InvertedValue driveInverted = InvertedValue.CounterClockwise_Positive;
-        public static final InvertedValue turnInverted = InvertedValue.Clockwise_Positive;
+        public static final InvertedValue turnInverted = InvertedValue.CounterClockwise_Positive;
 
-        public static final Rotation2d EncoderOffset = Rotation2d.fromDegrees(37.5292);
+        public static final Rotation2d EncoderOffset = Rotation2d.fromDegrees(174.990234375);
         public static final SensorDirectionValue EncoderReversed = SensorDirectionValue.CounterClockwise_Positive;
 
         public static final SwerveModuleConstants BRConstants = new SwerveModuleConstants(driveMotorID, turnMotorID, CANCoderID, driveInverted, turnInverted, EncoderOffset, EncoderReversed);
@@ -185,25 +186,16 @@ public class Constants {
 
     //MODULE 2
     public static class BLConstants {
-        public static final int driveMotorID = 41;
-        public static final int turnMotorID = 42;
-        public static final int CANCoderID = 43;
+        public static final int driveMotorID = 19;
+        public static final int turnMotorID = 20;
+        public static final int CANCoderID = 21;
 
         public static final InvertedValue driveInverted = InvertedValue.Clockwise_Positive;
-        public static final InvertedValue turnInverted = InvertedValue.Clockwise_Positive;
+        public static final InvertedValue turnInverted = InvertedValue.CounterClockwise_Positive;
 
-        public static final Rotation2d EncoderOffset = Rotation2d.fromDegrees(208.037109);
+        public static final Rotation2d EncoderOffset = Rotation2d.fromDegrees(353.232421875);
         public static final SensorDirectionValue EncoderReversed = SensorDirectionValue.CounterClockwise_Positive;
 
         public static final SwerveModuleConstants BLConstants = new SwerveModuleConstants(driveMotorID, turnMotorID, CANCoderID, driveInverted, turnInverted, EncoderOffset, EncoderReversed);
-    }
-
-    public static class RedSidePoses {
-        public static final Pose2d REDLEFTLOADING = new Pose2d(16.3,0.49, Rotation2d.fromDegrees(-50));// May need some tuning
-        public static final Pose2d REDRIGHTLOADING = new Pose2d();
-
-        public static final Pose2d REDFRONTSCORE = new Pose2d();
-        public static final Pose2d REDFRONTLEFTSCORE = new Pose2d(13.75,3.08, Rotation2d.fromDegrees(120));
-        public static final Pose2d REDBACKLEFTSCORE = new Pose2d(12.66, 2.98, Rotation2d.fromDegrees(60));
     }
 }
