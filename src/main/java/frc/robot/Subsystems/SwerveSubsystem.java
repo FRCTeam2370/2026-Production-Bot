@@ -65,8 +65,8 @@ import frc.robot.Constants.SwerveConstants;
 import frc.robot.Constants.TurretConstants;
 import frc.robot.Constants.VisionConstants;
 import frc.robot.SwerveModule;
-import frc.robot.Lib.Utils.BallLogic;
-import frc.robot.Lib.Utils.TurretLogic;
+import frc.robot.Utils.BallLogic;
+import frc.robot.Utils.TurretLogic;
 
 public class SwerveSubsystem extends SubsystemBase {
   private ObjectDetection mObjectDetection;
