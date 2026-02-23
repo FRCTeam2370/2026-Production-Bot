@@ -73,12 +73,11 @@ public class TurretSubsystem extends SubsystemBase {
   }
 
   public static void setElevation(double degrees){
-    double returnDegrees = TurretConstants.TurretMaxAngle.getDegrees();
-    if(degrees != Double.NaN){
-      returnDegrees = Math.max(Math.min(degrees, TurretConstants.TurretMaxAngle.getDegrees()), TurretConstants.TurretMinAngle.getDegrees());
-    }else{
-      returnDegrees = 65;
+    if(degrees == Double.NaN){
+      degrees = 65;
     }
+
+    double returnDegrees = Math.max(Math.min(degrees, TurretConstants.TurretMaxAngle.getDegrees()), TurretConstants.TurretMinAngle.getDegrees());
     
     elevationMotor.setControl(elevationMagicCycle.withPosition(elevationRotationsToKraken(returnDegrees / 360)));
   }
