@@ -38,10 +38,11 @@ public class TurretLogic {
         double flattenedTargetPoseY = targetPose.getZ() - TurretConstants.TurretVerticalOffset;
 
         double zeroOfTheDerivativeOfTheDesiredAngle = Double.NaN;
+        
         try{
             zeroOfTheDerivativeOfTheDesiredAngle = brentSolver.findRoot((double theta)-> Math.pow(flattenedInitialVel,2)*flattenedTargetPoseX*Math.cos(2*theta) - flattenedInitialVel*flattenedTargetPoseX*flattenedRobotVel*Math.cos(theta) + flattenedTargetPoseY*flattenedInitialVel*Math.sin(theta), TurretConstants.TurretMinAngle.getRadians(), TurretConstants.TurretMaxAngle.getRadians());
         }catch(Exception e){
-            System.out.println(e);
+            System.out.println("Zero of the derivative failed" + e);
         }
         
         double trueAngle = 0;

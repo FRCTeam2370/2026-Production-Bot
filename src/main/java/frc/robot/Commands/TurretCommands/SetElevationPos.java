@@ -12,8 +12,8 @@ import frc.robot.Subsystems.TurretSubsystem;
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class SetElevationPos extends Command {
   /** Creates a new SetElevationPos. */
-  Rotation2d pos;
-  public SetElevationPos(Rotation2d pos, TurretSubsystem mTurretSubsystem) {
+  double pos;
+  public SetElevationPos(double pos, TurretSubsystem mTurretSubsystem) {
     // Use addRequirements() here to declare subsystem dependencies.
     this.pos = pos;
     addRequirements(mTurretSubsystem);
@@ -22,7 +22,7 @@ public class SetElevationPos extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    pos = pos.getDegrees() > TurretConstants.TurretMinAngle.getDegrees() ? TurretConstants.TurretMinAngle : pos.getDegrees() < TurretConstants.TurretMaxAngle.getDegrees() ? TurretConstants.TurretMaxAngle : pos;
+    //pos = pos.getDegrees() > TurretConstants.TurretMinAngle.getDegrees() ? TurretConstants.TurretMinAngle : pos.getDegrees() < TurretConstants.TurretMaxAngle.getDegrees() ? TurretConstants.TurretMaxAngle : pos;
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -34,7 +34,7 @@ public class SetElevationPos extends Command {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    TurretSubsystem.setElevation(TurretConstants.TurretMaxAngle);
+    TurretSubsystem.setElevation(TurretConstants.TurretMaxAngle.getDegrees());
   }
 
   // Returns true when the command should end.

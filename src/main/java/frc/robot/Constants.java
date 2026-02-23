@@ -40,7 +40,7 @@ public class Constants {
   public static class spindexerConstants{
     public static final int spindexerMotorID = 5;
 
-    public static double spindexerSpeed = 1;
+    public static final double spindexerSpeed = 60;
   }
 
   public static class intakeConstants{
@@ -74,14 +74,14 @@ public class Constants {
         public static final int shooterElevationMotorID = 26;
 
         public static final double turretRatio = 18.09912109375 - 3.68310546875;//30/12 * 150/26;//Kraken rotations : turret rotations, 14.345
-        public static final double elevationRatio = 955/14;//Kraken rotations : turret rotations
+        public static final double elevationRatio = 955/12;//Kraken rotations : turret rotations
 
         public static final Transform2d RobotToTurret = new Transform2d(0.161925, -0.0889508, Rotation2d.fromDegrees(0));
 
         public static final Rotation2d TurretStartOffset = Rotation2d.fromDegrees(0);//relative to the cable chain (counterclockwise positive)
-        public static final Rotation2d TurretCableChainPoint = Rotation2d.fromDegrees(577.5);//Relative to the front of the robot (clockwise positive)
+        public static final Rotation2d TurretCableChainPoint = Rotation2d.fromDegrees(607);//Relative to the front of the robot (clockwise positive)
         public static final Rotation2d TurretMin = Rotation2d.fromDegrees(90);
-        public static final Rotation2d TurretMax = Rotation2d.fromDegrees(570);
+        public static final Rotation2d TurretMax = Rotation2d.fromDegrees(550);
 
         public static final double TurretVerticalOffset = 0.425;//meters
         public static final Rotation2d TurretMaxAngle = Rotation2d.fromDegrees(65);//from horizontal
@@ -89,8 +89,9 @@ public class Constants {
     }
 
     public static class FieldConstants {
-        public static final Translation3d HubFieldPose = new Translation3d(0,0, 2);  
-        public static final Translation3d AimPose1 = new Translation3d(1, 1, 0);
+        public static final Translation3d HubFieldPoseBlue = new Translation3d(4.625,4.025, 1.8288);  
+        public static final Translation3d HubFieldPoseRed = new Translation3d(11.925, 4.025, 1.8288);
+        public static final Translation3d AimPose1 = new Translation3d(0, 0, 1.8288);
         public static final Translation3d AimPose2 = new Translation3d(1, 2, 0);
         public static final Translation3d AimPose3 = new Translation3d(4, 0, 0);
 

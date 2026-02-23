@@ -72,20 +72,27 @@ public class TurretSubsystem extends SubsystemBase {
     }
   }
 
-  public static void setElevation(Rotation2d rot){
-    elevationMotor.setControl(elevationMagicCycle.withPosition(elevationRotationsToKraken(rot.getRotations())));
+  public static void setElevation(double degrees){
+    double returnDegrees = TurretConstants.TurretMaxAngle.getDegrees();
+    if(degrees != Double.NaN){
+      returnDegrees = Math.max(Math.min(degrees, TurretConstants.TurretMaxAngle.getDegrees()), TurretConstants.TurretMinAngle.getDegrees());
+    }else{
+      returnDegrees = 65;
+    }
+    
+    elevationMotor.setControl(elevationMagicCycle.withPosition(elevationRotationsToKraken(returnDegrees / 360)));
   }
 
   private static void configTurret(){
     turretRotationMotor.setNeutralMode(NeutralModeValue.Coast);
     turretRotationMotor.setPosition(turretRotationsToKraken(TurretConstants.TurretCableChainPoint.getRotations() - TurretConstants.TurretStartOffset.getRotations()));
 
-    turretRotConfig.Slot0.kP = 0.1;
+    turretRotConfig.Slot0.kP = 0.2;
     turretRotConfig.Slot0.kI = 0.0;
     turretRotConfig.Slot0.kD = 0.0;
 
-    turretRotConfig.MotionMagic.MotionMagicAcceleration = 80;
-    turretRotConfig.MotionMagic.MotionMagicCruiseVelocity = 40;
+    turretRotConfig.MotionMagic.MotionMagicAcceleration = 40;
+    turretRotConfig.MotionMagic.MotionMagicCruiseVelocity = 20;
 
     turretRotConfig.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;
 
@@ -93,12 +100,12 @@ public class TurretSubsystem extends SubsystemBase {
     turretRotationMotor.getConfigurator().apply(turretRotConfig);
   }
 
-  public static void turretElevationConfiguration() {
-    elevationMotor.setPosition(elevationRotationsToKraken(TurretConstants.TurretMaxAngle.getRotations()));
-
+  private static void turretElevationConfiguration() {
     elevationMotor.setNeutralMode(NeutralModeValue.Brake);
 
     turretElevationMotorConfig.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;
+
+    elevationMotor.setPosition(elevationRotationsToKraken(TurretConstants.TurretMaxAngle.getRotations()));
 
     turretElevationMotorConfig.Slot0.kP = 0.1;//1.8
     turretElevationMotorConfig.Slot0.kI = 0.0;//0.12

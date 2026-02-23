@@ -94,6 +94,7 @@ public class IntakeSubsystem extends SubsystemBase {
     CANcoderConfig.MagnetSensor.SensorDirection = SensorDirectionValue.CounterClockwise_Positive;
 
     intakeRotationMotorConfig.Feedback.RotorToSensorRatio = intakeConstants.intakeRatio;
+    CANcoderConfig.MagnetSensor.AbsoluteSensorDiscontinuityPoint = 0.5;
 
     intakeRotationMotorConfig.Slot0.kP = 0.075;
     intakeRotationMotorConfig.Slot0.kI = 0;
@@ -105,6 +106,7 @@ public class IntakeSubsystem extends SubsystemBase {
     intakeRotationMotorConfig.MotionMagic.MotionMagicCruiseVelocity = 40;
 
     intakeRotationMotor.getConfigurator().apply(intakeRotationMotorConfig);
+    intakeCANcoder.getConfigurator().apply(CANcoderConfig);
   }
 
   private static double intakeToKraken(double rot){

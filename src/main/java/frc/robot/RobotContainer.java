@@ -4,7 +4,6 @@
 
 package frc.robot;
 
-import static edu.wpi.first.units.Units.Rotation;
 
 import com.fasterxml.jackson.core.base.GeneratorBase;
 import com.pathplanner.lib.auto.AutoBuilder;
@@ -22,6 +21,8 @@ import frc.robot.Commands.ResetGyro;
 import frc.robot.Commands.TeleopSwerve;
 import frc.robot.Commands.Intake.FindIntakeKG;
 import frc.robot.Commands.Intake.IntakeSetPosition;
+import frc.robot.Commands.Intake.SetIntakePosAndSpeed;
+import frc.robot.Commands.Shooter.ShootAtVelocity;
 import frc.robot.Commands.TurretCommands.PointTurretAtPoint;
 import frc.robot.Commands.TurretCommands.SetElevationPos;
 import frc.robot.Commands.TurretCommands.SetTurretRotation;
@@ -77,13 +78,15 @@ public class RobotContainer {
 
     // driver.leftTrigger().toggleOnTrue(new FindDriveKS(mSwerve));
 
-    //driver.a().onTrue(new SetTurretRotation(Rotation2d.fromDegrees(360).getRotations(), mTurretSubsystem));
-    driver.b().toggleOnTrue(new PointTurretAtPoint(FieldConstants.HubFieldPose, mTurretSubsystem, mSwerve));
-    driver.x().onTrue(new SetTurretRotation(Rotation2d.fromDegrees(360).getRotations(), mTurretSubsystem));
-    // driver.y().toggleOnTrue(new PointTurretAtPoint(FieldConstants.AimPose1, mTurretSubsystem, mSwerve));
+    driver.rightTrigger().toggleOnTrue(new ShootAtVelocity(mShooterSubsystem, mUptakeSubsystem, mSpindexerSubsystem, mSwerve));
+    driver.leftBumper().toggleOnTrue(new SetIntakePosAndSpeed(Rotation2d.fromDegrees(-67).getRotations(), 60, mIntakeSubsystem));
+    driver.b().toggleOnTrue(new PointTurretAtPoint(FieldConstants.HubFieldPoseRed, mTurretSubsystem, mSwerve));
+    //driver.x().onTrue(new SetTurretRotation(Rotation2d.fromDegrees(360).getRotations(), mTurretSubsystem));
+    driver.y().toggleOnTrue(new PointTurretAtPoint(FieldConstants.AimPose1, mTurretSubsystem, mSwerve));
     // driver.x().toggleOnTrue(new PointTurretAtPoint(FieldConstants.AimPose2, mTurretSubsystem, mSwerve));
 
-    driver.rightTrigger().whileTrue(mSwerve.driveThroughBalls());
+    driver.x().onTrue(new SetElevationPos(30, mTurretSubsystem));
+    //driver.rightTrigger().whileTrue(mSwerve.driveThroughBalls());
     driver.povUp().whileTrue(mSwerve.driveToClosestBall(()-> mSwerve.getClosestBall()));
   }
 

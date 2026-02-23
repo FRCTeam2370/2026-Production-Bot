@@ -39,9 +39,12 @@ public class ShooterSubsystem extends SubsystemBase {
   }
 
   public static double getVelocity(){
-    return shooterMotorOne.getVelocity().getValueAsDouble();
+    return (Math.abs(shooterMotorOne.getVelocity().getValueAsDouble()) * (20/18));
   }
 
+  public static double getBallExitVelocity() {//MPS
+    return ((0.0754888*Math.PI*getVelocity()) / 2) == 0 ? 0 : ((0.0754888*Math.PI*getVelocity()) / 2);
+  }
   public static void shootPrototype(double speed) {
     shooterMotorOne.set(speed);
     shooterMotorTwo.set(speed);

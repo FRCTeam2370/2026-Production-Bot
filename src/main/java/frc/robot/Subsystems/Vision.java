@@ -34,7 +34,7 @@ public class Vision extends SubsystemBase {
       double totalDistanceToTags = 0;
 
       //tells Limelight Helpers what the robot's rotation is
-      LimelightHelpers.SetRobotOrientation(i, SwerveSubsystem.poseEstimator.getEstimatedPosition().getRotation().getDegrees(), 0, 0, 0, 0, 0);
+      LimelightHelpers.SetRobotOrientation(i, SwerveSubsystem.getgyro0to360(90).getDegrees(), 0, 0, 0, 0, 0);
       //Calculates the robot's field relative position for the camera using Mega Tag 2
       LimelightHelpers.PoseEstimate limelightPose = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2(i);
       
@@ -47,9 +47,8 @@ public class Vision extends SubsystemBase {
           double limelightTimestamp = Timer.getFPGATimestamp() - (latency / 1000.0);//calculates the timestamp of the frame using the latency and the FPGA timestamp
 
           //iterates through the amount of tags in the frame
-          for(int k=0; k<limelightAmountOfTags; k++){
-            totalDistanceToTags += LimelightHelpers.getRawFiducials(i)[k].distToCamera;//adds their distances to the totalDistanceToTags variable
-          }
+          
+          totalDistanceToTags = limelightPose.avgTagDist * limelightAmountOfTags;//adds their distances to the totalDistanceToTags variable
 
           //calculates the average distance to all tags in the frame
           double avgDistToTags = totalDistanceToTags/limelightAmountOfTags;

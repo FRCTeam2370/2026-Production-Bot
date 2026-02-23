@@ -149,7 +149,7 @@ public class SwerveSubsystem extends SubsystemBase {
 
     // SmartDashboard.putNumber("Odometry x", odometry.getPoseMeters().getX());
     // SmartDashboard.putNumber("Odometry y", odometry.getPoseMeters().getY());
-    SmartDashboard.putNumber("Calculated Turret Angle", turretRotationToPose(new Pose2d(FieldConstants.HubFieldPose.getX(), FieldConstants.HubFieldPose.getY(), new Rotation2d())).getDegrees());
+    SmartDashboard.putNumber("Calculated Turret Angle", turretRotationToPose(new Pose2d(FieldConstants.HubFieldPoseRed.getX(), FieldConstants.HubFieldPoseRed.getY(), new Rotation2d())).getDegrees());
     NetworkTableInstance.getDefault().getTable("fuelCV").getEntry("Camera Pose").setDoubleArray(new Double[]{detectionCamToField().getX(), detectionCamToField().getY(), getgyro0to360(180).getRadians()});
 
     updateOdometry();
@@ -196,9 +196,15 @@ public class SwerveSubsystem extends SubsystemBase {
      - (Math.toRadians(gyro.getAngularVelocityZWorld().getValueAsDouble()) * 0.02);//adding angular velocity lookahead
     thetaTurretToTarget = (((thetaTurretToTarget % (2*Math.PI)) + (2*Math.PI)) % (2*Math.PI));//Returns the thetaTurretToTarget value in the range of 0-360 degrees
     
-    double thetaTurretToTarget2 = thetaTurretToTarget + 2*Math.PI;
+    //double thetaTurretToTarget2 = thetaTurretToTarget + 2*Math.PI;
 
-    double returnTheta = TurretSubsystem.getTurretRotation().getRadians() - thetaTurretToTarget > TurretSubsystem.getTurretRotation().getRadians() - thetaTurretToTarget2 && thetaTurretToTarget2 > TurretConstants.TurretMin.getRadians() && thetaTurretToTarget2 < TurretConstants.TurretMax.getRadians() ? thetaTurretToTarget2 : thetaTurretToTarget > TurretConstants.TurretMin.getRadians() && thetaTurretToTarget < TurretConstants.TurretMax.getRadians() ? thetaTurretToTarget : 360;
+    double returnTheta = thetaTurretToTarget;
+    if(thetaTurretToTarget > TurretConstants.TurretMax.getRadians()){
+      returnTheta -= 2*Math.PI;
+    }else if(thetaTurretToTarget < TurretConstants.TurretMin.getRadians()){
+      returnTheta += 2*Math.PI;
+    }
+    //double returnTheta = TurretSubsystem.getTurretRotation().getRadians() - thetaTurretToTarget > TurretSubsystem.getTurretRotation().getRadians() - thetaTurretToTarget2 && thetaTurretToTarget2 > TurretConstants.TurretMin.getRadians() && thetaTurretToTarget2 < TurretConstants.TurretMax.getRadians() ? thetaTurretToTarget2 : thetaTurretToTarget > TurretConstants.TurretMin.getRadians() && thetaTurretToTarget < TurretConstants.TurretMax.getRadians() ? thetaTurretToTarget : 360;
 
     return Rotation2d.fromRadians(returnTheta);
   }
@@ -435,10 +441,22 @@ public class SwerveSubsystem extends SubsystemBase {
     return new DeferredCommand(()-> AutoBuilder.pathfindToPose(getClosestBall(), SwerveConstants.telePathConstraints), Set.of(this, mObjectDetection));
   }
 
-  public Pair<Pose2d, Rotation2d> getTurretPointTowardsPose(Translation3d targetPose){
-    Translation3d aimPose = turretLogic.getAimPose(targetPose, 2);
-    Rotation2d elevationAngle = Rotation2d.fromRadians(Math.atan2(aimPose.getZ() - TurretConstants.TurretVerticalOffset, Math.sqrt(Math.pow(aimPose.getX() - poseEstimator.getEstimatedPosition().getX(), 2) + Math.pow(aimPose.getY() - poseEstimator.getEstimatedPosition().getY(), 2))));
-    elevationAngle = elevationAngle.getDegrees() > TurretConstants.TurretMaxAngle.getDegrees() ? TurretConstants.TurretMaxAngle : elevationAngle.getDegrees() < TurretConstants.TurretMinAngle.getDegrees() ? TurretConstants.TurretMinAngle : elevationAngle;
-    return new Pair<Pose2d,Rotation2d>(new Pose2d(aimPose.getX(), aimPose.getY(), new Rotation2d()), elevationAngle);
+  public Pair<Pose2d, Double[]> getTurretPointTowardsPose(Translation3d targetPose){
+    Double[] returnDoubles = new Double[2];
+    Translation3d aimPose = turretLogic.getAimPose(targetPose, ShooterSubsystem.getBallExitVelocity());
+    double distanceToPose = Math.sqrt(Math.pow(aimPose.getX() - poseEstimator.getEstimatedPosition().getX(), 2) + Math.pow(aimPose.getY() - poseEstimator.getEstimatedPosition().getY(), 2));
+    Rotation2d elevationAngle = Rotation2d.fromRadians(Math.atan2(aimPose.getZ() - TurretConstants.TurretVerticalOffset, distanceToPose));
+    SmartDashboard.putNumber("Aimpose Z", aimPose.getZ());
+    SmartDashboard.putNumber("Raw Calculated Elevation Angle", elevationAngle.getDegrees());
+    //elevationAngle = elevationAngle.getDegrees() > TurretConstants.TurretMaxAngle.getDegrees() ? TurretConstants.TurretMaxAngle : elevationAngle.getDegrees() < TurretConstants.TurretMinAngle.getDegrees() ? TurretConstants.TurretMinAngle : elevationAngle;    
+
+    double velocity = 5*distanceToPose + 37.5;//5.15*distanceToPose + 38.3;
+
+    SmartDashboard.putNumber("Calculated Velocity", velocity);
+    returnDoubles[0] = elevationAngle.getDegrees();
+    returnDoubles[1] = velocity;
+
+    return Pair.of(new Pose2d(aimPose.getX(), aimPose.getY(), new Rotation2d()), returnDoubles);
   }
 }
+

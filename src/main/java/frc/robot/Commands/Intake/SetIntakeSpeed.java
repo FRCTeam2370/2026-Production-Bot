@@ -2,25 +2,19 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-package frc.robot.Commands.TurretCommands;
+package frc.robot.Commands.Intake;
 
-import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.Constants.TurretConstants;
-import frc.robot.Subsystems.SwerveSubsystem;
-import frc.robot.Subsystems.TurretSubsystem;
+import frc.robot.Subsystems.IntakeSubsystem;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
-public class PointTurretAtPoint extends Command {
-  private Translation3d pose;
-  private SwerveSubsystem mSwerve;
-  /** Creates a new PointTurretAtPoint. */
-  public PointTurretAtPoint(Translation3d pose, TurretSubsystem mTurretSubsystem, SwerveSubsystem mSwerve) {
+public class SetIntakeSpeed extends Command {
+  /** Creates a new StartIntake. */
+  double speed;
+  public SetIntakeSpeed(double speed, IntakeSubsystem mIntakeSubsystem) {
     // Use addRequirements() here to declare subsystem dependencies.
-    this.pose = pose;
-    this.mSwerve = mSwerve;
-    addRequirements(mTurretSubsystem);
+    this.speed = speed;
+    addRequirements(mIntakeSubsystem);
   }
 
   // Called when the command is initially scheduled.
@@ -30,15 +24,13 @@ public class PointTurretAtPoint extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    //TurretSubsystem.aimTurretAtPoint(mSwerve.getTurretPointTowardsPose(pose).getFirst());
-    TurretSubsystem.setElevation(mSwerve.getTurretPointTowardsPose(pose).getSecond()[0]);
+    IntakeSubsystem.intakeWithVelocity(speed);
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    //TurretSubsystem.aimTurretAtDegree(360);
-    TurretSubsystem.setElevation(TurretConstants.TurretMaxAngle.getDegrees());
+    IntakeSubsystem.intakeWithoutVelocity(0);
   }
 
   // Returns true when the command should end.
