@@ -85,7 +85,7 @@ public class IntakeSubsystem extends SubsystemBase {
   }
 
   public static void intakeRotationConfig() {
-    intakeRotationMotor.setPosition(intakeToKraken(intakeConstants.intakeMax.getRotations()));
+    intakeRotationMotor.setPosition(intakeToKraken(intakeCANcoder.getAbsolutePosition().getValueAsDouble() - intakeConstants.CANcoderOffset.getRotations() + intakeConstants.intakeMax.getRotations()));
 
     intakeRotationMotor.setNeutralMode(NeutralModeValue.Coast);
 

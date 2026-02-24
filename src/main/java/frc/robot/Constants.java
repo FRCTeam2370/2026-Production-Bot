@@ -34,13 +34,13 @@ public class Constants {
   public static class uptakeConstants{
     public static final int uptakeMotorID = 4;
 
-    public static final int uptakeSpeed = 50;
+    public static final int uptakeSpeed = 70;
   }
 
   public static class spindexerConstants{
     public static final int spindexerMotorID = 5;
 
-    public static final double spindexerSpeed = 60;
+    public static final double spindexerSpeed = 70;
   }
 
   public static class intakeConstants{
@@ -55,6 +55,8 @@ public class Constants {
 
     public static final Rotation2d intakeMax = Rotation2d.fromDegrees(90);
     public static final Rotation2d intakeMin = Rotation2d.fromDegrees(-68);
+
+    public static final Rotation2d CANcoderOffset = Rotation2d.fromDegrees(57.70419034090909);
   }
 
   public static class pigeonConstants{

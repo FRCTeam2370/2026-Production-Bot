@@ -86,12 +86,12 @@ public class TurretSubsystem extends SubsystemBase {
     turretRotationMotor.setNeutralMode(NeutralModeValue.Coast);
     turretRotationMotor.setPosition(turretRotationsToKraken(TurretConstants.TurretCableChainPoint.getRotations() - TurretConstants.TurretStartOffset.getRotations()));
 
-    turretRotConfig.Slot0.kP = 0.2;
-    turretRotConfig.Slot0.kI = 0.0;
+    turretRotConfig.Slot0.kP = 0.25;
+    turretRotConfig.Slot0.kI = 0.005;
     turretRotConfig.Slot0.kD = 0.0;
 
-    turretRotConfig.MotionMagic.MotionMagicAcceleration = 40;
-    turretRotConfig.MotionMagic.MotionMagicCruiseVelocity = 20;
+    turretRotConfig.MotionMagic.MotionMagicAcceleration = 80;
+    turretRotConfig.MotionMagic.MotionMagicCruiseVelocity = 40;
 
     turretRotConfig.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;
 
@@ -106,7 +106,7 @@ public class TurretSubsystem extends SubsystemBase {
 
     elevationMotor.setPosition(elevationRotationsToKraken(TurretConstants.TurretMaxAngle.getRotations()));
 
-    turretElevationMotorConfig.Slot0.kP = 0.3;//1.8
+    turretElevationMotorConfig.Slot0.kP = 0.2;//1.8
     turretElevationMotorConfig.Slot0.kI = 0.001;//0.12
     turretElevationMotorConfig.Slot0.kD = 0.0;//0.01
 
