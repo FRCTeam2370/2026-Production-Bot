@@ -37,7 +37,7 @@ public class TurretLogic {
         double flattenedTargetPoseX = Math.sqrt(Math.pow(targetPoseRelativeToRobotX, 2) + Math.pow(targetPoseRelativeToRobotY, 2));
         double flattenedTargetPoseY = targetPose.getZ() - TurretConstants.TurretVerticalOffset;
 
-        double zeroOfTheDerivativeOfTheDesiredAngle = Double.NaN;
+        double zeroOfTheDerivativeOfTheDesiredAngle = 0;
         
         try{
             zeroOfTheDerivativeOfTheDesiredAngle = brentSolver.findRoot((double theta)-> Math.pow(flattenedInitialVel,2)*flattenedTargetPoseX*Math.cos(2*theta) - flattenedInitialVel*flattenedTargetPoseX*flattenedRobotVel*Math.cos(theta) + flattenedTargetPoseY*flattenedInitialVel*Math.sin(theta), TurretConstants.TurretMinAngle.getRadians(), TurretConstants.TurretMaxAngle.getRadians());
@@ -46,16 +46,13 @@ public class TurretLogic {
         }
         
         double trueAngle = 0;
-        if(Double.toString(zeroOfTheDerivativeOfTheDesiredAngle) != "NaN"){
-            System.out.println("---------------" + Double.toString(zeroOfTheDerivativeOfTheDesiredAngle) + "-----------------");
+        try{
+            trueAngle = brentSolver.findRoot((double theta)-> flattenedInitialVel*flattenedTargetPoseX*(flattenedInitialVel*Math.cos(theta) - flattenedRobotVel)*Math.sin(theta) - 4.905*Math.pow(flattenedTargetPoseX,2) - (flattenedInitialVel*Math.cos(theta) - flattenedRobotVel)*flattenedTargetPoseY, zeroOfTheDerivativeOfTheDesiredAngle, TurretConstants.TurretMaxAngle.getRadians());
+        }catch(Exception e){
             try{
-                trueAngle = brentSolver.findRoot((double theta)-> flattenedInitialVel*flattenedTargetPoseX*(flattenedInitialVel*Math.cos(theta) - flattenedRobotVel)*Math.sin(theta) - 4.905*Math.pow(flattenedTargetPoseX,2) - (flattenedInitialVel*Math.cos(theta) - flattenedRobotVel)*flattenedTargetPoseY, zeroOfTheDerivativeOfTheDesiredAngle, TurretConstants.TurretMaxAngle.getRadians());
-            }catch(Exception e){
-                try{
-                    trueAngle = brentSolver.findRoot((double theta)-> flattenedInitialVel*flattenedTargetPoseX*(flattenedInitialVel*Math.cos(theta) - flattenedRobotVel)*Math.sin(theta) - 4.905*Math.pow(flattenedTargetPoseX,2) - (flattenedInitialVel*Math.cos(theta) - flattenedRobotVel)*flattenedTargetPoseY, TurretConstants.TurretMinAngle.getRadians(), zeroOfTheDerivativeOfTheDesiredAngle); 
-                }catch(Exception E){
-                    System.out.println("Cry" + E);
-                }
+                trueAngle = brentSolver.findRoot((double theta)-> flattenedInitialVel*flattenedTargetPoseX*(flattenedInitialVel*Math.cos(theta) - flattenedRobotVel)*Math.sin(theta) - 4.905*Math.pow(flattenedTargetPoseX,2) - (flattenedInitialVel*Math.cos(theta) - flattenedRobotVel)*flattenedTargetPoseY, TurretConstants.TurretMinAngle.getRadians(), zeroOfTheDerivativeOfTheDesiredAngle); 
+            }catch(Exception E){
+                System.out.println("Cry" + E);
             }
         }
         

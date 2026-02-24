@@ -47,7 +47,7 @@ public class TurretSubsystem extends SubsystemBase {
   }
 
   public static void aimTurretAtDegree(double degrees){
-    turretRotationMotor.setControl(turretRotMagicCycle.withPosition(Rotation2d.fromDegrees(degrees).getRotations()));
+    turretRotationMotor.setControl(turretRotMagicCycle.withPosition(turretRotationsToKraken(Rotation2d.fromDegrees(degrees).getRotations())));
   }
 
   public static void aimtTurretAtRotation(double rot){
@@ -106,12 +106,12 @@ public class TurretSubsystem extends SubsystemBase {
 
     elevationMotor.setPosition(elevationRotationsToKraken(TurretConstants.TurretMaxAngle.getRotations()));
 
-    turretElevationMotorConfig.Slot0.kP = 0.1;//1.8
-    turretElevationMotorConfig.Slot0.kI = 0.0;//0.12
+    turretElevationMotorConfig.Slot0.kP = 0.3;//1.8
+    turretElevationMotorConfig.Slot0.kI = 0.001;//0.12
     turretElevationMotorConfig.Slot0.kD = 0.0;//0.01
 
-    turretElevationMotorConfig.MotionMagic.MotionMagicAcceleration = 50;
-    turretElevationMotorConfig.MotionMagic.MotionMagicCruiseVelocity = 40;
+    turretElevationMotorConfig.MotionMagic.MotionMagicAcceleration = 300;
+    turretElevationMotorConfig.MotionMagic.MotionMagicCruiseVelocity = 150;
 
     elevationMotor.getConfigurator().apply(turretElevationMotorConfig);
   }
