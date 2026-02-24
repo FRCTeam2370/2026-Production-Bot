@@ -5,6 +5,7 @@
 package frc.robot.Utils;
 
 import edu.wpi.first.math.Pair;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants.TurretConstants;
@@ -14,14 +15,19 @@ import frc.robot.Subsystems.SwerveSubsystem;
 public class TurretLogic {
     SwerveSubsystem mSwerve;
     double trueAngle = 0;
-    BrentSolver brentSolver = new BrentSolver(0.001,0.001,0.001);
+    double zeroOfTheDerivativeOfTheDesiredAngle = 0;
+    boolean usingLower = false;
+    BrentSolver brentSolver = new BrentSolver(0.0001,0.0001,0.0001);
 
     public TurretLogic(SwerveSubsystem mSwerve){
         this.mSwerve = mSwerve;
     }
+
     public class TurretAimPose {
         public double vel;
         public Translation3d aimPose;
+        public boolean usingLower;
+        public double elevationAngleDegrees;
         public TurretAimPose(){}
     }
 
@@ -40,26 +46,26 @@ public class TurretLogic {
         double lateralOffsetVelocityY = lateralOffsetVelocityConstant * -targetPoseRelativeToRobotX;//x
 
         double flattenedRobotVel = robotSpeed * Math.cos(angleRobotVelocityToTarget);
-        double shooterVel = (5.769 * distanceToTarget + robotSpeed) + 35.98 - (9.06 * flattenedRobotVel) + (0.964 * Math.pow(flattenedRobotVel,2));//robot speed added
-        double launchSpeed = 0.0754888*Math.PI*0.5*shooterVel;
+        double shooterVel = (5.769 * distanceToTarget + (robotSpeed*0.5)) + 35.98 + (9.06 * -flattenedRobotVel) + (0.964 * Math.pow(flattenedRobotVel,2));//robot speed added
+        double launchSpeed = 0.0754888*Math.PI*0.5*shooterVel *20/18;
         double flattenedInitialVel = Math.sqrt(Math.pow(launchSpeed, 2) - Math.pow(robotSpeed * Math.sin(angleRobotVelocityToTarget), 2));
         
         double flattenedTargetPoseX = Math.sqrt(Math.pow(targetPoseRelativeToRobotX, 2) + Math.pow(targetPoseRelativeToRobotY, 2));
         double flattenedTargetPoseY = targetPose.getZ() - TurretConstants.TurretVerticalOffset;
-
-        double zeroOfTheDerivativeOfTheDesiredAngle = 0;
         
         try{
             zeroOfTheDerivativeOfTheDesiredAngle = brentSolver.findRoot((double theta)-> Math.pow(flattenedInitialVel,2)*flattenedTargetPoseX*Math.cos(2*theta) - flattenedInitialVel*flattenedTargetPoseX*flattenedRobotVel*Math.cos(theta) + flattenedTargetPoseY*flattenedInitialVel*Math.sin(theta), TurretConstants.TurretMinAngle.getRadians(), TurretConstants.TurretMaxAngle.getRadians());
         }catch(Exception e){
             System.out.println("Zero of the derivative failed" + e);
         }
-        
+
         try{
             trueAngle = brentSolver.findRoot((double theta)-> flattenedInitialVel*flattenedTargetPoseX*(flattenedInitialVel*Math.cos(theta) - flattenedRobotVel)*Math.sin(theta) - 4.905*Math.pow(flattenedTargetPoseX,2) - (flattenedInitialVel*Math.cos(theta) - flattenedRobotVel)*flattenedTargetPoseY, zeroOfTheDerivativeOfTheDesiredAngle, TurretConstants.TurretMaxAngle.getRadians());
+            usingLower = false;
         }catch(Exception e){
             try{
                 trueAngle = brentSolver.findRoot((double theta)-> flattenedInitialVel*flattenedTargetPoseX*(flattenedInitialVel*Math.cos(theta) - flattenedRobotVel)*Math.sin(theta) - 4.905*Math.pow(flattenedTargetPoseX,2) - (flattenedInitialVel*Math.cos(theta) - flattenedRobotVel)*flattenedTargetPoseY, TurretConstants.TurretMinAngle.getRadians(), zeroOfTheDerivativeOfTheDesiredAngle); 
+                usingLower = true;
             }catch(Exception E){
                 System.out.println("Cry" + E);
             }
@@ -76,6 +82,7 @@ public class TurretLogic {
             -vUnajustedY - lateralOffsetVelocityY, 
             vUnajustedZ + TurretConstants.TurretVerticalOffset);
         turretAimPose.vel = shooterVel;
+        turretAimPose.usingLower = usingLower;
 
         return turretAimPose;
     }

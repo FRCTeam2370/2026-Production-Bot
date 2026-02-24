@@ -10,6 +10,7 @@ import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -36,7 +37,9 @@ import frc.robot.Subsystems.Vision;
 
 public class RobotContainer {
   public static final CommandXboxController driver = new CommandXboxController(0);
+  public static final GenericHID dial = new GenericHID(2);
 
+  public static boolean shouldDial = false;
   
   private final TurretSubsystem mTurretSubsystem = new TurretSubsystem();
   private final IntakeSubsystem mIntakeSubsystem = new IntakeSubsystem();

@@ -34,13 +34,13 @@ public class Constants {
   public static class uptakeConstants{
     public static final int uptakeMotorID = 4;
 
-    public static final int uptakeSpeed = 70;
+    public static final int uptakeSpeed = 80;
   }
 
   public static class spindexerConstants{
     public static final int spindexerMotorID = 5;
 
-    public static final double spindexerSpeed = 70;
+    public static final double spindexerSpeed = 100;
   }
 
   public static class intakeConstants{
@@ -74,6 +74,9 @@ public class Constants {
     public static class TurretConstants{
         public static final int TurretRotationID = 7;
         public static final int shooterElevationMotorID = 26;
+        public static final int turretEncoderID = 27;
+
+        public static final double encoderRatio = 30/12;
 
         public static final double turretRatio = 18.09912109375 - 3.68310546875;//30/12 * 150/26;//Kraken rotations : turret rotations, 14.345
         public static final double elevationRatio = 955/12;//Kraken rotations : turret rotations

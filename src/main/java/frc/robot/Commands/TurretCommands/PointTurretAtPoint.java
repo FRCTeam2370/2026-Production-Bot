@@ -4,6 +4,7 @@
 
 package frc.robot.Commands.TurretCommands;
 
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -30,8 +31,8 @@ public class PointTurretAtPoint extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    TurretSubsystem.aimTurretAtPoint(mSwerve.getTurretPointTowardsPose(pose).getFirst());
-    TurretSubsystem.setElevation(mSwerve.getTurretPointTowardsPose(pose).getSecond()[0]);
+    TurretSubsystem.aimTurretAtPoint(new Pose2d(mSwerve.getTurretPointTowardsPose(pose).aimPose.getX(), mSwerve.getTurretPointTowardsPose(pose).aimPose.getY(), new Rotation2d()));
+    TurretSubsystem.setElevation(mSwerve.getTurretPointTowardsPose(pose).elevationAngleDegrees);
   }
 
   // Called once the command ends or is interrupted.

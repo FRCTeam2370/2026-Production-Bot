@@ -4,18 +4,21 @@
 
 package frc.robot.Commands.Shooter;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants.FieldConstants;
 import frc.robot.Constants.spindexerConstants;
 import frc.robot.Constants.uptakeConstants;
 import frc.robot.Subsystems.ShooterSubsystem;
 import frc.robot.Subsystems.UptakeSubsystem;
+import frc.robot.Utils.TurretLogic.TurretAimPose;
 import frc.robot.Subsystems.SpindexerSubsystem;
 import frc.robot.Subsystems.SwerveSubsystem;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class ShootAtVelocity extends Command {
   double vel;
+  boolean usingLower;
   SwerveSubsystem mSwerve;
   /** Creates a new ShootAtVeolcity. */
   public ShootAtVelocity(ShooterSubsystem mShooterSubsystem, UptakeSubsystem mUptakeSubsystem, SpindexerSubsystem mSpindexerSubsystem, SwerveSubsystem mSwerve) {
@@ -31,12 +34,15 @@ public class ShootAtVelocity extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    vel = mSwerve.getTurretPointTowardsPose(FieldConstants.HubFieldPoseRed).getSecond()[1];
+    TurretAimPose aimpose = mSwerve.getTurretPointTowardsPose(FieldConstants.HubFieldPoseRed);
+    vel = aimpose.vel;
+    usingLower = aimpose.usingLower;
     ShooterSubsystem.shootWithVelocity(vel);
     if(ShooterSubsystem.getVelocity() > vel * 0.975){
       UptakeSubsystem.uptakeWithVelocity(uptakeConstants.uptakeSpeed);
       SpindexerSubsystem.spindexrWithVelocity(spindexerConstants.spindexerSpeed);
     }
+    SmartDashboard.putBoolean("using Lower", usingLower);
   }
 
   // Called once the command ends or is interrupted.

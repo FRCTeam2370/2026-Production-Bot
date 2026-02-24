@@ -443,26 +443,23 @@ public class SwerveSubsystem extends SubsystemBase {
     return new DeferredCommand(()-> AutoBuilder.pathfindToPose(getClosestBall(), SwerveConstants.telePathConstraints), Set.of(this, mObjectDetection));
   }
 
-  public Pair<Pose2d, Double[]> getTurretPointTowardsPose(Translation3d targetPose){
-    Double[] returnDoubles = new Double[2];
+  public TurretAimPose getTurretPointTowardsPose(Translation3d targetPose){
     double distanceToPose = Math.sqrt(Math.pow(targetPose.getX() - turretToField().getX(), 2) + Math.pow(targetPose.getY() - turretToField().getY(), 2));
     //double velocity = 5.15*distanceToPose + 38.3;//5*distanceToPose + 37.5;
     //double ballExitVelocity = ((0.0754888*Math.PI*ShooterSubsystem.getVelocity()) / 2) == 0 ? ((0.0754888*Math.PI*velocity) / 2) : ((0.0754888*Math.PI*ShooterSubsystem.getVelocity()) / 2);
     TurretAimPose turretAimPose = turretLogic.getAimPose(targetPose, distanceToPose);
-    Translation3d aimPose = turretAimPose.aimPose;
     //double distanceToPose = Math.sqrt(Math.pow(aimPose.getX() - poseEstimator.getEstimatedPosition().getX(), 2) + Math.pow(aimPose.getY() - poseEstimator.getEstimatedPosition().getY(), 2));
-    Rotation2d elevationAngle = Rotation2d.fromRadians(Math.atan2(aimPose.getZ() - TurretConstants.TurretVerticalOffset, distanceToPose));
-    SmartDashboard.putNumber("Aimpose Z", aimPose.getZ());
+    Rotation2d elevationAngle = Rotation2d.fromRadians(Math.atan2(turretAimPose.aimPose.getZ() - TurretConstants.TurretVerticalOffset, distanceToPose));
+    SmartDashboard.putNumber("Aimpose Z", turretAimPose.aimPose.getZ());
     SmartDashboard.putNumber("Raw Calculated Elevation Angle", elevationAngle.getDegrees());
     //elevationAngle = elevationAngle.getDegrees() > TurretConstants.TurretMaxAngle.getDegrees() ? TurretConstants.TurretMaxAngle : elevationAngle.getDegrees() < TurretConstants.TurretMinAngle.getDegrees() ? TurretConstants.TurretMinAngle : elevationAngle;   
     
     SmartDashboard.putNumber("Calculated Velocity", turretAimPose.vel);
-    returnDoubles[0] = elevationAngle.getDegrees();
-    returnDoubles[1] = turretAimPose.vel;
+    turretAimPose.elevationAngleDegrees = elevationAngle.getDegrees();
 
-    field.getObject("Aim Point").setPose(new Pose2d(aimPose.getX(), aimPose.getY(), new Rotation2d()));
+    field.getObject("Aim Point").setPose(new Pose2d(turretAimPose.aimPose.getX(), turretAimPose.aimPose.getY(), new Rotation2d()));
 
-    return Pair.of(new Pose2d(aimPose.getX(), aimPose.getY(), new Rotation2d()), returnDoubles);
+    return turretAimPose;
   }
 }
 
