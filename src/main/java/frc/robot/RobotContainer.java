@@ -77,8 +77,8 @@ public class RobotContainer {
     driver.y().toggleOnTrue(new PointTurretAtPoint(FieldConstants.AimPose1, mTurretSubsystem, mSwerve));
     // driver.x().toggleOnTrue(new PointTurretAtPoint(FieldConstants.AimPose2, mTurretSubsystem, mSwerve));
 
-    driver.x().onTrue(new SetElevationPos(45, mTurretSubsystem));
-    driver.a().onTrue(new SetElevationPos(50, mTurretSubsystem));
+    driver.x().onTrue(new SetElevationPos(50, mTurretSubsystem));
+    driver.a().onTrue(new SetElevationPos(75, mTurretSubsystem));
     //driver.rightTrigger().whileTrue(mSwerve.driveThroughBalls());
     driver.povUp().whileTrue(mSwerve.driveToClosestBall(()-> mSwerve.getClosestBall()));
   }

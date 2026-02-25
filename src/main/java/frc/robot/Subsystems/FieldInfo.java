@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Subsystems.LEDSubsystem.LEDState;
 
 public class FieldInfo extends SubsystemBase {
   /** Creates a new FieldInfo. */
@@ -19,6 +20,13 @@ public class FieldInfo extends SubsystemBase {
   public void periodic() {
     // This method will be called once per scheduler run
     SmartDashboard.putBoolean("Hub Active", isHubActive());
+    if(isHubActive() && DriverStation.getAlliance().isPresent()){
+      if(DriverStation.getAlliance().get() == Alliance.Blue){
+        LEDSubsystem.mLEDState = LEDState.Blue;
+      }else{
+        LEDSubsystem.mLEDState = LEDState.Red;
+      }
+    }
   }
 
   public boolean isHubActive() {
