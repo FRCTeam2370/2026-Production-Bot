@@ -211,4 +211,17 @@ public class Constants {
 
         public static final SwerveModuleConstants BLConstants = new SwerveModuleConstants(driveMotorID, turnMotorID, CANCoderID, driveInverted, turnInverted, EncoderOffset, EncoderReversed);
     }
+
+    public static class LEDConstants {
+        public static final int LEDID = 0;
+        public static final int LEDLength = 46;//79
+        public static final int endgameLength = 46;
+
+        public static final int LEDBrightness = 50;
+
+        public static final int idleSpeed = 50;
+        public static final int targetingSpeed = 1;
+        public static final double activePeriodSoon = 0.1;
+        public static final double activePeriod = 0.3;
+    }
 }

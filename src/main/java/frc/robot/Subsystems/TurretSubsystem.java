@@ -10,14 +10,13 @@ import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
-import com.pathplanner.lib.config.RobotConfig;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.RobotContainer;
 import frc.robot.Constants.TurretConstants;
+import frc.robot.RobotContainer;
 
 public class TurretSubsystem extends SubsystemBase {
   public static TalonFX turretRotationMotor = new TalonFX(TurretConstants.TurretRotationID, "*");

@@ -27,7 +27,6 @@ import com.pathplanner.lib.path.Waypoint;
 import com.pathplanner.lib.util.PathPlannerLogging;
 //import com.revrobotics.spark.SparkLowLevel.MotorType;
 
-import edu.wpi.first.math.Pair;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
