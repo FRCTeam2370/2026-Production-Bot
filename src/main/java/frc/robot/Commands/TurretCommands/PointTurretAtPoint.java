@@ -38,7 +38,7 @@ public class PointTurretAtPoint extends Command {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    TurretSubsystem.aimTurretAtDegree(360);
+    TurretSubsystem.aimTurretAtDegree(540);
     TurretSubsystem.setElevation(TurretConstants.TurretMaxAngle.getDegrees());
   }
 

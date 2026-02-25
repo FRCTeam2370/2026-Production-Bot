@@ -9,6 +9,7 @@ import com.fasterxml.jackson.core.base.GeneratorBase;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -63,21 +64,11 @@ public class RobotContainer {
   }
 
   private void configureBindings() {
-    mSwerve.setDefaultCommand(new TeleopSwerve(mSwerve, ()-> driver.getRawAxis(0), ()-> -driver.getRawAxis(1), ()-> -driver.getRawAxis(4), ()-> false));
-
-    //driver.b().whileTrue(mSwerve.PathfindToPose(() -> new Pose2d(16.3,0.49, Rotation2d.fromDegrees(-50))));
-    // try {
-    //   driver.b().whileTrue(mSwerve.PathfindThenFollow(PathPlannerPath.fromPathFile("CoralLoadLR")));
-    // } catch (FileVersionException | IOException | ParseException e) {
-    //   // TODO Auto-generated catch block
-    //   e.printStackTrace();
-    // }
-    // driver.x().whileTrue(mSwerve.PathfindToPose(() -> Constants.RedSidePoses.REDFRONTLEFTSCORE));
-    // driver.y().whileTrue(mSwerve.PathfindToPose(()-> Constants.RedSidePoses.REDBACKLEFTSCORE));
+    mSwerve.setDefaultCommand(new TeleopSwerve(mSwerve, ()-> -driver.getRawAxis(0), ()-> driver.getRawAxis(1), ()-> driver.getRawAxis(4), ()-> false));
 
     driver.back().onTrue(new ResetGyro(mSwerve));
 
-    // driver.leftTrigger().toggleOnTrue(new FindDriveKS(mSwerve));
+    driver.leftTrigger().whileTrue(mSwerve.PathfindToPose(()-> new Pose2d(0,0, Rotation2d.fromDegrees(0))));
 
     driver.rightTrigger().toggleOnTrue(new ShootAtVelocity(mShooterSubsystem, mUptakeSubsystem, mSpindexerSubsystem, mSwerve));
     driver.leftBumper().toggleOnTrue(new SetIntakePosAndSpeed(Rotation2d.fromDegrees(-67).getRotations(), 60, mIntakeSubsystem));

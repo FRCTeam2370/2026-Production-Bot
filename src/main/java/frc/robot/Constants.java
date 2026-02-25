@@ -64,7 +64,7 @@ public class Constants {
   }
 
     public static class VisionConstants{
-        public static final double stdCoefficient = 0.01;
+        public static final double stdCoefficient = 0.05;
 
         public static final Pose2d objectDetectionRobotToCamera = new Pose2d(-0.254, 0, Rotation2d.fromDegrees(180));//12.5, 10, 180 degrees
 
@@ -83,7 +83,7 @@ public class Constants {
 
         public static final Transform2d RobotToTurret = new Transform2d(0.161925, -0.0889508, Rotation2d.fromDegrees(0));
 
-        public static final Rotation2d TurretStartOffset = Rotation2d.fromDegrees(0);//relative to the cable chain (counterclockwise positive)
+        public static final Rotation2d TurretStartOffset = Rotation2d.fromDegrees(50);//relative to the cable chain (counterclockwise positive)
         public static final Rotation2d TurretCableChainPoint = Rotation2d.fromDegrees(590);//Relative to the front of the robot (clockwise positive)
         public static final Rotation2d TurretMin = Rotation2d.fromDegrees(90);
         public static final Rotation2d TurretMax = Rotation2d.fromDegrees(540);
@@ -158,7 +158,7 @@ public class Constants {
         public static final int turnMotorID = 14;
         public static final int CANCoderID = 15;
 
-        public static final InvertedValue driveInverted = InvertedValue.CounterClockwise_Positive;
+        public static final InvertedValue driveInverted = InvertedValue.Clockwise_Positive;
         public static final InvertedValue turnInverted = InvertedValue.CounterClockwise_Positive;
 
         public static final Rotation2d EncoderOffset = Rotation2d.fromDegrees(355.95703125);
@@ -173,7 +173,7 @@ public class Constants {
         public static final int turnMotorID = 11;
         public static final int CANCoderID = 12;
 
-        public static final InvertedValue driveInverted = InvertedValue.Clockwise_Positive;
+        public static final InvertedValue driveInverted = InvertedValue.CounterClockwise_Positive;
         public static final InvertedValue turnInverted = InvertedValue.CounterClockwise_Positive;
 
         public static final Rotation2d EncoderOffset = Rotation2d.fromDegrees(176.1328125);
@@ -188,7 +188,7 @@ public class Constants {
         public static final int turnMotorID = 17;
         public static final int CANCoderID = 18;
 
-        public static final InvertedValue driveInverted = InvertedValue.CounterClockwise_Positive;
+        public static final InvertedValue driveInverted = InvertedValue.Clockwise_Positive;
         public static final InvertedValue turnInverted = InvertedValue.CounterClockwise_Positive;
 
         public static final Rotation2d EncoderOffset = Rotation2d.fromDegrees(174.990234375);
@@ -203,7 +203,7 @@ public class Constants {
         public static final int turnMotorID = 20;
         public static final int CANCoderID = 21;
 
-        public static final InvertedValue driveInverted = InvertedValue.Clockwise_Positive;
+        public static final InvertedValue driveInverted = InvertedValue.CounterClockwise_Positive;
         public static final InvertedValue turnInverted = InvertedValue.CounterClockwise_Positive;
 
         public static final Rotation2d EncoderOffset = Rotation2d.fromDegrees(353.232421875);

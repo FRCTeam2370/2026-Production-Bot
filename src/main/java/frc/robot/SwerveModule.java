@@ -67,6 +67,8 @@ public class SwerveModule {
         turnMotorConfig.Slot0.kI = Constants.SwerveConstants.TurnkI;
         turnMotorConfig.Slot0.kD = Constants.SwerveConstants.TurnkD;
 
+        driveMotorConfig.CurrentLimits.StatorCurrentLimit = 40;
+
         turnMotorConfig.Feedback.SensorToMechanismRatio = (Constants.SwerveConstants.RTurnRatio);//turn motor to rotor raio
 
         turnMotorConfig.ClosedLoopGeneral.ContinuousWrap = true;
@@ -133,7 +135,7 @@ public class SwerveModule {
         if(isOpenLoop){
             double output = desiredState.speedMetersPerSecond / Constants.SwerveConstants.maxSpeed;
             driveMotor.set(output);
-        }else if(isOpenLoop == false){
+        }else if(!isOpenLoop){
             double velocity = MPSToKraken(desiredState.speedMetersPerSecond);
             driveMotor.setControl(velocityDutyCycle.withVelocity(velocity));
         }

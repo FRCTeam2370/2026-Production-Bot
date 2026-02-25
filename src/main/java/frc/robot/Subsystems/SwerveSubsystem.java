@@ -105,8 +105,8 @@ public class SwerveSubsystem extends SubsystemBase {
       new SwerveModule(3, Constants.BRConstants.BRConstants)
     };
 
-    odometry = new SwerveDriveOdometry(Constants.SwerveConstants.kinematics, getRotation2d(), getModulePositions());
-    poseEstimator = new SwerveDrivePoseEstimator(Constants.SwerveConstants.kinematics, getRotation2d(), getModulePositions(), new Pose2d(getPose().getTranslation(), getRotation2d()));
+    odometry = new SwerveDriveOdometry(Constants.SwerveConstants.kinematics, getgyro0to360(90), getModulePositions());
+    poseEstimator = new SwerveDrivePoseEstimator(Constants.SwerveConstants.kinematics, getgyro0to360(90), getModulePositions(), new Pose2d(getPose().getTranslation(), getgyro0to360(90)));
 
     resetOdometry(new Pose2d(poseEstimator.getEstimatedPosition().getTranslation(), readGyro()));
 
@@ -137,7 +137,7 @@ public class SwerveSubsystem extends SubsystemBase {
     // SmartDashboard.putNumber("wheel Velocity", mSwerveModules[0].getWheelVelocity());
     // SmartDashboard.putNumber("drive Voltage", mSwerveModules[0].getWheelVoltage());
 
-    SmartDashboard.putNumber("Gyro Val", getRotation2d().getDegrees());
+    SmartDashboard.putNumber("Gyro Val", readGyro().getDegrees());
     SmartDashboard.putNumber("gyro 0-360 val", getgyro0to360(0).getDegrees());
     // SmartDashboard.putNumber("Heading", getHeading());
     // SmartDashboard.putNumber("pose x", poseEstimator.getEstimatedPosition().getX());
@@ -156,7 +156,7 @@ public class SwerveSubsystem extends SubsystemBase {
 
     updateOdometry();
     //odometry.update(getRotation2d(), getModulePositions());//USE THIS WHEN TESTING AUTOS WITHOUT FIELD LOCALIZATION
-    resetOdometry(poseEstimator.getEstimatedPosition());
+    //resetOdometry(poseEstimator.getEstimatedPosition());
 
     field.setRobotPose(poseEstimator.getEstimatedPosition());
     turret.setPose(new Pose2d(turretToField().getTranslation(), turretRotationToPose(HubPose)));
@@ -192,7 +192,7 @@ public class SwerveSubsystem extends SubsystemBase {
   //This method calculates the angle from the turret to the target Pose2d
   public static Rotation2d turretRotationToPose(Pose2d pose){
     double thetaWorldToTarget = Math.atan2((pose.getY()), (pose.getX()));//calculates the angle from the turret's point to the target point
-    double thetaTurretToTarget = thetaWorldToTarget//uses the thetaWorldToTarget and subtracts the robot's rotation to get the rotation from the turret (adding pi here is an offset)
+    double thetaTurretToTarget = thetaWorldToTarget - 0.5*Math.PI//uses the thetaWorldToTarget and subtracts the robot's rotation to get the rotation from the turret (adding pi here is an offset)
      - getgyro0to360(0).getRadians() //subtracting the robot's rotation
      - (Math.toRadians(gyro.getAngularVelocityZWorld().getValueAsDouble()) * 0.02);//adding angular velocity lookahead
     thetaTurretToTarget = (((thetaTurretToTarget % (2*Math.PI)) + (2*Math.PI)) % (2*Math.PI));//Returns the thetaTurretToTarget value in the range of 0-360 degrees
@@ -215,7 +215,7 @@ public class SwerveSubsystem extends SubsystemBase {
     SwerveModuleState[] swerveModuleStates = Constants.SwerveConstants.kinematics.toSwerveModuleStates(
       fieldRelative ? ChassisSpeeds.fromFieldRelativeSpeeds(translation.getX(), translation.getY(), rotationPID.calculate(rotation), readGyro()) :
       new ChassisSpeeds(translation.getX(), translation.getY(), rotationPIDauto.calculate(rotation))
-    );    
+    );
 
     SwerveDriveKinematics.desaturateWheelSpeeds(swerveModuleStates, Constants.SwerveConstants.maxSpeed);
 
@@ -226,7 +226,7 @@ public class SwerveSubsystem extends SubsystemBase {
   }
 
   public static Rotation2d getgyro0to360(double offset){
-    return Rotation2d.fromDegrees((((getRotation2d().getDegrees() + offset) % 360)+360)%360);
+    return Rotation2d.fromDegrees((((readGyro().getDegrees() + offset) % 360)+360)%360);
   }
 
   public SwerveModulePosition[] getModulePositions(){
@@ -251,17 +251,14 @@ public class SwerveSubsystem extends SubsystemBase {
     return color.isPresent() && color.get() == Alliance.Blue ? gyro.getRotation2d() : gyro.getRotation2d().rotateBy(Rotation2d.fromDegrees(180));
   }
 
-  public static Rotation2d getRotation2d(){
-    return Rotation2d.fromDegrees(readGyro().getDegrees() + 90);
-  }
-
   public void resetOdometry(Pose2d pose){
-    odometry.resetPosition(getRotation2d(), getModulePositions(), pose);//pose.getRotation()
-    //poseEstimator.resetPose(pose);
+    odometry.resetPosition(readGyro(), getModulePositions(), pose);//pose.getRotation()
+    poseEstimator.resetPose(pose);
   }
 
   public void updateOdometry(){
-    poseEstimator.update(getRotation2d(), getModulePositions());
+    poseEstimator.update(readGyro(), getModulePositions());
+    odometry.resetPose(poseEstimator.getEstimatedPosition());
   }
 
   public Pose2d getPose(){
@@ -310,8 +307,8 @@ public class SwerveSubsystem extends SubsystemBase {
               this::getRobotRelativeSpeeds, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
               (speeds, feedforwards) -> driveRobotRelative(speeds),//drive(new Translation2d(speeds.vxMetersPerSecond, speeds.vyMetersPerSecond), -speeds.omegaRadiansPerSecond / Constants.SwerveConstants.maxAngularVelocity, false, false),//drive(new Translation2d(speeds.vxMetersPerSecond, speeds.vyMetersPerSecond), speeds.omegaRadiansPerSecond / 3.1154127, false, true),//driveRobotRelative(speeds), // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds. Also optionally outputs individual module feedforwards
               new PPHolonomicDriveController( // PPHolonomicController is the built in path following controller for holonomic drive trains
-                      new PIDConstants(0, 0.0, 0.0), // Translation PID constants// 3.8 - p
-                      new PIDConstants(0, 0.0, 0.0) // Rotation PID constants//kp 0.00755, ki 0.0001
+                      new PIDConstants(5, 0.0, 0.0), // Translation PID constants// 3.8 - p
+                      new PIDConstants(5, 0.0, 0.0) // Rotation PID constants//kp 0.00755, ki 0.0001
               ),
               config, // The robot configuration
               () -> {

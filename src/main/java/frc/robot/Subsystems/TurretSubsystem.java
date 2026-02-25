@@ -30,6 +30,8 @@ public class TurretSubsystem extends SubsystemBase {
   private static MotionMagicDutyCycle turretRotMagicCycle = new MotionMagicDutyCycle(0);
   public static MotionMagicDutyCycle elevationMagicCycle = new MotionMagicDutyCycle(0);
 
+  public static boolean canShoot = false;
+
   /** Creates a new TurretSubsystem. */
   public TurretSubsystem() {
     configTurret();
@@ -44,6 +46,7 @@ public class TurretSubsystem extends SubsystemBase {
     //SmartDashboard.putNumber("Turret Elevation Position", elevationMotor.getPosition().getValueAsDouble());
     SmartDashboard.putNumber("Elevation degrees", Rotation2d.fromRotations(krakenToElevationRotations(elevationMotor.getPosition().getValueAsDouble())).getDegrees());
     SmartDashboard.putNumber("Turret Ticks", turretRotationMotor.getPosition().getValueAsDouble());
+    SmartDashboard.putNumber("Turret CAN coder", turretCANcoder.getAbsolutePosition().getValueAsDouble());
     if(RobotContainer.driver.povDown().getAsBoolean() && !RobotContainer.shouldDial){
       RobotContainer.shouldDial = true;
     }else if(RobotContainer.driver.povDown().getAsBoolean() && RobotContainer.shouldDial){
@@ -52,10 +55,18 @@ public class TurretSubsystem extends SubsystemBase {
   }
 
   public static void aimTurretAtPoint(Pose2d pose){
+    double targetRot;
     if(RobotContainer.shouldDial){
-      turretRotationMotor.setControl(turretRotMagicCycle.withPosition(turretRotationsToKraken(SwerveSubsystem.turretRotationToPose(pose).getRotations() + 0.25*RobotContainer.dial.getRawAxis(0))));
+      targetRot = turretRotationsToKraken(SwerveSubsystem.turretRotationToPose(pose).getRotations() + 0.25*RobotContainer.dial.getRawAxis(0));
+      turretRotationMotor.setControl(turretRotMagicCycle.withPosition(targetRot));
     }else{
-      turretRotationMotor.setControl(turretRotMagicCycle.withPosition(turretRotationsToKraken(SwerveSubsystem.turretRotationToPose(pose).getRotations())));
+      targetRot = turretRotationsToKraken(SwerveSubsystem.turretRotationToPose(pose).getRotations());
+      turretRotationMotor.setControl(turretRotMagicCycle.withPosition(targetRot));
+    }
+    if(turretRotationMotor.getPosition().getValueAsDouble() > targetRot * 0.975 && turretRotationMotor.getPosition().getValueAsDouble() < targetRot * 1.975){
+      canShoot = true;
+    }else{
+      canShoot = false;
     }
   }
 
@@ -97,7 +108,8 @@ public class TurretSubsystem extends SubsystemBase {
 
   private static void configTurret(){
     turretRotationMotor.setNeutralMode(NeutralModeValue.Coast);
-    turretRotationMotor.setPosition(turretRotationsToKraken(TurretConstants.TurretCableChainPoint.getRotations() - TurretConstants.TurretStartOffset.getRotations()));
+    turretRotationMotor.setPosition(turretRotationsToKraken(TurretConstants.TurretCableChainPoint.getRotations() - TurretConstants.TurretStartOffset.getRotations()) + (turretCANcoder.getAbsolutePosition().getValueAsDouble() * TurretConstants.encoderRatio));
+    //turretRotationMotor.setPosition(turretRotationsToKraken(TurretConstants.TurretCableChainPoint.getRotations() - TurretConstants.TurretStartOffset.getRotations()));
 
     turretRotConfig.Slot0.kP = 0.22;
     turretRotConfig.Slot0.kI = 0.005;
