@@ -57,7 +57,7 @@ public class TurretLogic {
         try{
             zeroOfTheDerivativeOfTheDesiredAngle = brentSolver.findRoot((double theta)-> Math.pow(flattenedInitialVel,2)*flattenedTargetPoseX*Math.cos(2*theta) - flattenedInitialVel*flattenedTargetPoseX*flattenedRobotVel*Math.cos(theta) + flattenedTargetPoseY*flattenedInitialVel*Math.sin(theta), TurretConstants.TurretMinAngle.getRadians(), TurretConstants.TurretStartElevation.getRadians());
         }catch(Exception e){
-            System.out.println("Zero of the derivative failed" + e);
+            //System.out.println("Zero of the derivative failed" + e);
         }
 
         try{
@@ -68,7 +68,7 @@ public class TurretLogic {
                 trueAngle = brentSolver.findRoot((double theta)-> flattenedInitialVel*flattenedTargetPoseX*(flattenedInitialVel*Math.cos(theta) - flattenedRobotVel)*Math.sin(theta) - 4.905*Math.pow(flattenedTargetPoseX,2) - (flattenedInitialVel*Math.cos(theta) - flattenedRobotVel)*flattenedTargetPoseY, TurretConstants.TurretMinAngle.getRadians(), zeroOfTheDerivativeOfTheDesiredAngle); 
                 usingLower = true;
             }catch(Exception E){
-                System.out.println("Cry" + E);
+                //System.out.println("Cry" + E);
             }
         }
         
@@ -78,11 +78,12 @@ public class TurretLogic {
         double vUnajustedY = Math.cos(trueAngle) * Math.sin(angleToTarget) * flattenedInitialVel;
         double vUnajustedZ = Math.sin(trueAngle) * flattenedInitialVel;
 
+        double velocityOffset = 4;
         TurretAimPose turretAimPose = new TurretAimPose();
         turretAimPose.aimPose = new Translation3d(-vUnajustedX - lateralOffsetVelocityX, 
             -vUnajustedY - lateralOffsetVelocityY, 
             vUnajustedZ + TurretConstants.TurretVerticalOffset);
-        turretAimPose.vel = shooterVel - shooterConstants.velocityOffset;
+        turretAimPose.vel = shooterVel - velocityOffset;
         turretAimPose.usingLower = usingLower;
 
         return turretAimPose;

@@ -32,7 +32,7 @@ public class PointTurretAtPoint extends Command {
   @Override
   public void execute() {
     TurretSubsystem.aimTurretAtPoint(new Pose2d(mSwerve.getTurretPointTowardsPose(pose).aimPose.getX(), mSwerve.getTurretPointTowardsPose(pose).aimPose.getY(), new Rotation2d()));
-    TurretSubsystem.setElevation(mSwerve.getTurretPointTowardsPose(pose).elevationAngleDegrees);
+    TurretSubsystem.setElevation(mSwerve.getTurretPointTowardsPose(pose).elevationAngleDegrees + 5);
   }
 
   // Called once the command ends or is interrupted.

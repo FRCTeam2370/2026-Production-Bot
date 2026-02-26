@@ -39,13 +39,13 @@ public class ShootAtVelocity extends Command {
     vel = aimpose.vel;
     usingLower = aimpose.usingLower;
     ShooterSubsystem.shootWithVelocity(vel);
-    if(ShooterSubsystem.getVelocity() > vel * 0.975 /*&& TurretSubsystem.canShoot*/){
+    if(ShooterSubsystem.getVelocity() > vel * 0.9 && TurretSubsystem.canShoot){
       UptakeSubsystem.uptakeWithVelocity(uptakeConstants.uptakeSpeed);
       SpindexerSubsystem.spindexrWithVelocity(spindexerConstants.spindexerSpeed);
-    }// }else{
-    //   UptakeSubsystem.uptakeWithVelocity(0);
-    //   SpindexerSubsystem.spindexrWithVelocity(0);
-    // }
+    }else{
+      UptakeSubsystem.uptakeWithVelocity(0);
+      SpindexerSubsystem.spindexrWithVelocity(0);
+    }
     SmartDashboard.putBoolean("using Lower", usingLower);
     SmartDashboard.putNumber("Expected Shooter vel", vel);
   }
