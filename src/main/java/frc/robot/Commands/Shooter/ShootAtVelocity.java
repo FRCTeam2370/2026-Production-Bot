@@ -43,7 +43,7 @@ public class ShootAtVelocity extends Command {
       UptakeSubsystem.uptakeWithVelocity(uptakeConstants.uptakeSpeed);
       SpindexerSubsystem.spindexrWithVelocity(spindexerConstants.spindexerSpeed);
     }else{
-      UptakeSubsystem.uptakeWithVelocity(0);
+      UptakeSubsystem.uptakeWithVelocity(-20);
       SpindexerSubsystem.spindexrWithVelocity(0);
     }
     SmartDashboard.putBoolean("using Lower", usingLower);
