@@ -82,6 +82,8 @@ public class SwerveSubsystem extends SubsystemBase {
   private static FieldObject2d detectorCam = field.getObject("Detection Cam");
   private static FieldObject2d nextClosestBall = field.getObject("next closest ball");
 
+  private static double lastTurretTheta = 0;
+
   private StructPublisher<Pose2d> publisher = NetworkTableInstance.getDefault()
   .getStructTopic("MyPose", Pose2d.struct).publish();
 
@@ -151,6 +153,7 @@ public class SwerveSubsystem extends SubsystemBase {
     // SmartDashboard.putNumber("Odometry x", odometry.getPoseMeters().getX());
     // SmartDashboard.putNumber("Odometry y", odometry.getPoseMeters().getY());
     SmartDashboard.putNumber("Calculated Turret Angle", turretRotationToPose(new Pose2d(FieldConstants.HubFieldPoseRed.getX(), FieldConstants.HubFieldPoseRed.getY(), new Rotation2d())).getDegrees());
+    SmartDashboard.putNumber("Calculated Turret Angle 0-450", turretRotationToPose450(new Pose2d(FieldConstants.HubFieldPoseRed.getX(), FieldConstants.HubFieldPoseRed.getY(), new Rotation2d())).getDegrees());
     NetworkTableInstance.getDefault().getTable("fuelCV").getEntry("Camera Pose").setDoubleArray(new Double[]{detectionCamToField().getX(), detectionCamToField().getY(), getgyro0to360(180).getRadians()});
 
     updateOdometry();
@@ -207,6 +210,27 @@ public class SwerveSubsystem extends SubsystemBase {
       returnTheta += 2*Math.PI;
     }
     
+    return Rotation2d.fromRadians(returnTheta);
+  }
+
+  public static Rotation2d turretRotationToPose450(Pose2d pose){
+    double thetaWorldToTarget = Math.atan2((pose.getY()), (pose.getX()));//calculates the angle from the turret's point to the target point
+    double thetaTurretToTarget = thetaWorldToTarget - 0.5*Math.PI//uses the thetaWorldToTarget and subtracts the robot's rotation to get the rotation from the turret (adding pi here is an offset)
+     - getgyro0to360(0).getRadians() //subtracting the robot's rotation
+     - (Math.toRadians(gyro.getAngularVelocityZWorld().getValueAsDouble()) * 0.02);//adding angular velocity lookahead
+    thetaTurretToTarget = (((thetaTurretToTarget % (2*Math.PI)) + (2*Math.PI)) % (2*Math.PI));//Returns the thetaTurretToTarget value in the range of 0-360 degrees
+
+    double returnTheta;
+    if(thetaTurretToTarget + 2*Math.PI < TurretConstants.TurretMax.getRadians()){
+      if(Math.abs(lastTurretTheta - thetaTurretToTarget) < Math.abs(lastTurretTheta - thetaTurretToTarget - 2*Math.PI) && thetaTurretToTarget > TurretConstants.TurretMin.getRadians()){
+        returnTheta = thetaTurretToTarget;
+      }else{
+        returnTheta = thetaTurretToTarget + 2*Math.PI;
+      }
+    }else{
+      returnTheta = thetaTurretToTarget;
+    }
+    lastTurretTheta = returnTheta;
     return Rotation2d.fromRadians(returnTheta);
   }
 

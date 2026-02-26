@@ -56,10 +56,10 @@ public class TurretSubsystem extends SubsystemBase {
   public static void aimTurretAtPoint(Pose2d pose){
     double targetRot;
     if(RobotContainer.shouldDial){
-      targetRot = turretRotationsToKraken(SwerveSubsystem.turretRotationToPose(pose).getRotations() + 0.25*RobotContainer.dial.getRawAxis(0));
+      targetRot = turretRotationsToKraken(SwerveSubsystem.turretRotationToPose450(pose).getRotations() + 0.25*RobotContainer.dial.getRawAxis(0));
       turretRotationMotor.setControl(turretRotMagicCycle.withPosition(targetRot));
     }else{
-      targetRot = turretRotationsToKraken(SwerveSubsystem.turretRotationToPose(pose).getRotations());
+      targetRot = turretRotationsToKraken(SwerveSubsystem.turretRotationToPose450(pose).getRotations());
       turretRotationMotor.setControl(turretRotMagicCycle.withPosition(targetRot));
     }
     if(turretRotationMotor.getPosition().getValueAsDouble() > targetRot * 0.975 && turretRotationMotor.getPosition().getValueAsDouble() < targetRot * 1.975){
