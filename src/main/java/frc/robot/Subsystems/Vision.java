@@ -34,7 +34,7 @@ public class Vision extends SubsystemBase {
       double totalDistanceToTags = 0;
 
       //tells Limelight Helpers what the robot's rotation is
-      LimelightHelpers.SetRobotOrientation(i, SwerveSubsystem.getgyro0to360(180).getDegrees(), 0, 0, 0, 0, 0);
+      LimelightHelpers.SetRobotOrientation(i, SwerveSubsystem.getgyro0to360(270).getDegrees(), 0, 0, 0, 0, 0);
       //Calculates the robot's field relative position for the camera using Mega Tag 2
       LimelightHelpers.PoseEstimate limelightPose = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2(i);
       

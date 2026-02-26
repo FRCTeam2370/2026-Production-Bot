@@ -93,13 +93,13 @@ public class IntakeSubsystem extends SubsystemBase {
     CANcoderConfig.MagnetSensor.SensorDirection = SensorDirectionValue.CounterClockwise_Positive;
 
     intakeRotationMotorConfig.Feedback.RotorToSensorRatio = intakeConstants.intakeRatio;
-    CANcoderConfig.MagnetSensor.AbsoluteSensorDiscontinuityPoint = 0.5;
+    CANcoderConfig.MagnetSensor.AbsoluteSensorDiscontinuityPoint = 0.2;
 
     intakeRotationMotorConfig.Slot0.kP = 0.1;
     intakeRotationMotorConfig.Slot0.kI = 0;
     intakeRotationMotorConfig.Slot0.kD = 0.0;
 
-    intakeRotationMotorConfig.Slot0.kG = 0.03;
+    intakeRotationMotorConfig.Slot0.kG = 0.025;
 
     intakeRotationMotorConfig.MotionMagic.MotionMagicAcceleration = 100;
     intakeRotationMotorConfig.MotionMagic.MotionMagicCruiseVelocity = 40;

@@ -18,6 +18,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Constants.FieldConstants;
 import frc.robot.Commands.ResetGyro;
+import frc.robot.Commands.SetLEDStatus;
 import frc.robot.Commands.TeleopSwerve;
 import frc.robot.Commands.Intake.FindIntakeKG;
 import frc.robot.Commands.Intake.IntakeSetPosition;
@@ -28,6 +29,7 @@ import frc.robot.Commands.TurretCommands.SetElevationPos;
 import frc.robot.Commands.TurretCommands.SetTurretRotation;
 import frc.robot.Subsystems.FieldInfo;
 import frc.robot.Subsystems.IntakeSubsystem;
+import frc.robot.Subsystems.LEDSubsystem;
 import frc.robot.Subsystems.ObjectDetection;
 import frc.robot.Subsystems.ShooterSubsystem;
 import frc.robot.Subsystems.SpindexerSubsystem;
@@ -35,6 +37,7 @@ import frc.robot.Subsystems.SwerveSubsystem;
 import frc.robot.Subsystems.TurretSubsystem;
 import frc.robot.Subsystems.UptakeSubsystem;
 import frc.robot.Subsystems.Vision;
+import frc.robot.Subsystems.LEDSubsystem.LEDState;
 
 public class RobotContainer {
   public static final CommandXboxController driver = new CommandXboxController(0);
@@ -51,6 +54,7 @@ public class RobotContainer {
   private final ObjectDetection mObjectDetection = new ObjectDetection();
   private final FieldInfo mFieldInfo = new FieldInfo();
   private final SwerveSubsystem mSwerve = new SwerveSubsystem(mObjectDetection);
+  private final LEDSubsystem mLedSubsystem = new LEDSubsystem();
 
   private final SendableChooser<Command> autoChooser;
 
@@ -81,6 +85,8 @@ public class RobotContainer {
     driver.a().onTrue(new SetElevationPos(75, mTurretSubsystem));
     //driver.rightTrigger().whileTrue(mSwerve.driveThroughBalls());
     driver.povUp().whileTrue(mSwerve.driveToClosestBall(()-> mSwerve.getClosestBall()));
+
+    driver.povRight().onTrue(new SetLEDStatus(mLedSubsystem, LEDState.EndgameBlue));
   }
 
   public Command getAutonomousCommand() {

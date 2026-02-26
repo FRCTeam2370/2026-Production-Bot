@@ -27,14 +27,15 @@ public class Robot extends TimedRobot {
 
   @Override
   public void disabledInit() {
-    LEDSubsystem.mLEDState = LEDState.Idle;
+    LEDSubsystem.mLEDState = LEDState.Idle;    
     for(String i : Vision.limelightNames){
       LimelightHelpers.setLimelightNTDouble(i, "throttle_set", 500);
     }
   }
 
   @Override
-  public void disabledPeriodic() {}
+  public void disabledPeriodic() {
+  }
 
   @Override
   public void disabledExit() {}

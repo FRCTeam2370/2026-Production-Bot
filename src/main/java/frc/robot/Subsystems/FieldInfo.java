@@ -20,13 +20,13 @@ public class FieldInfo extends SubsystemBase {
   public void periodic() {
     // This method will be called once per scheduler run
     SmartDashboard.putBoolean("Hub Active", isHubActive());
-    if(isHubActive() && DriverStation.getAlliance().isPresent()){
-      if(DriverStation.getAlliance().get() == Alliance.Blue){
-        LEDSubsystem.mLEDState = LEDState.Blue;
-      }else{
-        LEDSubsystem.mLEDState = LEDState.Red;
-      }
-    }
+    // if(isHubActive() && DriverStation.getAlliance().isPresent()){
+    //   if(DriverStation.getAlliance().get() == Alliance.Blue){
+    //     LEDSubsystem.mLEDState = LEDState.Blue;
+    //   }else{
+    //     LEDSubsystem.mLEDState = LEDState.Red;
+    //   }
+    // }
   }
 
   public boolean isHubActive() {

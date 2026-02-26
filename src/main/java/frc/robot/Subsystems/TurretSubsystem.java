@@ -44,8 +44,8 @@ public class TurretSubsystem extends SubsystemBase {
     //SmartDashboard.putNumber("Turret Elevation Motor Current", elevationMotor.getStatorCurrent().getValueAsDouble());
     //SmartDashboard.putNumber("Turret Elevation Position", elevationMotor.getPosition().getValueAsDouble());
     SmartDashboard.putNumber("Elevation degrees", Rotation2d.fromRotations(krakenToElevationRotations(elevationMotor.getPosition().getValueAsDouble())).getDegrees());
-    SmartDashboard.putNumber("Turret Ticks", turretRotationMotor.getPosition().getValueAsDouble());
-    SmartDashboard.putNumber("Turret CAN coder", turretCANcoder.getAbsolutePosition().getValueAsDouble());
+    //SmartDashboard.putNumber("Turret Ticks", turretRotationMotor.getPosition().getValueAsDouble());
+    //SmartDashboard.putNumber("Turret CAN coder", turretCANcoder.getAbsolutePosition().getValueAsDouble());
     if(RobotContainer.driver.povDown().getAsBoolean() && !RobotContainer.shouldDial){
       RobotContainer.shouldDial = true;
     }else if(RobotContainer.driver.povDown().getAsBoolean() && RobotContainer.shouldDial){
@@ -97,7 +97,7 @@ public class TurretSubsystem extends SubsystemBase {
 
   public static void setElevation(double degrees){
     if(degrees == Double.NaN){
-      degrees = 65;
+      degrees = TurretConstants.TurretMaxAngle.getDegrees();
     }
 
     double returnDegrees = Math.max(Math.min(degrees, TurretConstants.TurretMaxAngle.getDegrees()), TurretConstants.TurretMinAngle.getDegrees());
@@ -128,7 +128,7 @@ public class TurretSubsystem extends SubsystemBase {
 
     turretElevationMotorConfig.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;
 
-    elevationMotor.setPosition(elevationRotationsToKraken(TurretConstants.TurretMaxAngle.getRotations()));
+    elevationMotor.setPosition(elevationRotationsToKraken(TurretConstants.TurretStartElevation.getRotations()));
 
     turretElevationMotorConfig.Slot0.kP = 0.2;//1.8
     turretElevationMotorConfig.Slot0.kI = 0.001;//0.12

@@ -446,7 +446,7 @@ public class SwerveSubsystem extends SubsystemBase {
     TurretAimPose turretAimPose = turretLogic.getAimPose(targetPose, distanceToPose);
     //double distanceToPose = Math.sqrt(Math.pow(aimPose.getX() - poseEstimator.getEstimatedPosition().getX(), 2) + Math.pow(aimPose.getY() - poseEstimator.getEstimatedPosition().getY(), 2));
     Rotation2d elevationAngle = Rotation2d.fromRadians(Math.atan2(turretAimPose.aimPose.getZ() - TurretConstants.TurretVerticalOffset, distanceToPose));
-    SmartDashboard.putNumber("Aimpose Z", turretAimPose.aimPose.getZ());
+    //SmartDashboard.putNumber("Aimpose Z", turretAimPose.aimPose.getZ());
     SmartDashboard.putNumber("Raw Calculated Elevation Angle", elevationAngle.getDegrees());
     //elevationAngle = elevationAngle.getDegrees() > TurretConstants.TurretMaxAngle.getDegrees() ? TurretConstants.TurretMaxAngle : elevationAngle.getDegrees() < TurretConstants.TurretMinAngle.getDegrees() ? TurretConstants.TurretMinAngle : elevationAngle;   
     

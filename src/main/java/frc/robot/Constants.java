@@ -29,6 +29,8 @@ public class Constants {
     public static final int shooterMotorTwoID = 25;
 
     public static final int shooterSpeed = 60;
+
+    public static final double velocityOffset = 5;
   }
 
   public static class uptakeConstants{
@@ -56,7 +58,7 @@ public class Constants {
     public static final Rotation2d intakeMax = Rotation2d.fromDegrees(90);
     public static final Rotation2d intakeMin = Rotation2d.fromDegrees(-68);
 
-    public static final Rotation2d CANcoderOffset = Rotation2d.fromDegrees(57.70419034090909);
+    public static final Rotation2d CANcoderOffset = Rotation2d.fromRotations(-0.179931640625);
   }
 
   public static class pigeonConstants{
@@ -64,7 +66,7 @@ public class Constants {
   }
 
     public static class VisionConstants{
-        public static final double stdCoefficient = 0.05;
+        public static final double stdCoefficient = 0.1;
 
         public static final Pose2d objectDetectionRobotToCamera = new Pose2d(-0.254, 0, Rotation2d.fromDegrees(180));//12.5, 10, 180 degrees
 
@@ -81,7 +83,7 @@ public class Constants {
         public static final double turretRatio = 18.09912109375 - 3.68310546875;//30/12 * 150/26;//Kraken rotations : turret rotations, 14.345
         public static final double elevationRatio = 955/12;//Kraken rotations : turret rotations
 
-        public static final Transform2d RobotToTurret = new Transform2d(0.161925, -0.0889508, Rotation2d.fromDegrees(0));
+        public static final Transform2d RobotToTurret = new Transform2d(-0.161925, -0.0889508, Rotation2d.fromDegrees(0));
 
         public static final Rotation2d TurretStartOffset = Rotation2d.fromDegrees(50);//relative to the cable chain (counterclockwise positive)
         public static final Rotation2d TurretCableChainPoint = Rotation2d.fromDegrees(590);//Relative to the front of the robot (clockwise positive)
@@ -91,6 +93,7 @@ public class Constants {
         public static final double TurretVerticalOffset = 0.425;//meters
         public static final Rotation2d TurretMaxAngle = Rotation2d.fromDegrees(75);//from horizontal, old: 65
         public static final Rotation2d TurretMinAngle = Rotation2d.fromDegrees(50);//from horizontal, old: 40
+        public static final Rotation2d TurretStartElevation = Rotation2d.fromDegrees(75);
     }
 
     public static class FieldConstants {
@@ -213,7 +216,7 @@ public class Constants {
     }
 
     public static class LEDConstants {
-        public static final int LEDID = 0;
+        public static final int LEDID = 1;
         public static final int LEDLength = 46;//79
         public static final int endgameLength = 46;
 

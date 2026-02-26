@@ -41,8 +41,8 @@ public class UptakeSubsystem extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    SmartDashboard.putNumber("Uptake Current", uptakeMotor.getStatorCurrent().getValueAsDouble());
-    SmartDashboard.putNumber("Uptake Velocity", uptakeMotor.getVelocity().getValueAsDouble());
+    // SmartDashboard.putNumber("Uptake Current", uptakeMotor.getStatorCurrent().getValueAsDouble());
+    // SmartDashboard.putNumber("Uptake Velocity", uptakeMotor.getVelocity().getValueAsDouble());
   }
 
   public static void uptakeConfiguration() {
