@@ -24,6 +24,7 @@ import frc.robot.Commands.Intake.FindIntakeKG;
 import frc.robot.Commands.Intake.IntakeSetPosition;
 import frc.robot.Commands.Intake.SetIntakePosAndSpeed;
 import frc.robot.Commands.Shooter.ShootAtVelocity;
+import frc.robot.Commands.TurretCommands.AimTurretAtActiveAimPoint;
 import frc.robot.Commands.TurretCommands.PointTurretAtPoint;
 import frc.robot.Commands.TurretCommands.SetElevationPos;
 import frc.robot.Commands.TurretCommands.SetTurretRotation;
@@ -45,17 +46,16 @@ public class RobotContainer {
 
   public static boolean shouldDial = false;
   
+  private final ObjectDetection mObjectDetection = new ObjectDetection();
+  private final FieldInfo mFieldInfo = new FieldInfo();
+  private final SwerveSubsystem mSwerve = new SwerveSubsystem(mObjectDetection);
   private final TurretSubsystem mTurretSubsystem = new TurretSubsystem();
   private final IntakeSubsystem mIntakeSubsystem = new IntakeSubsystem();
   private final SpindexerSubsystem mSpindexerSubsystem = new SpindexerSubsystem();
   private final UptakeSubsystem mUptakeSubsystem = new UptakeSubsystem();
   private final ShooterSubsystem mShooterSubsystem = new ShooterSubsystem();
   private final Vision mVision = new Vision();
-  private final ObjectDetection mObjectDetection = new ObjectDetection();
-  private final FieldInfo mFieldInfo = new FieldInfo();
-  private final SwerveSubsystem mSwerve = new SwerveSubsystem(mObjectDetection);
   private final LEDSubsystem mLedSubsystem = new LEDSubsystem();
-
   private final SendableChooser<Command> autoChooser;
 
   public RobotContainer() {
@@ -69,6 +69,7 @@ public class RobotContainer {
 
   private void configureBindings() {
     mSwerve.setDefaultCommand(new TeleopSwerve(mSwerve, ()-> -driver.getRawAxis(0), ()-> driver.getRawAxis(1), ()-> driver.getRawAxis(4), ()-> false));
+    driver.b().toggleOnTrue(new AimTurretAtActiveAimPoint(mSwerve, mTurretSubsystem));
 
     driver.back().onTrue(new ResetGyro(mSwerve));
 
@@ -76,9 +77,9 @@ public class RobotContainer {
 
     driver.rightTrigger().toggleOnTrue(new ShootAtVelocity(mShooterSubsystem, mUptakeSubsystem, mSpindexerSubsystem, mSwerve));
     driver.leftBumper().toggleOnTrue(new SetIntakePosAndSpeed(Rotation2d.fromDegrees(-67).getRotations(), 60, mIntakeSubsystem));
-    driver.b().toggleOnTrue(new PointTurretAtPoint(FieldConstants.HubFieldPoseRed, mTurretSubsystem, mSwerve));
+    //driver.b().toggleOnTrue(new PointTurretAtPoint(FieldConstants.HubFieldPoseRed, mTurretSubsystem, mSwerve));
     //driver.x().onTrue(new SetTurretRotation(Rotation2d.fromDegrees(360).getRotations(), mTurretSubsystem));
-    driver.y().toggleOnTrue(new PointTurretAtPoint(FieldConstants.AimPose1, mTurretSubsystem, mSwerve));
+    //driver.y().toggleOnTrue(new PointTurretAtPoint(FieldConstants.AimPose1, mTurretSubsystem, mSwerve));
     // driver.x().toggleOnTrue(new PointTurretAtPoint(FieldConstants.AimPose2, mTurretSubsystem, mSwerve));
 
     driver.x().onTrue(new SetElevationPos(50, mTurretSubsystem));

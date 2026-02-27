@@ -12,7 +12,13 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
+import frc.robot.Constants.SwerveConstants;
+import frc.robot.Subsystems.LEDSubsystem;
+import frc.robot.Subsystems.ShooterSubsystem;
 import frc.robot.Subsystems.SwerveSubsystem;
+import frc.robot.Subsystems.TurretSubsystem;
+import frc.robot.Subsystems.LEDSubsystem.LEDState;
+import frc.robot.Subsystems.TurretSubsystem.ActiveAimPose;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class TeleopSwerve extends Command {
@@ -40,6 +46,22 @@ public class TeleopSwerve extends Command {
     double xVal = Math.abs(xSup.getAsDouble()) < 0.05 ? 0 : xSup.getAsDouble();
     double yVal = Math.abs(ySup.getAsDouble()) < 0.05 ? 0 : ySup.getAsDouble();
     double rotVal = Math.abs(rotSup.getAsDouble()) < 0.05 ? 0 : rotSup.getAsDouble();
+
+    if(ShooterSubsystem.getVelocity() > 5 && LEDSubsystem.mLEDState == LEDState.Hub){
+      ActiveAimPose pose = TurretSubsystem.activeAimPoint;
+      double xDistanceToTarget = pose.aimPoint.getX() - SwerveSubsystem.poseEstimator.getEstimatedPosition().getX();
+      double yDistanceToTarget = pose.aimPoint.getY() - SwerveSubsystem.poseEstimator.getEstimatedPosition().getY();
+      double totalDistanceToTarget = Math.sqrt(Math.pow(xDistanceToTarget, 2) + Math.pow(yDistanceToTarget, 2));
+      double xVelocity = yVal * Constants.SwerveConstants.maxSpeed;
+      double yVelocity = xVal * Constants.SwerveConstants.maxSpeed;
+
+      if((xVelocity * xDistanceToTarget) > 0){
+        yVal *= SwerveConstants.maxApproachPercent*Math.abs(totalDistanceToTarget/xDistanceToTarget);
+      }
+      if((yVelocity * yDistanceToTarget) < 0){
+        xVal *= SwerveConstants.maxApproachPercent*Math.abs(totalDistanceToTarget/yDistanceToTarget);
+      }
+    }
     xVal *= SwerveSubsystem.color.isPresent() && SwerveSubsystem.color.get() == Alliance.Blue ? -1 : 1;
     yVal *= SwerveSubsystem.color.isPresent() && SwerveSubsystem.color.get() == Alliance.Blue ? -1 : 1;
 

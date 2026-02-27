@@ -68,9 +68,9 @@ public class Constants {
     public static class VisionConstants{
         public static final double stdCoefficient = 0.1;
 
-        public static final Pose2d objectDetectionRobotToCamera = new Pose2d(-0.254, 0, Rotation2d.fromDegrees(180));//12.5, 10, 180 degrees
+        public static final Pose2d objectDetectionRobotToCamera = new Pose2d(0.254, -0.254, Rotation2d.fromDegrees(0));//12.5, 10, 180 degrees
 
-        public static final Rotation2d intakeSideRelativeToFront = Rotation2d.fromDegrees(180);
+        public static final Rotation2d intakeSideRelativeToFront = Rotation2d.fromDegrees(0);
     }
 
     public static class TurretConstants{
@@ -131,6 +131,7 @@ public class Constants {
 
         public static final double maxSpeed = 5.12064;//meters per second
         public static final double maxAngularVelocity = 3.1154127;//radians per second
+        public static final double maxApproachPercent = 0.2;// percent that the robot's max velocity should be limited to when moving towards the hub (this allows the math to work correctly at all times since we can't move very fast towards the goal or else it shoots too low)
 
         public static final double HeadingOffset = 0;//degrees from forward
         public static final double gyroOffset = 90;
@@ -216,7 +217,7 @@ public class Constants {
     }
 
     public static class LEDConstants {
-        public static final int LEDID = 1;
+        public static final int LEDID = 0;
         public static final int LEDLength = 46;//79
         public static final int endgameLength = 46;
 

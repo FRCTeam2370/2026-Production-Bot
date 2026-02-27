@@ -47,6 +47,11 @@ public class IntakeSubsystem extends SubsystemBase {
     SmartDashboard.putNumber("intake position current", intakeRotationMotor.getStatorCurrent().getValueAsDouble());
     SmartDashboard.putNumber("Intake CANcoder val", intakeCANcoder.getAbsolutePosition().getValueAsDouble());
     SmartDashboard.putNumber("Intake Degrees", Rotation2d.fromRotations(KrakenToIntake(intakeRotationMotor.getPosition().getValueAsDouble())).getDegrees());
+    if(KrakenToIntake(intakeRotationMotor.getPosition().getValueAsDouble()) < intakeConstants.intakeMin.getRotations() * 0.95){
+      ObjectDetection.intakeDown = true;
+    }else{
+      ObjectDetection.intakeDown = false;
+    }
   }
 
   public static void intakeWithVelocity(double speed) {

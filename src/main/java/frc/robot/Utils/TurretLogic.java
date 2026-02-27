@@ -13,7 +13,7 @@ import frc.robot.Subsystems.SwerveSubsystem;
 public class TurretLogic {
     SwerveSubsystem mSwerve;
     double trueAngle = 0;
-    double zeroOfTheDerivativeOfTheDesiredAngle = 0;
+    double zeroOfTheDerivativeOfTheDesiredAngle = TurretConstants.TurretMinAngle.getRadians();
     boolean usingLower = false;
     BrentSolver brentSolver = new BrentSolver(0.01,0.01,0.01);
 

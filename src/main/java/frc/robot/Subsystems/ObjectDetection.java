@@ -18,6 +18,7 @@ public class ObjectDetection extends SubsystemBase {
   public double[] ballAngles, ballDistances, weights, ballx, bally, sortedWeights;
   private int numFuel;
   private boolean plotBalls = false;
+  public static boolean intakeDown = false;
   public NetworkTable fuelCV;
   public ArrayList<Pose2d> ballPoses = new ArrayList<>();
   //public ArrayList<Ball> balls = new ArrayList<>();
@@ -32,7 +33,7 @@ public class ObjectDetection extends SubsystemBase {
     if(fuelCV != null){
       handleFuelDetection();
     }
-
+    NetworkTableInstance.getDefault().getTable("fuelCV").getEntry("intakeDown").setBoolean(intakeDown);
     SmartDashboard.putNumber("Ball Poses Size", ballPoses.size());
     //SmartDashboard.putNumber("ball angle", ballAngles[0]);
     //SmartDashboard.putNumber("ball distance", ballDistances[0]);

@@ -252,6 +252,10 @@ public class SwerveSubsystem extends SubsystemBase {
     return Rotation2d.fromDegrees((((readGyro().getDegrees() + offset) % 360)+360)%360);
   }
 
+  public static Rotation2d getGyroFieldRelative(double offset){
+    return Rotation2d.fromDegrees((((gyro.getYaw().getValueAsDouble() + offset) % 360) + 360) % 360);
+  }
+
   public SwerveModulePosition[] getModulePositions(){
     SwerveModulePosition[] positions = new SwerveModulePosition[]{
       mSwerveModules[0].getPosition(),

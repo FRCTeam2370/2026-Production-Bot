@@ -13,9 +13,13 @@ import com.ctre.phoenix6.signals.NeutralModeValue;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation3d;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants.FieldConstants;
 import frc.robot.Constants.TurretConstants;
+import frc.robot.Subsystems.LEDSubsystem.LEDState;
 import frc.robot.RobotContainer;
 
 public class TurretSubsystem extends SubsystemBase {
@@ -30,6 +34,17 @@ public class TurretSubsystem extends SubsystemBase {
   public static MotionMagicDutyCycle elevationMagicCycle = new MotionMagicDutyCycle(0);
 
   public static boolean canShoot = false;
+
+  public static class ActiveAimPose {
+    public Translation3d aimPoint;
+    public LEDState ledState;
+    public ActiveAimPose(Translation3d aimPoint, LEDState ledState){
+      this.aimPoint = aimPoint;
+      this.ledState = ledState;
+    }
+  }
+
+  public static ActiveAimPose activeAimPoint = new ActiveAimPose(SwerveSubsystem.color.isPresent() && SwerveSubsystem.color.get() == Alliance.Blue ? FieldConstants.HubFieldPoseBlue : FieldConstants.HubFieldPoseRed, LEDState.Hub);
 
   /** Creates a new TurretSubsystem. */
   public TurretSubsystem() {
