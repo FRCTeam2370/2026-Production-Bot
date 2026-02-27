@@ -17,6 +17,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.units.measure.Angle;
+import frc.robot.Constants.SwerveConstants;
 import frc.robot.Utils.SwerveModuleConstants;
 
 /** Add your docs here. */
@@ -67,7 +68,7 @@ public class SwerveModule {
         turnMotorConfig.Slot0.kI = Constants.SwerveConstants.TurnkI;
         turnMotorConfig.Slot0.kD = Constants.SwerveConstants.TurnkD;
 
-        driveMotorConfig.CurrentLimits.StatorCurrentLimit = 40;
+        driveMotorConfig.CurrentLimits.StatorCurrentLimit = SwerveConstants.CurrentLimit;
 
         turnMotorConfig.Feedback.SensorToMechanismRatio = (Constants.SwerveConstants.RTurnRatio);//turn motor to rotor raio
 

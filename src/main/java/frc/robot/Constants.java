@@ -123,6 +123,8 @@ public class Constants {
         public static final double DriveKS = 0.1;//for finding the kv and ks based off of each other -> 10 vel at 1.45 volt -> 1.45 - 0.3 = 1.15 / 10 = 0.115
         public static final double DriveKV = 0.0;//0.125
 
+        public static final double CurrentLimit = 60;//Amps
+
         public static final double TurnkP = 4;
         public static final double TurnkI = 0;
         public static final double TurnkD = 0;

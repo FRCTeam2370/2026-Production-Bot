@@ -132,6 +132,8 @@ public class TurretSubsystem extends SubsystemBase {
     turretRotConfig.MotionMagic.MotionMagicAcceleration = 150;
     turretRotConfig.MotionMagic.MotionMagicCruiseVelocity = 100;
 
+    turretRotConfig.CurrentLimits.StatorCurrentLimit = 40;
+
     turretRotConfig.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;
 
 
@@ -151,6 +153,8 @@ public class TurretSubsystem extends SubsystemBase {
 
     turretElevationMotorConfig.MotionMagic.MotionMagicAcceleration = 300;
     turretElevationMotorConfig.MotionMagic.MotionMagicCruiseVelocity = 240;
+
+    turretElevationMotorConfig.CurrentLimits.StatorCurrentLimit = 40;
 
     elevationMotor.getConfigurator().apply(turretElevationMotorConfig);
   }

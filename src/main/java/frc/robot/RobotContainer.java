@@ -25,6 +25,7 @@ import frc.robot.Commands.Intake.IntakeSetPosition;
 import frc.robot.Commands.Intake.SetIntakePosAndSpeed;
 import frc.robot.Commands.Shooter.ShootAtVelocity;
 import frc.robot.Commands.TurretCommands.AimTurretAtActiveAimPoint;
+import frc.robot.Commands.TurretCommands.PointTurretAndShoot;
 import frc.robot.Commands.TurretCommands.PointTurretAtPoint;
 import frc.robot.Commands.TurretCommands.SetElevationPos;
 import frc.robot.Commands.TurretCommands.SetTurretRotation;
@@ -47,8 +48,8 @@ public class RobotContainer {
   public static boolean shouldDial = false;
   
   private final ObjectDetection mObjectDetection = new ObjectDetection();
-  private final FieldInfo mFieldInfo = new FieldInfo();
   private final SwerveSubsystem mSwerve = new SwerveSubsystem(mObjectDetection);
+  private final FieldInfo mFieldInfo = new FieldInfo();
   private final TurretSubsystem mTurretSubsystem = new TurretSubsystem();
   private final IntakeSubsystem mIntakeSubsystem = new IntakeSubsystem();
   private final SpindexerSubsystem mSpindexerSubsystem = new SpindexerSubsystem();
@@ -63,6 +64,8 @@ public class RobotContainer {
     SmartDashboard.putData("Auto Chooser", autoChooser);
     //Put all NamedCommands here
     NamedCommands.registerCommand("Test", new ResetGyro(mSwerve));
+    NamedCommands.registerCommand("Aim and Shoot", new PointTurretAndShoot(TurretSubsystem.activeAimPoint.aimPoint, mTurretSubsystem, mSwerve, mUptakeSubsystem, mSpindexerSubsystem, mShooterSubsystem));
+    NamedCommands.registerCommand("Deploy Intake", new SetIntakePosAndSpeed(Rotation2d.fromDegrees(-67).getRotations(), 60, mIntakeSubsystem));
 
     configureBindings();
   }

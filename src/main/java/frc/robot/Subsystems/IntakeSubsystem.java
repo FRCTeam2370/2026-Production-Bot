@@ -86,6 +86,8 @@ public class IntakeSubsystem extends SubsystemBase {
     intakeMotorConfig.Slot0.kP = 0.01;
     intakeMotorConfig.Slot0.kV = 0.01;
 
+    intakeMotorConfig.CurrentLimits.StatorCurrentLimit = 40;
+
     intakeMotor.getConfigurator().apply(intakeMotorConfig);
   }
 
@@ -108,6 +110,8 @@ public class IntakeSubsystem extends SubsystemBase {
 
     intakeRotationMotorConfig.MotionMagic.MotionMagicAcceleration = 100;
     intakeRotationMotorConfig.MotionMagic.MotionMagicCruiseVelocity = 40;
+
+    intakeRotationMotorConfig.CurrentLimits.StatorCurrentLimit = 40;
 
     intakeRotationMotor.getConfigurator().apply(intakeRotationMotorConfig);
     intakeCANcoder.getConfigurator().apply(CANcoderConfig);
