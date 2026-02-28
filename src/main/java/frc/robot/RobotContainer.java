@@ -5,7 +5,7 @@
 package frc.robot;
 
 
-import com.fasterxml.jackson.core.base.GeneratorBase;
+import com.fasterxml.jackson.databind.util.Named;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 
@@ -16,22 +16,20 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
-import frc.robot.Constants.FieldConstants;
 import frc.robot.Commands.ResetGyro;
 import frc.robot.Commands.SetLEDStatus;
 import frc.robot.Commands.TeleopSwerve;
-import frc.robot.Commands.Intake.FindIntakeKG;
-import frc.robot.Commands.Intake.IntakeSetPosition;
 import frc.robot.Commands.Intake.SetIntakePosAndSpeed;
 import frc.robot.Commands.Shooter.ShootAtVelocity;
+import frc.robot.Commands.Shooter.ShootAtVelocityForTime;
 import frc.robot.Commands.TurretCommands.AimTurretAtActiveAimPoint;
 import frc.robot.Commands.TurretCommands.PointTurretAndShoot;
-import frc.robot.Commands.TurretCommands.PointTurretAtPoint;
+import frc.robot.Commands.TurretCommands.PointTurretAndShootForTime;
 import frc.robot.Commands.TurretCommands.SetElevationPos;
-import frc.robot.Commands.TurretCommands.SetTurretRotation;
 import frc.robot.Subsystems.FieldInfo;
 import frc.robot.Subsystems.IntakeSubsystem;
 import frc.robot.Subsystems.LEDSubsystem;
+import frc.robot.Subsystems.LEDSubsystem.LEDState;
 import frc.robot.Subsystems.ObjectDetection;
 import frc.robot.Subsystems.ShooterSubsystem;
 import frc.robot.Subsystems.SpindexerSubsystem;
@@ -39,7 +37,6 @@ import frc.robot.Subsystems.SwerveSubsystem;
 import frc.robot.Subsystems.TurretSubsystem;
 import frc.robot.Subsystems.UptakeSubsystem;
 import frc.robot.Subsystems.Vision;
-import frc.robot.Subsystems.LEDSubsystem.LEDState;
 
 public class RobotContainer {
   public static final CommandXboxController driver = new CommandXboxController(0);
@@ -64,8 +61,9 @@ public class RobotContainer {
     SmartDashboard.putData("Auto Chooser", autoChooser);
     //Put all NamedCommands here
     NamedCommands.registerCommand("Test", new ResetGyro(mSwerve));
+    NamedCommands.registerCommand("Aim and Shoot For Time", new PointTurretAndShootForTime(TurretSubsystem.activeAimPoint.aimPoint, 3, mTurretSubsystem, mSwerve, mUptakeSubsystem, mSpindexerSubsystem, mShooterSubsystem));
+    NamedCommands.registerCommand("Deploy Intake", new SetIntakePosAndSpeed(Rotation2d.fromDegrees(-67).getRotations(), 60, mIntakeSubsystem, mSwerve));
     NamedCommands.registerCommand("Aim and Shoot", new PointTurretAndShoot(TurretSubsystem.activeAimPoint.aimPoint, mTurretSubsystem, mSwerve, mUptakeSubsystem, mSpindexerSubsystem, mShooterSubsystem));
-    NamedCommands.registerCommand("Deploy Intake", new SetIntakePosAndSpeed(Rotation2d.fromDegrees(-67).getRotations(), 60, mIntakeSubsystem));
 
     configureBindings();
   }
@@ -76,10 +74,8 @@ public class RobotContainer {
 
     driver.back().onTrue(new ResetGyro(mSwerve));
 
-    driver.leftTrigger().whileTrue(mSwerve.PathfindToPose(()-> new Pose2d(0,0, Rotation2d.fromDegrees(0))));
-
     driver.rightTrigger().toggleOnTrue(new ShootAtVelocity(mShooterSubsystem, mUptakeSubsystem, mSpindexerSubsystem, mSwerve));
-    driver.leftBumper().toggleOnTrue(new SetIntakePosAndSpeed(Rotation2d.fromDegrees(-67).getRotations(), 60, mIntakeSubsystem));
+    driver.leftBumper().toggleOnTrue(new SetIntakePosAndSpeed(Rotation2d.fromDegrees(-67).getRotations(), 60, mIntakeSubsystem, mSwerve));
     //driver.b().toggleOnTrue(new PointTurretAtPoint(FieldConstants.HubFieldPoseRed, mTurretSubsystem, mSwerve));
     //driver.x().onTrue(new SetTurretRotation(Rotation2d.fromDegrees(360).getRotations(), mTurretSubsystem));
     //driver.y().toggleOnTrue(new PointTurretAtPoint(FieldConstants.AimPose1, mTurretSubsystem, mSwerve));
@@ -87,7 +83,7 @@ public class RobotContainer {
 
     driver.x().onTrue(new SetElevationPos(50, mTurretSubsystem));
     driver.a().onTrue(new SetElevationPos(75, mTurretSubsystem));
-    //driver.rightTrigger().whileTrue(mSwerve.driveThroughBalls());
+    driver.leftTrigger().whileTrue(mSwerve.driveThroughBalls());
     driver.povUp().whileTrue(mSwerve.driveToClosestBall(()-> mSwerve.getClosestBall()));
 
     driver.povRight().onTrue(new SetLEDStatus(mLedSubsystem, LEDState.EndgameBlue));

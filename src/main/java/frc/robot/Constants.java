@@ -56,7 +56,7 @@ public class Constants {
     public static final double intakeRatio = 250/21;//kraken rotations : intake rotations
 
     public static final Rotation2d intakeMax = Rotation2d.fromDegrees(90);
-    public static final Rotation2d intakeMin = Rotation2d.fromDegrees(-68);
+    public static final Rotation2d intakeMin = Rotation2d.fromDegrees(-63);
 
     public static final Rotation2d CANcoderOffset = Rotation2d.fromRotations(-0.179931640625);
   }
@@ -68,7 +68,7 @@ public class Constants {
     public static class VisionConstants{
         public static final double stdCoefficient = 0.1;
 
-        public static final Pose2d objectDetectionRobotToCamera = new Pose2d(0.254, -0.254, Rotation2d.fromDegrees(0));//12.5, 10, 180 degrees
+        public static final Pose2d objectDetectionRobotToCamera = new Pose2d(0.3429, 0.50165, Rotation2d.fromDegrees(0));//12.5, 10, 180 degrees
 
         public static final Rotation2d intakeSideRelativeToFront = Rotation2d.fromDegrees(0);
     }
@@ -83,7 +83,7 @@ public class Constants {
         public static final double turretRatio = 18.09912109375 - 3.68310546875;//30/12 * 150/26;//Kraken rotations : turret rotations, 14.345
         public static final double elevationRatio = 955/12;//Kraken rotations : turret rotations
 
-        public static final Transform2d RobotToTurret = new Transform2d(-0.161925, -0.0889508, Rotation2d.fromDegrees(0));
+        public static final Transform2d RobotToTurret = new Transform2d(-0.161925, 0.0889508, Rotation2d.fromDegrees(0));
 
         public static final Rotation2d TurretStartOffset = Rotation2d.fromDegrees(50);//relative to the cable chain (counterclockwise positive)
         public static final Rotation2d TurretCableChainPoint = Rotation2d.fromDegrees(590);//Relative to the front of the robot (clockwise positive)
@@ -220,7 +220,7 @@ public class Constants {
 
     public static class LEDConstants {
         public static final int LEDID = 0;
-        public static final int LEDLength = 46;//79
+        public static final int LEDLength = 70;//79
         public static final int endgameLength = 46;
 
         public static final int LEDBrightness = 50;

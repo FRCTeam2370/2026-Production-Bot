@@ -56,15 +56,15 @@ public class TeleopSwerve extends Command {
       double yVelocity = xVal * Constants.SwerveConstants.maxSpeed;
 
       if((xVelocity * xDistanceToTarget) > 0){
-        yVal *= SwerveConstants.maxApproachPercent*Math.abs(totalDistanceToTarget/xDistanceToTarget);
+        yVal /= Math.abs(totalDistanceToTarget/yDistanceToTarget);
       }
       if((yVelocity * yDistanceToTarget) < 0){
-        xVal *= SwerveConstants.maxApproachPercent*Math.abs(totalDistanceToTarget/yDistanceToTarget);
+        xVal /= Math.abs(totalDistanceToTarget/xDistanceToTarget);
       }
     }
     xVal *= SwerveSubsystem.color.isPresent() && SwerveSubsystem.color.get() == Alliance.Blue ? -1 : 1;
     yVal *= SwerveSubsystem.color.isPresent() && SwerveSubsystem.color.get() == Alliance.Blue ? -1 : 1;
 
-    mSwerve.drive(new Translation2d(xLimiter.calculate(xVal), yLimiter.calculate(yVal)).times(Constants.SwerveConstants.maxSpeed), rotLimiter.calculate(rotVal * 0.2), !robotCentricSup.getAsBoolean(), true);
+    mSwerve.drive(new Translation2d(xLimiter.calculate(xVal), yLimiter.calculate(yVal)).times(SwerveConstants.maxSpeed), rotLimiter.calculate(rotVal * 0.2), !robotCentricSup.getAsBoolean(), true);
   }
 }

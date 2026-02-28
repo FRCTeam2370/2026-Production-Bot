@@ -154,7 +154,7 @@ public class SwerveSubsystem extends SubsystemBase {
     // SmartDashboard.putNumber("Odometry y", odometry.getPoseMeters().getY());
     SmartDashboard.putNumber("Calculated Turret Angle", turretRotationToPose(new Pose2d(FieldConstants.HubFieldPoseRed.getX(), FieldConstants.HubFieldPoseRed.getY(), new Rotation2d())).getDegrees());
     SmartDashboard.putNumber("Calculated Turret Angle 0-450", turretRotationToPose450(new Pose2d(FieldConstants.HubFieldPoseRed.getX(), FieldConstants.HubFieldPoseRed.getY(), new Rotation2d())).getDegrees());
-    NetworkTableInstance.getDefault().getTable("fuelCV").getEntry("Camera Pose").setDoubleArray(new Double[]{detectionCamToField().getX(), detectionCamToField().getY(), getgyro0to360(180).getRadians()});
+    NetworkTableInstance.getDefault().getTable("fuelCV").getEntry("Camera Pose").setDoubleArray(new Double[]{detectionCamToField().getX(), detectionCamToField().getY(), poseEstimator.getEstimatedPosition().getRotation().getRadians()});
 
     updateOdometry();
     //odometry.update(getRotation2d(), getModulePositions());//USE THIS WHEN TESTING AUTOS WITHOUT FIELD LOCALIZATION
@@ -175,7 +175,7 @@ public class SwerveSubsystem extends SubsystemBase {
     double xlocal = TurretConstants.RobotToTurret.getX();
     double ylocal = TurretConstants.RobotToTurret.getY();
 
-    double xGlobal = xlocal * Math.cos(getgyro0to360(0).getRadians()) + ylocal * Math.sin(getgyro0to360(0).getRadians()) + poseEstimator.getEstimatedPosition().getX();
+    double xGlobal = xlocal * Math.cos(getgyro0to360(0).getRadians()) - ylocal * Math.sin(getgyro0to360(0).getRadians()) + poseEstimator.getEstimatedPosition().getX();
     double yGlobal = ylocal * Math.cos(getgyro0to360(0).getRadians()) + xlocal * Math.sin(getgyro0to360(0).getRadians()) + poseEstimator.getEstimatedPosition().getY();
 
     return new Pose2d(xGlobal, yGlobal, new Rotation2d());
@@ -185,10 +185,11 @@ public class SwerveSubsystem extends SubsystemBase {
     double xlocal = VisionConstants.objectDetectionRobotToCamera.getX();
     double ylocal = VisionConstants.objectDetectionRobotToCamera.getY();
 
-    double xGlobal = xlocal * Math.cos(getgyro0to360(0).getRadians()) + ylocal * Math.sin(getgyro0to360(0).getRadians()) + poseEstimator.getEstimatedPosition().getX();
-    double yGlobal = ylocal * Math.cos(getgyro0to360(0).getRadians()) + xlocal * Math.sin(getgyro0to360(0).getRadians()) + poseEstimator.getEstimatedPosition().getY();
+    Rotation2d currentAngle = poseEstimator.getEstimatedPosition().getRotation();
+    double xGlobal = xlocal * Math.cos(currentAngle.getRadians()) - ylocal * Math.sin(currentAngle.getRadians()) + poseEstimator.getEstimatedPosition().getX();
+    double yGlobal = ylocal * Math.cos(currentAngle.getRadians()) + xlocal * Math.sin(currentAngle.getRadians()) + poseEstimator.getEstimatedPosition().getY();
 
-    return new Pose2d(xGlobal, yGlobal, getgyro0to360(180));
+    return new Pose2d(xGlobal, yGlobal, poseEstimator.getEstimatedPosition().getRotation());
   }
 
   //This method calculates the angle from the turret to the target Pose2d

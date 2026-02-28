@@ -43,6 +43,7 @@ public class IntakeSubsystem extends SubsystemBase {
   public void periodic() {
     // This method will be called once per scheduler run
     SmartDashboard.putNumber("Intake Current", intakeMotor.getStatorCurrent().getValueAsDouble());
+    SmartDashboard.putNumber("Intake Vel", intakeMotor.getVelocity().getValueAsDouble());
     SmartDashboard.putNumber("Intake Pos", intakeRotationMotor.getPosition().getValueAsDouble());
     SmartDashboard.putNumber("intake position current", intakeRotationMotor.getStatorCurrent().getValueAsDouble());
     SmartDashboard.putNumber("Intake CANcoder val", intakeCANcoder.getAbsolutePosition().getValueAsDouble());
@@ -102,11 +103,11 @@ public class IntakeSubsystem extends SubsystemBase {
     intakeRotationMotorConfig.Feedback.RotorToSensorRatio = intakeConstants.intakeRatio;
     CANcoderConfig.MagnetSensor.AbsoluteSensorDiscontinuityPoint = 0.2;
 
-    intakeRotationMotorConfig.Slot0.kP = 0.1;
+    intakeRotationMotorConfig.Slot0.kP = 0.15;
     intakeRotationMotorConfig.Slot0.kI = 0;
     intakeRotationMotorConfig.Slot0.kD = 0.0;
 
-    intakeRotationMotorConfig.Slot0.kG = 0.025;
+    intakeRotationMotorConfig.Slot0.kG = 0.01;
 
     intakeRotationMotorConfig.MotionMagic.MotionMagicAcceleration = 100;
     intakeRotationMotorConfig.MotionMagic.MotionMagicCruiseVelocity = 40;
