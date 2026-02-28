@@ -18,6 +18,8 @@ import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.FieldConstants;
+import frc.robot.Constants.FieldConstants.Red;
+import frc.robot.LimelightHelpers.PoseEstimate;
 import frc.robot.Constants.TurretConstants;
 import frc.robot.Subsystems.LEDSubsystem.LEDState;
 import frc.robot.RobotContainer;
@@ -44,7 +46,7 @@ public class TurretSubsystem extends SubsystemBase {
     }
   }
 
-  public static ActiveAimPose activeAimPoint = new ActiveAimPose(SwerveSubsystem.color.isPresent() && SwerveSubsystem.color.get() == Alliance.Blue ? FieldConstants.HubFieldPoseBlue : FieldConstants.HubFieldPoseRed, LEDState.Hub);
+  public static ActiveAimPose activeAimPoint = new ActiveAimPose(SwerveSubsystem.color.isPresent() && SwerveSubsystem.color.get() == Alliance.Blue ? FieldConstants.HubFieldPoseBlue : Red.HubFieldPoseRed, LEDState.Hub);
 
   /** Creates a new TurretSubsystem. */
   public TurretSubsystem() {
@@ -66,6 +68,23 @@ public class TurretSubsystem extends SubsystemBase {
     }else if(RobotContainer.driver.povDown().getAsBoolean() && RobotContainer.shouldDial){
       RobotContainer.shouldDial = false;
     }
+    Pose2d robotPose = SwerveSubsystem.poseEstimator.getEstimatedPosition();
+    if(robotPose.getX() < Red.neutralZoneEnterX){
+      if(robotPose.getY() > 4){
+        activeAimPoint = new ActiveAimPose(Red.FeedPoseRed2, LEDState.Point);
+      }else{
+        activeAimPoint = new ActiveAimPose(Red.FeedPoseRed1, LEDState.Point);
+      }
+    }else{
+      activeAimPoint = new ActiveAimPose(FieldConstants.Red.HubFieldPoseRed, LEDState.Hub);
+    }
+
+    Pose2d turretPose = SwerveSubsystem.turretToField();
+    if(turretPose.getX() < Red.neutralZoneEnterX + 0.2 && turretPose.getX() > Red.neutralZoneEnterX - 0.2){
+      setElevation(TurretConstants.TurretMaxAngle.getDegrees());
+    }
+
+    SwerveSubsystem.field.getObject("Active Aimpoint").setPose(new Pose2d(activeAimPoint.aimPoint.getX(), activeAimPoint.aimPoint.getY(), new Rotation2d()));
   }
 
   public static void aimTurretAtPoint(Pose2d pose){

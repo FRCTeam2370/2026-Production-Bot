@@ -68,6 +68,7 @@ public class RobotContainer {
     configureBindings();
   }
 
+  //TODO: 35 degrees from the wall is best for picking up against the wall
   private void configureBindings() {
     mSwerve.setDefaultCommand(new TeleopSwerve(mSwerve, ()-> -driver.getRawAxis(0), ()-> driver.getRawAxis(1), ()-> driver.getRawAxis(4), ()-> false));
     driver.b().toggleOnTrue(new AimTurretAtActiveAimPoint(mSwerve, mTurretSubsystem));

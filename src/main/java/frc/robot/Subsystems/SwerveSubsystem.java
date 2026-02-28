@@ -54,6 +54,7 @@ import frc.robot.Constants.FieldConstants;
 import frc.robot.Constants.SwerveConstants;
 import frc.robot.Constants.TurretConstants;
 import frc.robot.Constants.VisionConstants;
+import frc.robot.Constants.FieldConstants.Red;
 import frc.robot.SwerveModule;
 import frc.robot.Utils.BallLogic;
 import frc.robot.Utils.TurretLogic;
@@ -150,10 +151,12 @@ public class SwerveSubsystem extends SubsystemBase {
     SmartDashboard.putNumber("robot relative x Vel", getRobotRelativeSpeeds().vxMetersPerSecond);
     SmartDashboard.putNumber("robot relative y Vel", getRobotRelativeSpeeds().vyMetersPerSecond);
 
+    SmartDashboard.putNumber("getTrenchOffsetY", getTrenchOffsetY());
+
     // SmartDashboard.putNumber("Odometry x", odometry.getPoseMeters().getX());
     // SmartDashboard.putNumber("Odometry y", odometry.getPoseMeters().getY());
-    SmartDashboard.putNumber("Calculated Turret Angle", turretRotationToPose(new Pose2d(FieldConstants.HubFieldPoseRed.getX(), FieldConstants.HubFieldPoseRed.getY(), new Rotation2d())).getDegrees());
-    SmartDashboard.putNumber("Calculated Turret Angle 0-450", turretRotationToPose450(new Pose2d(FieldConstants.HubFieldPoseRed.getX(), FieldConstants.HubFieldPoseRed.getY(), new Rotation2d())).getDegrees());
+    SmartDashboard.putNumber("Calculated Turret Angle", turretRotationToPose(new Pose2d(Red.HubFieldPoseRed.getX(), Red.HubFieldPoseRed.getY(), new Rotation2d())).getDegrees());
+    SmartDashboard.putNumber("Calculated Turret Angle 0-450", turretRotationToPose450(new Pose2d(Red.HubFieldPoseRed.getX(), Red.HubFieldPoseRed.getY(), new Rotation2d())).getDegrees());
     NetworkTableInstance.getDefault().getTable("fuelCV").getEntry("Camera Pose").setDoubleArray(new Double[]{detectionCamToField().getX(), detectionCamToField().getY(), poseEstimator.getEstimatedPosition().getRotation().getRadians()});
 
     updateOdometry();
@@ -485,6 +488,27 @@ public class SwerveSubsystem extends SubsystemBase {
     field.getObject("Aim Point").setPose(new Pose2d(turretAimPose.aimPose.getX(), turretAimPose.aimPose.getY(), new Rotation2d()));
 
     return turretAimPose;
+  }
+
+  public static double getTrenchOffsetY(){
+    Pose2d pose = poseEstimator.getEstimatedPosition();
+    if(pose.getY() < 4){//on the bottom half of the field
+      if(pose.getX() < FieldConstants.RedTrenchEndX && pose.getX() > FieldConstants.RedTrenchStartX && pose.getY() > FieldConstants.bottomTrenchStartY && pose.getY() < FieldConstants.bottomTrenchEndY){
+        return Clamp(FieldConstants.bottomTrenchMiddleY - pose.getY(), -1, 1);
+      }else{
+        return 0;
+      }
+    }else{//on the top half of the field
+      if(pose.getX() < FieldConstants.RedTrenchEndX && pose.getX() > FieldConstants.RedTrenchStartX && pose.getY() > FieldConstants.topTrenchStartY && pose.getY() < FieldConstants.topTrenchEndY){
+        return Clamp(FieldConstants.topTrenchMiddleY - pose.getY(), -1, 1);
+      }else{
+        return 0;
+      }
+    }
+  }
+
+  public static double Clamp(double val, double minValue, double maxValue){
+    return Math.max(Math.min(val, maxValue), minValue);
   }
 }
 

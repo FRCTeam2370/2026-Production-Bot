@@ -7,6 +7,7 @@ package frc.robot.Commands.Shooter;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants.FieldConstants;
+import frc.robot.Constants.FieldConstants.Red;
 import frc.robot.Constants.spindexerConstants;
 import frc.robot.Constants.uptakeConstants;
 import frc.robot.Subsystems.ShooterSubsystem;
@@ -35,7 +36,7 @@ public class ShootAtVelocity extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    TurretAimPose aimpose = mSwerve.getTurretPointTowardsPose(FieldConstants.HubFieldPoseRed);
+    TurretAimPose aimpose = mSwerve.getTurretPointTowardsPose(Red.HubFieldPoseRed);
     vel = aimpose.vel;
     usingLower = aimpose.usingLower;
     ShooterSubsystem.shootWithVelocity(vel);

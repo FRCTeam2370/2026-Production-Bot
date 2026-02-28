@@ -97,12 +97,31 @@ public class Constants {
     }
 
     public static class FieldConstants {
-        public static final Translation3d HubFieldPoseBlue = new Translation3d(4.625,4.025, 1.8288);  
+      public static class Red{
         public static final Translation3d HubFieldPoseRed = new Translation3d(11.925, 4.025, 1.8288);
+        public static final Translation3d FeedPoseRed1 = new Translation3d(15,1,0);
+        public static final Translation3d FeedPoseRed2 = new Translation3d(15, 7, 0);
+        public static final double neutralZoneEnterX = 12;//Meters
+      }
+        public static final Translation3d HubFieldPoseBlue = new Translation3d(4.625,4.025, 1.8288);  
         public static final Translation3d AimPose1 = new Translation3d(0, 0, 1.8288);
         public static final Translation3d AimPose2 = new Translation3d(1, 2, 0);
         public static final Translation3d AimPose3 = new Translation3d(4, 0, 0);
 
+        public static final double bottomTrenchStartY = 0;
+        public static final double bottomTrenchMiddleY = 0.625;// middle y coordinate of the bottom trench
+        public static final double bottomTrenchEndY = 1.25;
+
+        public static final double topTrenchStartY = 6.75;
+        public static final double topTrenchMiddleY = 7.375;// middle y coordinate of the top trench
+        public static final double topTrenchEndY = 8;
+
+        public static final double RedTrenchStartX = 10.5;// start x coordinate of the red trench
+        public static final double RedTrenchEndX = 13.5;// end x coordinate of the red trench
+
+        public static final double BlueTrenchStartX = 0;
+        public static final double BlueTrenchEndX = 0;
+        
     }
 
     public static class SwerveConstants {

@@ -78,7 +78,7 @@ public class TurretLogic {
         double vUnajustedY = Math.cos(trueAngle) * Math.sin(angleToTarget) * flattenedInitialVel;
         double vUnajustedZ = Math.sin(trueAngle) * flattenedInitialVel;
 
-        double velocityOffset = 3;
+        double velocityOffset = 0;
         TurretAimPose turretAimPose = new TurretAimPose();
         turretAimPose.aimPose = new Translation3d(-vUnajustedX - lateralOffsetVelocityX, 
             -vUnajustedY - lateralOffsetVelocityY, 

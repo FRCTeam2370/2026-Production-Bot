@@ -62,6 +62,9 @@ public class TeleopSwerve extends Command {
         xVal /= Math.abs(totalDistanceToTarget/xDistanceToTarget);
       }
     }
+
+    xVal = SwerveSubsystem.Clamp(xVal - SwerveSubsystem.getTrenchOffsetY(), -1, 1);
+
     xVal *= SwerveSubsystem.color.isPresent() && SwerveSubsystem.color.get() == Alliance.Blue ? -1 : 1;
     yVal *= SwerveSubsystem.color.isPresent() && SwerveSubsystem.color.get() == Alliance.Blue ? -1 : 1;
 
