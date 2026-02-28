@@ -19,6 +19,7 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Commands.ResetGyro;
 import frc.robot.Commands.SetLEDStatus;
 import frc.robot.Commands.TeleopSwerve;
+import frc.robot.Commands.Intake.DeployIntake;
 import frc.robot.Commands.Intake.SetIntakePosAndSpeed;
 import frc.robot.Commands.Shooter.ShootAtVelocity;
 import frc.robot.Commands.Shooter.ShootAtVelocityForTime;
@@ -56,14 +57,15 @@ public class RobotContainer {
   private final LEDSubsystem mLedSubsystem = new LEDSubsystem();
   private final SendableChooser<Command> autoChooser;
 
-  public RobotContainer() {
-    autoChooser = AutoBuilder.buildAutoChooser();
-    SmartDashboard.putData("Auto Chooser", autoChooser);
+  public RobotContainer() {    
     //Put all NamedCommands here
     NamedCommands.registerCommand("Test", new ResetGyro(mSwerve));
     NamedCommands.registerCommand("Aim and Shoot For Time", new PointTurretAndShootForTime(TurretSubsystem.activeAimPoint.aimPoint, 3, mTurretSubsystem, mSwerve, mUptakeSubsystem, mSpindexerSubsystem, mShooterSubsystem));
-    NamedCommands.registerCommand("Deploy Intake", new SetIntakePosAndSpeed(Rotation2d.fromDegrees(-67).getRotations(), 60, mIntakeSubsystem, mSwerve));
+    NamedCommands.registerCommand("Deploy Intake", new DeployIntake(Rotation2d.fromDegrees(-67).getRotations(), 60, mIntakeSubsystem, mSwerve));
     NamedCommands.registerCommand("Aim and Shoot", new PointTurretAndShoot(TurretSubsystem.activeAimPoint.aimPoint, mTurretSubsystem, mSwerve, mUptakeSubsystem, mSpindexerSubsystem, mShooterSubsystem));
+
+    autoChooser = AutoBuilder.buildAutoChooser();
+    SmartDashboard.putData("Auto Chooser", autoChooser);
 
     configureBindings();
   }
