@@ -20,12 +20,12 @@
         "y": 7.17262482168331
       },
       "prevControl": {
-        "x": 6.1943476350011215,
-        "y": 7.681826089011991
+        "x": 6.173937232524963,
+        "y": 7.302011412268189
       },
       "nextControl": {
-        "x": 7.757920553301305,
-        "y": 6.663423554354629
+        "x": 7.89722318099691,
+        "y": 7.0240620657404556
       },
       "isLocked": false,
       "linkedName": null
@@ -141,7 +141,7 @@
   "folder": "Left Paths",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": -90.0
+    "rotation": 90.0
   },
   "useDefaultConstraints": true
 }

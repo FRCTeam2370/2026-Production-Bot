@@ -6,6 +6,7 @@ package frc.robot.Subsystems;
 
 import java.util.Optional;
 
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -23,17 +24,18 @@ public class FieldInfo extends SubsystemBase {
   boolean prefireRed = false, prefireBlue = false, endgame = false;
 
   public static class FieldPoints {
-    public Translation3d HubPose;
-    public Translation3d PassPose1;
-    public Translation3d PassPose2;
-    public FieldPoints(Translation3d HubPose, Translation3d PassPose1, Translation3d PassPose2){
+    public Translation3d HubPose, PassPose1, PassPose2;
+    public Pose2d ClimbLeft, ClimbRight;
+    public FieldPoints(Translation3d HubPose, Translation3d PassPose1, Translation3d PassPose2, Pose2d ClimbLeft, Pose2d ClimbRight){
       this.HubPose = HubPose;
       this.PassPose1 = PassPose1;
       this.PassPose2 = PassPose2;
+      this.ClimbLeft = ClimbLeft;
+      this.ClimbRight = ClimbRight;
     }
   }
 
-  public static FieldPoints fieldPoints = new FieldPoints(null, null, null);
+  public static FieldPoints fieldPoints = new FieldPoints(null, null, null, null, null);
 
   /** Creates a new FieldInfo. */
   public FieldInfo() {
@@ -41,10 +43,14 @@ public class FieldInfo extends SubsystemBase {
       fieldPoints.HubPose = Blue.HubFieldPoseBlue;
       fieldPoints.PassPose1 = Blue.PassPose1;
       fieldPoints.PassPose2 = Blue.PassPose2;
+      fieldPoints.ClimbLeft = Blue.ClimbLeft;
+      fieldPoints.ClimbRight = Blue.ClimbRight;
     }else{
       fieldPoints.HubPose = Red.HubFieldPoseRed;
       fieldPoints.PassPose1 = Red.PassPose1;
       fieldPoints.PassPose2 = Red.PassPose2;
+      fieldPoints.ClimbLeft = Red.ClimbLeft;
+      fieldPoints.ClimbRight = Red.ClimbRight;
     }
   }
 

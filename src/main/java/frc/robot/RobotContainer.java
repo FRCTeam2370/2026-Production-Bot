@@ -37,6 +37,7 @@ import frc.robot.Subsystems.ObjectDetection;
 import frc.robot.Subsystems.ShooterSubsystem;
 import frc.robot.Subsystems.SpindexerSubsystem;
 import frc.robot.Subsystems.SwerveSubsystem;
+import frc.robot.Subsystems.SwerveSubsystem.StartingSide;
 import frc.robot.Subsystems.TurretSubsystem;
 import frc.robot.Subsystems.UptakeSubsystem;
 import frc.robot.Subsystems.Vision;
@@ -58,20 +59,22 @@ public class RobotContainer {
   private final Vision mVision = new Vision();
   private final LEDSubsystem mLedSubsystem = new LEDSubsystem();
   private final SendableChooser<Command> autoChooser;
+  
 
   public RobotContainer() {    
     DataLogManager.start();
     DriverStation.startDataLog(DataLogManager.getLog());
-    
+
     //Put all NamedCommands here
     NamedCommands.registerCommand("Test", new ResetGyro(mSwerve));
-    NamedCommands.registerCommand("Aim and Shoot For Time", new PointTurretAndShootForTime(TurretSubsystem.activeAimPoint.aimPoint, 3, mTurretSubsystem, mSwerve, mUptakeSubsystem, mSpindexerSubsystem, mShooterSubsystem));
+    NamedCommands.registerCommand("Aim and Shoot For 3", new PointTurretAndShootForTime(TurretSubsystem.activeAimPoint.aimPoint, 3, mTurretSubsystem, mSwerve, mUptakeSubsystem, mSpindexerSubsystem, mShooterSubsystem));
+    NamedCommands.registerCommand("Aim and Shoot For 5", new PointTurretAndShootForTime(TurretSubsystem.activeAimPoint.aimPoint, 5, mTurretSubsystem, mSwerve, mUptakeSubsystem, mSpindexerSubsystem, mShooterSubsystem));
     NamedCommands.registerCommand("Deploy Intake", new DeployIntake(Rotation2d.fromDegrees(-67).getRotations(), 60, mIntakeSubsystem, mSwerve));
     NamedCommands.registerCommand("Aim and Shoot", new PointTurretAndShoot(TurretSubsystem.activeAimPoint.aimPoint, mTurretSubsystem, mSwerve, mUptakeSubsystem, mSpindexerSubsystem, mShooterSubsystem));
 
     autoChooser = AutoBuilder.buildAutoChooser();
     SmartDashboard.putData("Auto Chooser", autoChooser);
-
+    
     configureBindings();
   }
 

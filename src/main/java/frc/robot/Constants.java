@@ -36,7 +36,7 @@ public class Constants {
   public static class uptakeConstants{
     public static final int uptakeMotorID = 4;
 
-    public static final int uptakeSpeed = 80;
+    public static final int uptakeSpeed = 100;
   }
 
   public static class spindexerConstants{
@@ -103,6 +103,9 @@ public class Constants {
 
         public static final Translation3d PassPose1 = new Translation3d(15, 1, 0);
         public static final Translation3d PassPose2 = new Translation3d(15, 7, 0);
+
+        public static final Pose2d ClimbLeft = new Pose2d();
+        public static final Pose2d ClimbRight = new Pose2d();
       }
 
       public static class Blue{
@@ -111,9 +114,10 @@ public class Constants {
         public static final Translation3d PassPose2 = new Translation3d(1, 7, 0);
 
         public static final double neutralZoneEnterX = 4;
+
+        public static final Pose2d ClimbLeft = new Pose2d();
+        public static final Pose2d ClimbRight = new Pose2d();
       }
-        
-        
 
         public static final double bottomTrenchStartY = 0;
         public static final double bottomTrenchMiddleY = 0.625;// middle y coordinate of the bottom trench

@@ -14,6 +14,7 @@ import java.util.function.Supplier;
 
 import com.ctre.phoenix6.configs.Pigeon2Configuration;
 import com.ctre.phoenix6.hardware.Pigeon2;
+import com.ctre.phoenix6.swerve.SwerveDrivetrain.SwerveControlParameters;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.config.ModuleConfig;
 import com.pathplanner.lib.config.PIDConstants;
@@ -45,11 +46,13 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.FieldObject2d;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.DeferredCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.RobotContainer;
 import frc.robot.Constants.FieldConstants;
 import frc.robot.Constants.SwerveConstants;
 import frc.robot.Constants.TurretConstants;
@@ -61,6 +64,7 @@ import frc.robot.Utils.TurretLogic;
 import frc.robot.Utils.TurretLogic.TurretAimPose;
 
 public class SwerveSubsystem extends SubsystemBase {
+  public static final SendableChooser<StartingSide> startingSideChooser = new SendableChooser<>();
   private ObjectDetection mObjectDetection;
   public static Pigeon2 gyro = new Pigeon2(Constants.SwerveConstants.pigeonID);
   private static Pigeon2Configuration gyroConfig = new Pigeon2Configuration();
@@ -69,7 +73,7 @@ public class SwerveSubsystem extends SubsystemBase {
 
   public TurretLogic turretLogic;
 
-  public static PIDController rotationPIDauto = new PIDController(0.075, 0.0, 0.01);
+  public static PIDController rotationPIDauto = new PIDController(0.055, 0.0, 0.0);
   public static PIDController rotationPID = new PIDController(0.5, 0, 0);
 
   public static Field2d field = new Field2d();
@@ -88,15 +92,32 @@ public class SwerveSubsystem extends SubsystemBase {
   private StructPublisher<Pose2d> publisher = NetworkTableInstance.getDefault()
   .getStructTopic("MyPose", Pose2d.struct).publish();
 
+  public static enum StartingSide {
+    LEFT, 
+    RIGHT,
+    MIDDLE
+  }
+
+  public static StartingSide startingSide;
 
   /** Creates a new SwerveSubsystem. */
   public SwerveSubsystem(ObjectDetection mObjectDetection) {
+    startingSideChooser.addOption("LEFT", StartingSide.LEFT);
+    startingSideChooser.addOption("RIGHT", StartingSide.RIGHT);
+    startingSideChooser.addOption("MIDDLE", StartingSide.MIDDLE);
+    startingSideChooser.setDefaultOption("LEFT", StartingSide.LEFT);
+    SmartDashboard.putData("starting side", startingSideChooser);
+
     this.mObjectDetection = mObjectDetection;
     turretLogic = new TurretLogic(this);
     color = DriverStation.getAlliance();
     SmartDashboard.putString("Alliace Color", color.toString());
 
     rotationPID.enableContinuousInput(-Math.PI, Math.PI);
+
+    startingSide = StartingSide.MIDDLE;
+
+    SmartDashboard.putString("starting Side", startingSide.toString());
 
     configureGyro();
 
@@ -113,8 +134,6 @@ public class SwerveSubsystem extends SubsystemBase {
     resetOdometry(new Pose2d(poseEstimator.getEstimatedPosition().getTranslation(), readGyro()));
 
     configurePathPlanner();
-
-    
 
     //Logging
     PathPlannerLogging.setLogActivePathCallback((poses) -> field.getObject("path").setPoses(poses));
@@ -256,10 +275,6 @@ public class SwerveSubsystem extends SubsystemBase {
     return Rotation2d.fromDegrees((((readGyro().getDegrees() + offset) % 360)+360)%360);
   }
 
-  public static Rotation2d getGyroFieldRelative(double offset){
-    return Rotation2d.fromDegrees((((gyro.getYaw().getValueAsDouble() + offset) % 360) + 360) % 360);
-  }
-
   public SwerveModulePosition[] getModulePositions(){
     SwerveModulePosition[] positions = new SwerveModulePosition[]{
       mSwerveModules[0].getPosition(),
@@ -273,9 +288,22 @@ public class SwerveSubsystem extends SubsystemBase {
   public static void configureGyro(){
     resetGyro();
   }
+
+  public static void resetGyroVIAPoseEstimator(){
+    gyro.setYaw(SwerveConstants.gyroOffset - poseEstimator.getEstimatedPosition().getRotation().getDegrees());
+  }
   
   public static void resetGyro(){
-    gyro.setYaw(Constants.SwerveConstants.gyroOffset);
+    // if(startingSideChooser.getSelected() == StartingSide.MIDDLE){
+    //   gyro.setYaw(SwerveConstants.gyroOffset - 180);
+    // }else if(startingSideChooser.getSelected() == StartingSide.LEFT){
+    //   gyro.setYaw(SwerveConstants.gyroOffset - 90);
+    // }else if(startingSideChooser.getSelected() == StartingSide.RIGHT){
+    //   gyro.setYaw(SwerveConstants.gyroOffset + 90);
+    // }else{
+    //   gyro.setYaw(SwerveConstants.gyroOffset);
+    // }
+    gyro.setYaw(SwerveConstants.gyroOffset + 90);
   }
 
   public static Rotation2d readGyro(){
@@ -283,8 +311,9 @@ public class SwerveSubsystem extends SubsystemBase {
   }
 
   public void resetOdometry(Pose2d pose){
-    odometry.resetPosition(readGyro(), getModulePositions(), pose);//pose.getRotation()
+    odometry.resetPosition(pose.getRotation(), getModulePositions(), pose);//pose.getRotation()
     poseEstimator.resetPose(pose);
+    resetGyroVIAPoseEstimator();
   }
 
   public void updateOdometry(){
@@ -494,13 +523,13 @@ public class SwerveSubsystem extends SubsystemBase {
     Pose2d pose = poseEstimator.getEstimatedPosition();
     if(pose.getY() < 4){//on the bottom half of the field
       if(pose.getX() < FieldConstants.RedTrenchEndX && pose.getX() > FieldConstants.RedTrenchStartX && pose.getY() > FieldConstants.bottomTrenchStartY && pose.getY() < FieldConstants.bottomTrenchEndY){
-        return Clamp(FieldConstants.bottomTrenchMiddleY - pose.getY(), -1, 1);
+        return Clamp(FieldConstants.bottomTrenchMiddleY - pose.getY(), -0.2, 0.2);
       }else{
         return 0;
       }
     }else{//on the top half of the field
       if(pose.getX() < FieldConstants.RedTrenchEndX && pose.getX() > FieldConstants.RedTrenchStartX && pose.getY() > FieldConstants.topTrenchStartY && pose.getY() < FieldConstants.topTrenchEndY){
-        return Clamp(FieldConstants.topTrenchMiddleY - pose.getY(), -1, 1);
+        return Clamp(FieldConstants.topTrenchMiddleY - pose.getY(), -0.2, 0.2);
       }else{
         return 0;
       }
