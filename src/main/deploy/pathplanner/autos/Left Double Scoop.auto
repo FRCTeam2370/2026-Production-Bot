@@ -29,6 +29,37 @@
           }
         },
         {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "We need time Left"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Aim and Shoot For Time"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Neutral Scoop Far Left"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 0.2
+          }
+        },
+        {
           "type": "named",
           "data": {
             "name": "Aim and Shoot For Time"

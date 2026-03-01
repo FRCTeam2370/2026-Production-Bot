@@ -6,16 +6,47 @@ package frc.robot.Subsystems;
 
 import java.util.Optional;
 
+import edu.wpi.first.math.geometry.Transform2d;
+import edu.wpi.first.math.geometry.Transform3d;
+import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants.FieldConstants;
+import frc.robot.Constants.FieldConstants.Blue;
+import frc.robot.Constants.FieldConstants.Red;
 import frc.robot.Subsystems.LEDSubsystem.LEDState;
 
 public class FieldInfo extends SubsystemBase {
   boolean prefireRed = false, prefireBlue = false, endgame = false;
+
+  public static class FieldPoints {
+    public Translation3d HubPose;
+    public Translation3d PassPose1;
+    public Translation3d PassPose2;
+    public FieldPoints(Translation3d HubPose, Translation3d PassPose1, Translation3d PassPose2){
+      this.HubPose = HubPose;
+      this.PassPose1 = PassPose1;
+      this.PassPose2 = PassPose2;
+    }
+  }
+
+  public static FieldPoints fieldPoints = new FieldPoints(null, null, null);
+
   /** Creates a new FieldInfo. */
-  public FieldInfo() {}
+  public FieldInfo() {
+    if(SwerveSubsystem.color.get() == Alliance.Blue){
+      fieldPoints.HubPose = Blue.HubFieldPoseBlue;
+      fieldPoints.PassPose1 = Blue.PassPose1;
+      fieldPoints.PassPose2 = Blue.PassPose2;
+    }else{
+      fieldPoints.HubPose = Red.HubFieldPoseRed;
+      fieldPoints.PassPose1 = Red.PassPose1;
+      fieldPoints.PassPose2 = Red.PassPose2;
+    }
+  }
 
   @Override
   public void periodic() {

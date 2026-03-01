@@ -9,9 +9,9 @@
           "data": {
             "commands": [
               {
-                "type": "path",
+                "type": "named",
                 "data": {
-                  "pathName": "Middle Start"
+                  "name": "Deploy Intake"
                 }
               },
               {
@@ -22,11 +22,29 @@
               }
             ]
           }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Right To Neutral"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 0.2
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Aim and Shoot For Time"
+          }
         }
       ]
     }
   },
   "resetOdom": true,
-  "folder": "Middle Autos",
+  "folder": "Right Autos",
   "choreoAuto": false
 }

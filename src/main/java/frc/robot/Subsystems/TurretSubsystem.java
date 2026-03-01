@@ -18,8 +18,8 @@ import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.FieldConstants;
+import frc.robot.Constants.FieldConstants.Blue;
 import frc.robot.Constants.FieldConstants.Red;
-import frc.robot.LimelightHelpers.PoseEstimate;
 import frc.robot.Constants.TurretConstants;
 import frc.robot.Subsystems.LEDSubsystem.LEDState;
 import frc.robot.RobotContainer;
@@ -36,6 +36,7 @@ public class TurretSubsystem extends SubsystemBase {
   public static MotionMagicDutyCycle elevationMagicCycle = new MotionMagicDutyCycle(0);
 
   public static boolean canShoot = false;
+  public static boolean canElevate = true;
 
   public static class ActiveAimPose {
     public Translation3d aimPoint;
@@ -46,7 +47,7 @@ public class TurretSubsystem extends SubsystemBase {
     }
   }
 
-  public static ActiveAimPose activeAimPoint = new ActiveAimPose(SwerveSubsystem.color.isPresent() && SwerveSubsystem.color.get() == Alliance.Blue ? FieldConstants.HubFieldPoseBlue : Red.HubFieldPoseRed, LEDState.Hub);
+  public static ActiveAimPose activeAimPoint = new ActiveAimPose(SwerveSubsystem.color.isPresent() && SwerveSubsystem.color.get() == Alliance.Blue ? FieldConstants.Blue.HubFieldPoseBlue : Red.HubFieldPoseRed, LEDState.Hub);
 
   /** Creates a new TurretSubsystem. */
   public TurretSubsystem() {
@@ -68,23 +69,48 @@ public class TurretSubsystem extends SubsystemBase {
     }else if(RobotContainer.driver.povDown().getAsBoolean() && RobotContainer.shouldDial){
       RobotContainer.shouldDial = false;
     }
+
     Pose2d robotPose = SwerveSubsystem.poseEstimator.getEstimatedPosition();
-    if(robotPose.getX() < Red.neutralZoneEnterX){
-      if(robotPose.getY() > 4){
-        activeAimPoint = new ActiveAimPose(Red.FeedPoseRed2, LEDState.Point);
-      }else{
-        activeAimPoint = new ActiveAimPose(Red.FeedPoseRed1, LEDState.Point);
-      }
-    }else{
-      activeAimPoint = new ActiveAimPose(FieldConstants.Red.HubFieldPoseRed, LEDState.Hub);
-    }
+
+    HandleActiveAimPoint(robotPose);
 
     Pose2d turretPose = SwerveSubsystem.turretToField();
-    if(turretPose.getX() < Red.neutralZoneEnterX + 0.2 && turretPose.getX() > Red.neutralZoneEnterX - 0.2){
-      setElevation(TurretConstants.TurretMaxAngle.getDegrees());
-    }
+
+    HandleElevationLimits(turretPose);
 
     SwerveSubsystem.field.getObject("Active Aimpoint").setPose(new Pose2d(activeAimPoint.aimPoint.getX(), activeAimPoint.aimPoint.getY(), new Rotation2d()));
+  }
+
+  private void HandleElevationLimits(Pose2d turretPose){
+    if(turretPose.getX() < Red.neutralZoneEnterX + 0.2 && turretPose.getX() > Red.neutralZoneEnterX - 0.2){
+      canElevate = false;
+    }else{
+      canElevate = true;
+    }
+  }
+
+  private void HandleActiveAimPoint(Pose2d pose){
+    if(SwerveSubsystem.color.get() == Alliance.Blue){
+      if(pose.getX() > Blue.neutralZoneEnterX){
+        if(pose.getY() > 4){
+          activeAimPoint = new ActiveAimPose(FieldConstants.Blue.PassPose2, LEDState.Point);
+        }else{
+          activeAimPoint = new ActiveAimPose(FieldConstants.Blue.PassPose1, LEDState.Point);
+        }
+      }else{
+        activeAimPoint = new ActiveAimPose(FieldConstants.Blue.HubFieldPoseBlue, LEDState.Hub);
+      }
+    }else{
+      if(pose.getX() < Red.neutralZoneEnterX){
+        if(pose.getY() > 4){
+          activeAimPoint = new ActiveAimPose(Red.PassPose2, LEDState.Point);
+        }else{
+          activeAimPoint = new ActiveAimPose(Red.PassPose1, LEDState.Point);
+        }
+      }else{
+        activeAimPoint = new ActiveAimPose(FieldConstants.Red.HubFieldPoseRed, LEDState.Hub);
+      }
+    }
   }
 
   public static void aimTurretAtPoint(Pose2d pose){

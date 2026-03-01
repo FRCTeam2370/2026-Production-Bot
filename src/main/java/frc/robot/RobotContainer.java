@@ -11,6 +11,8 @@ import com.pathplanner.lib.auto.NamedCommands;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.wpilibj.DataLogManager;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -58,6 +60,9 @@ public class RobotContainer {
   private final SendableChooser<Command> autoChooser;
 
   public RobotContainer() {    
+    DataLogManager.start();
+    DriverStation.startDataLog(DataLogManager.getLog());
+    
     //Put all NamedCommands here
     NamedCommands.registerCommand("Test", new ResetGyro(mSwerve));
     NamedCommands.registerCommand("Aim and Shoot For Time", new PointTurretAndShootForTime(TurretSubsystem.activeAimPoint.aimPoint, 3, mTurretSubsystem, mSwerve, mUptakeSubsystem, mSpindexerSubsystem, mShooterSubsystem));
