@@ -4,6 +4,8 @@
 
 package frc.robot;
 
+import static edu.wpi.first.units.Units.Rotation;
+
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.SensorDirectionValue;
 import com.pathplanner.lib.path.PathConstraints;
@@ -104,8 +106,8 @@ public class Constants {
         public static final Translation3d PassPose1 = new Translation3d(15, 1, 0);
         public static final Translation3d PassPose2 = new Translation3d(15, 7, 0);
 
-        public static final Pose2d ClimbLeft = new Pose2d();
-        public static final Pose2d ClimbRight = new Pose2d();
+        public static final Pose2d ClimbLeft = new Pose2d(15.29, 3.456, Rotation2d.fromDegrees(-90));
+        public static final Pose2d ClimbRight = new Pose2d(15.419, 5.36, Rotation2d.fromDegrees(90));
       }
 
       public static class Blue{

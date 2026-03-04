@@ -100,6 +100,7 @@ public class RobotContainer {
     driver.a().onTrue(new SetElevationPos(75, mTurretSubsystem));
     driver.leftTrigger().whileTrue(mSwerve.driveThroughBalls());
     driver.povUp().whileTrue(mSwerve.driveToClosestBall(()-> mSwerve.getClosestBall()));
+    driver.povLeft().whileTrue(mSwerve.PathfindToPose(()-> FieldInfo.fieldPoints.ClimbRight));
   }
 
   public Command getAutonomousCommand() {
