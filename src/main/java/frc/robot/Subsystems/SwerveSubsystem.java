@@ -4,6 +4,8 @@
 
 package frc.robot.Subsystems;
 
+import static edu.wpi.first.units.Units.Rotation;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -64,12 +66,13 @@ import frc.robot.Utils.TurretLogic;
 import frc.robot.Utils.TurretLogic.TurretAimPose;
 
 public class SwerveSubsystem extends SubsystemBase {
-  public static final SendableChooser<StartingSide> startingSideChooser = new SendableChooser<>();
   private ObjectDetection mObjectDetection;
   public static Pigeon2 gyro = new Pigeon2(Constants.SwerveConstants.pigeonID);
   private static Pigeon2Configuration gyroConfig = new Pigeon2Configuration();
   public SwerveModule[] mSwerveModules;
   public static SwerveDriveOdometry odometry;
+
+  private static Rotation2d startOrientation = Rotation2d.fromDegrees(SwerveConstants.gyroOffset);
 
   public TurretLogic turretLogic;
 
@@ -92,21 +95,8 @@ public class SwerveSubsystem extends SubsystemBase {
   private StructPublisher<Pose2d> publisher = NetworkTableInstance.getDefault()
   .getStructTopic("MyPose", Pose2d.struct).publish();
 
-  public static enum StartingSide {
-    LEFT, 
-    RIGHT,
-    MIDDLE
-  }
-
-  public static StartingSide startingSide;
-
   /** Creates a new SwerveSubsystem. */
   public SwerveSubsystem(ObjectDetection mObjectDetection) {
-    startingSideChooser.addOption("LEFT", StartingSide.LEFT);
-    startingSideChooser.addOption("RIGHT", StartingSide.RIGHT);
-    startingSideChooser.addOption("MIDDLE", StartingSide.MIDDLE);
-    startingSideChooser.setDefaultOption("LEFT", StartingSide.LEFT);
-    SmartDashboard.putData("starting side", startingSideChooser);
 
     this.mObjectDetection = mObjectDetection;
     turretLogic = new TurretLogic(this);
@@ -114,10 +104,6 @@ public class SwerveSubsystem extends SubsystemBase {
     SmartDashboard.putString("Alliace Color", color.toString());
 
     rotationPID.enableContinuousInput(-Math.PI, Math.PI);
-
-    startingSide = StartingSide.MIDDLE;
-
-    SmartDashboard.putString("starting Side", startingSide.toString());
 
     configureGyro();
 
@@ -128,10 +114,9 @@ public class SwerveSubsystem extends SubsystemBase {
       new SwerveModule(3, Constants.BRConstants.BRConstants)
     };
 
-    odometry = new SwerveDriveOdometry(Constants.SwerveConstants.kinematics, getgyro0to360(90), getModulePositions());
-    poseEstimator = new SwerveDrivePoseEstimator(Constants.SwerveConstants.kinematics, getgyro0to360(90), getModulePositions(), new Pose2d(getPose().getTranslation(), getgyro0to360(90)));
+    makeOdometry();
 
-    resetOdometry(new Pose2d(poseEstimator.getEstimatedPosition().getTranslation(), readGyro()));
+    //resetOdometry(new Pose2d(poseEstimator.getEstimatedPosition().getTranslation(), readGyro()));
 
     configurePathPlanner();
 
@@ -150,7 +135,6 @@ public class SwerveSubsystem extends SubsystemBase {
     // SmartDashboard.putNumber("Mod 1 CAN Pose", Rotation2d.fromDegrees(mSwerveModules[1].getCANcoder().getDegrees()).getDegrees());
     // SmartDashboard.putNumber("Mod 2 CAN Pose", Rotation2d.fromDegrees(mSwerveModules[2].getCANcoder().getDegrees()).getDegrees());
     // SmartDashboard.putNumber("Mod 3 CAN Pose", Rotation2d.fromDegrees(mSwerveModules[3].getCANcoder().getDegrees()).getDegrees());
-
     
     // SmartDashboard.putNumber("Wheel MPS", mSwerveModules[0].getWheelMPS());
     // SmartDashboard.putNumber("Wheel Meters", mSwerveModules[0].getModuleMeters());
@@ -188,6 +172,11 @@ public class SwerveSubsystem extends SubsystemBase {
     detectorCam.setPose(detectionCamToField());
 
     publisher.set(poseEstimator.getEstimatedPosition());
+  }
+
+  public void makeOdometry(){
+    odometry = new SwerveDriveOdometry(Constants.SwerveConstants.kinematics, readGyro(), getModulePositions());
+    poseEstimator = new SwerveDrivePoseEstimator(Constants.SwerveConstants.kinematics, readGyro(), getModulePositions(), new Pose2d(getPose().getTranslation(), getgyro0to360(90)));
   }
 
 
@@ -288,22 +277,9 @@ public class SwerveSubsystem extends SubsystemBase {
   public static void configureGyro(){
     resetGyro();
   }
-
-  public static void resetGyroVIAPoseEstimator(){
-    gyro.setYaw(SwerveConstants.gyroOffset - poseEstimator.getEstimatedPosition().getRotation().getDegrees());
-  }
   
   public static void resetGyro(){
-    // if(startingSideChooser.getSelected() == StartingSide.MIDDLE){
-    //   gyro.setYaw(SwerveConstants.gyroOffset - 180);
-    // }else if(startingSideChooser.getSelected() == StartingSide.LEFT){
-    //   gyro.setYaw(SwerveConstants.gyroOffset - 90);
-    // }else if(startingSideChooser.getSelected() == StartingSide.RIGHT){
-    //   gyro.setYaw(SwerveConstants.gyroOffset + 90);
-    // }else{
-    //   gyro.setYaw(SwerveConstants.gyroOffset);
-    // }
-    gyro.setYaw(SwerveConstants.gyroOffset + 90);
+    gyro.setYaw(startOrientation.getDegrees());
   }
 
   public static Rotation2d readGyro(){
@@ -311,9 +287,10 @@ public class SwerveSubsystem extends SubsystemBase {
   }
 
   public void resetOdometry(Pose2d pose){
+    startOrientation = Rotation2d.fromDegrees(pose.getRotation().getDegrees() - SwerveConstants.gyroOffset);
+    gyro.setYaw(startOrientation.getDegrees());
     odometry.resetPosition(pose.getRotation(), getModulePositions(), pose);//pose.getRotation()
     poseEstimator.resetPose(pose);
-    resetGyroVIAPoseEstimator();
   }
 
   public void updateOdometry(){

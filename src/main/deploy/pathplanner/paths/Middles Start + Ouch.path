@@ -1,0 +1,125 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 3.6250213980028523,
+        "y": 4.00265335235378
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 3.210984308131241,
+        "y": 5.1930099857346645
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 0.8302710413694718,
+        "y": 5.296519258202568
+      },
+      "prevControl": {
+        "x": 0.9975163942063956,
+        "y": 4.95008245589751
+      },
+      "nextControl": {
+        "x": 0.6491298145506419,
+        "y": 5.671740370898717
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 0.7138231098430812,
+        "y": 7.004422253922967
+      },
+      "prevControl": {
+        "x": 0.6944151212553493,
+        "y": 6.053430813124107
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": null
+    }
+  ],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 0.8358208955223865,
+      "rotationDegrees": 145.0
+    }
+  ],
+  "constraintZones": [
+    {
+      "name": "Slow for the ouch",
+      "minWaypointRelativePos": 0.4915597569210048,
+      "maxWaypointRelativePos": 1.8528021607022147,
+      "constraints": {
+        "maxVelocity": 1.0,
+        "maxAcceleration": 1.0,
+        "maxAngularVelocity": 540.0,
+        "maxAngularAcceleration": 720.0,
+        "nominalVoltage": 12.0,
+        "unlimited": false
+      }
+    }
+  ],
+  "pointTowardsZones": [],
+  "eventMarkers": [
+    {
+      "name": "Aim and Shoot",
+      "waypointRelativePos": 0.16205266711681066,
+      "endWaypointRelativePos": null,
+      "command": {
+        "type": "parallel",
+        "data": {
+          "commands": [
+            {
+              "type": "named",
+              "data": {
+                "name": "Aim and Shoot"
+              }
+            },
+            {
+              "type": "named",
+              "data": {
+                "name": "Deploy Intake"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "Deploy Hintake",
+      "waypointRelativePos": 0.7346387575962242,
+      "endWaypointRelativePos": null,
+      "command": {
+        "type": "named",
+        "data": {
+          "name": "Deploy Hintake"
+        }
+      }
+    }
+  ],
+  "globalConstraints": {
+    "maxVelocity": 3.0,
+    "maxAcceleration": 3.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": 145.0
+  },
+  "reversed": false,
+  "folder": "Middle Paths",
+  "idealStartingState": {
+    "velocity": 0.0,
+    "rotation": 180.0
+  },
+  "useDefaultConstraints": true
+}

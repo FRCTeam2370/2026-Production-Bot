@@ -7,13 +7,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Middle Start"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "MS to Ouch"
+            "pathName": "Middles Start + Ouch"
           }
         }
       ]

@@ -5,12 +5,15 @@
 package frc.robot;
 
 
+import static edu.wpi.first.units.Units.Rotation;
+
 import com.fasterxml.jackson.databind.util.Named;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.GenericHID;
@@ -37,7 +40,6 @@ import frc.robot.Subsystems.ObjectDetection;
 import frc.robot.Subsystems.ShooterSubsystem;
 import frc.robot.Subsystems.SpindexerSubsystem;
 import frc.robot.Subsystems.SwerveSubsystem;
-import frc.robot.Subsystems.SwerveSubsystem.StartingSide;
 import frc.robot.Subsystems.TurretSubsystem;
 import frc.robot.Subsystems.UptakeSubsystem;
 import frc.robot.Subsystems.Vision;
@@ -71,6 +73,7 @@ public class RobotContainer {
     NamedCommands.registerCommand("Aim and Shoot For 5", new PointTurretAndShootForTime(TurretSubsystem.activeAimPoint.aimPoint, 5, mTurretSubsystem, mSwerve, mUptakeSubsystem, mSpindexerSubsystem, mShooterSubsystem));
     NamedCommands.registerCommand("Deploy Intake", new DeployIntake(Rotation2d.fromDegrees(-67).getRotations(), 60, mIntakeSubsystem, mSwerve));
     NamedCommands.registerCommand("Aim and Shoot", new PointTurretAndShoot(TurretSubsystem.activeAimPoint.aimPoint, mTurretSubsystem, mSwerve, mUptakeSubsystem, mSpindexerSubsystem, mShooterSubsystem));
+    NamedCommands.registerCommand("Deploy Hintake", new DeployIntake(Rotation2d.fromDegrees(-50).getRotations(), 60, mIntakeSubsystem, mSwerve));
 
     autoChooser = AutoBuilder.buildAutoChooser();
     SmartDashboard.putData("Auto Chooser", autoChooser);
@@ -87,6 +90,7 @@ public class RobotContainer {
 
     driver.rightTrigger().toggleOnTrue(new ShootAtVelocity(mShooterSubsystem, mUptakeSubsystem, mSpindexerSubsystem, mSwerve));
     driver.leftBumper().toggleOnTrue(new SetIntakePosAndSpeed(Rotation2d.fromDegrees(-67).getRotations(), 60, mIntakeSubsystem, mSwerve));
+    driver.povRight().toggleOnTrue(new SetIntakePosAndSpeed(Rotation2d.fromDegrees(-50).getRotations(), 60, mIntakeSubsystem, mSwerve));
     //driver.b().toggleOnTrue(new PointTurretAtPoint(FieldConstants.HubFieldPoseRed, mTurretSubsystem, mSwerve));
     //driver.x().onTrue(new SetTurretRotation(Rotation2d.fromDegrees(360).getRotations(), mTurretSubsystem));
     //driver.y().toggleOnTrue(new PointTurretAtPoint(FieldConstants.AimPose1, mTurretSubsystem, mSwerve));
@@ -96,8 +100,6 @@ public class RobotContainer {
     driver.a().onTrue(new SetElevationPos(75, mTurretSubsystem));
     driver.leftTrigger().whileTrue(mSwerve.driveThroughBalls());
     driver.povUp().whileTrue(mSwerve.driveToClosestBall(()-> mSwerve.getClosestBall()));
-
-    driver.povRight().onTrue(new SetLEDStatus(mLedSubsystem, LEDState.EndgameBlue));
   }
 
   public Command getAutonomousCommand() {
