@@ -107,7 +107,7 @@ public class IntakeSubsystem extends SubsystemBase {
     intakeRotationMotorConfig.Slot0.kI = 0;
     intakeRotationMotorConfig.Slot0.kD = 0.0;
 
-    intakeRotationMotorConfig.Slot0.kG = 0.03;
+    intakeRotationMotorConfig.Slot0.kG = 0.035;
 
     intakeRotationMotorConfig.MotionMagic.MotionMagicAcceleration = 100;
     intakeRotationMotorConfig.MotionMagic.MotionMagicCruiseVelocity = 40;

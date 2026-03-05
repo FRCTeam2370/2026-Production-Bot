@@ -24,6 +24,8 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Commands.ResetGyro;
 import frc.robot.Commands.SetLEDStatus;
 import frc.robot.Commands.TeleopSwerve;
+import frc.robot.Commands.ClimberCommands.ClimbForPercent;
+import frc.robot.Commands.ClimberCommands.SetClimberPos;
 import frc.robot.Commands.Intake.DeployIntake;
 import frc.robot.Commands.Intake.SetIntakePosAndSpeed;
 import frc.robot.Commands.Shooter.ShootAtVelocity;
@@ -32,6 +34,8 @@ import frc.robot.Commands.TurretCommands.AimTurretAtActiveAimPoint;
 import frc.robot.Commands.TurretCommands.PointTurretAndShoot;
 import frc.robot.Commands.TurretCommands.PointTurretAndShootForTime;
 import frc.robot.Commands.TurretCommands.SetElevationPos;
+import frc.robot.Constants.ClimberConstants;
+import frc.robot.Subsystems.ClimberSubsystem;
 import frc.robot.Subsystems.FieldInfo;
 import frc.robot.Subsystems.IntakeSubsystem;
 import frc.robot.Subsystems.LEDSubsystem;
@@ -46,6 +50,7 @@ import frc.robot.Subsystems.Vision;
 
 public class RobotContainer {
   public static final CommandXboxController driver = new CommandXboxController(0);
+  public static final CommandXboxController operator = new CommandXboxController(1);
   public static final GenericHID dial = new GenericHID(2);
 
   public static boolean shouldDial = false;
@@ -60,6 +65,8 @@ public class RobotContainer {
   private final ShooterSubsystem mShooterSubsystem = new ShooterSubsystem();
   private final Vision mVision = new Vision();
   private final LEDSubsystem mLedSubsystem = new LEDSubsystem();
+  private final ClimberSubsystem mClimberSubsystem = new ClimberSubsystem();
+
   private final SendableChooser<Command> autoChooser;
   
 
@@ -71,9 +78,9 @@ public class RobotContainer {
     NamedCommands.registerCommand("Test", new ResetGyro(mSwerve));
     NamedCommands.registerCommand("Aim and Shoot For 3", new PointTurretAndShootForTime(TurretSubsystem.activeAimPoint.aimPoint, 3, mTurretSubsystem, mSwerve, mUptakeSubsystem, mSpindexerSubsystem, mShooterSubsystem));
     NamedCommands.registerCommand("Aim and Shoot For 5", new PointTurretAndShootForTime(TurretSubsystem.activeAimPoint.aimPoint, 5, mTurretSubsystem, mSwerve, mUptakeSubsystem, mSpindexerSubsystem, mShooterSubsystem));
-    NamedCommands.registerCommand("Deploy Intake", new DeployIntake(Rotation2d.fromDegrees(-67).getRotations(), 60, mIntakeSubsystem, mSwerve));
-    NamedCommands.registerCommand("Aim and Shoot", new PointTurretAndShoot(TurretSubsystem.activeAimPoint.aimPoint, mTurretSubsystem, mSwerve, mUptakeSubsystem, mSpindexerSubsystem, mShooterSubsystem));
-    NamedCommands.registerCommand("Deploy Hintake", new DeployIntake(Rotation2d.fromDegrees(-50).getRotations(), 60, mIntakeSubsystem, mSwerve));
+    NamedCommands.registerCommand("Deploy Intake", new DeployIntake(Rotation2d.fromDegrees(-67).getRotations(), 70, mIntakeSubsystem, mSwerve));
+    NamedCommands.registerCommand("Aim and Shoot", new PointTurretAndShootForTime(TurretSubsystem.activeAimPoint.aimPoint, 20, mTurretSubsystem, mSwerve, mUptakeSubsystem, mSpindexerSubsystem, mShooterSubsystem));
+    NamedCommands.registerCommand("Deploy Hintake", new DeployIntake(Rotation2d.fromDegrees(-40).getRotations(), 70, mIntakeSubsystem, mSwerve));
 
     autoChooser = AutoBuilder.buildAutoChooser();
     SmartDashboard.putData("Auto Chooser", autoChooser);
@@ -90,7 +97,7 @@ public class RobotContainer {
 
     driver.rightTrigger().toggleOnTrue(new ShootAtVelocity(mShooterSubsystem, mUptakeSubsystem, mSpindexerSubsystem, mSwerve));
     driver.leftBumper().toggleOnTrue(new SetIntakePosAndSpeed(Rotation2d.fromDegrees(-67).getRotations(), 60, mIntakeSubsystem, mSwerve));
-    driver.povRight().toggleOnTrue(new SetIntakePosAndSpeed(Rotation2d.fromDegrees(-50).getRotations(), 60, mIntakeSubsystem, mSwerve));
+    driver.povRight().toggleOnTrue(new SetIntakePosAndSpeed(Rotation2d.fromDegrees(-40).getRotations(), 60, mIntakeSubsystem, mSwerve));
     //driver.b().toggleOnTrue(new PointTurretAtPoint(FieldConstants.HubFieldPoseRed, mTurretSubsystem, mSwerve));
     //driver.x().onTrue(new SetTurretRotation(Rotation2d.fromDegrees(360).getRotations(), mTurretSubsystem));
     //driver.y().toggleOnTrue(new PointTurretAtPoint(FieldConstants.AimPose1, mTurretSubsystem, mSwerve));
@@ -101,6 +108,12 @@ public class RobotContainer {
     driver.leftTrigger().whileTrue(mSwerve.driveThroughBalls());
     driver.povUp().whileTrue(mSwerve.driveToClosestBall(()-> mSwerve.getClosestBall()));
     driver.povLeft().whileTrue(mSwerve.PathfindToPose(()-> FieldInfo.fieldPoints.ClimbRight));
+
+    operator.rightBumper().whileTrue(new ClimbForPercent(30, mClimberSubsystem));
+    operator.leftBumper().whileTrue(new ClimbForPercent(-30, mClimberSubsystem));
+    operator.a().onTrue(new SetClimberPos(0, mClimberSubsystem));
+    operator.b().onTrue(new SetClimberPos(230, mClimberSubsystem));
+    operator.x().onTrue(new SetClimberPos(115, mClimberSubsystem));
   }
 
   public Command getAutonomousCommand() {

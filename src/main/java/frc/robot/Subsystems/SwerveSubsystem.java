@@ -154,11 +154,11 @@ public class SwerveSubsystem extends SubsystemBase {
     SmartDashboard.putNumber("robot relative x Vel", getRobotRelativeSpeeds().vxMetersPerSecond);
     SmartDashboard.putNumber("robot relative y Vel", getRobotRelativeSpeeds().vyMetersPerSecond);
 
-    SmartDashboard.putNumber("getTrenchOffsetY", getTrenchOffsetY());
+    //SmartDashboard.putNumber("getTrenchOffsetY", getTrenchOffsetY());
 
     // SmartDashboard.putNumber("Odometry x", odometry.getPoseMeters().getX());
     // SmartDashboard.putNumber("Odometry y", odometry.getPoseMeters().getY());
-    SmartDashboard.putNumber("Calculated Turret Angle", turretRotationToPose(new Pose2d(Red.HubFieldPoseRed.getX(), Red.HubFieldPoseRed.getY(), new Rotation2d())).getDegrees());
+    //SmartDashboard.putNumber("Calculated Turret Angle", turretRotationToPose(new Pose2d(Red.HubFieldPoseRed.getX(), Red.HubFieldPoseRed.getY(), new Rotation2d())).getDegrees());
     SmartDashboard.putNumber("Calculated Turret Angle 0-450", turretRotationToPose450(new Pose2d(Red.HubFieldPoseRed.getX(), Red.HubFieldPoseRed.getY(), new Rotation2d())).getDegrees());
     NetworkTableInstance.getDefault().getTable("fuelCV").getEntry("Camera Pose").setDoubleArray(new Double[]{detectionCamToField().getX(), detectionCamToField().getY(), poseEstimator.getEstimatedPosition().getRotation().getRadians()});
 
@@ -289,8 +289,8 @@ public class SwerveSubsystem extends SubsystemBase {
   public void resetOdometry(Pose2d pose){
     startOrientation = Rotation2d.fromDegrees(pose.getRotation().getDegrees() - SwerveConstants.gyroOffset);
     gyro.setYaw(startOrientation.getDegrees());
-    odometry.resetPosition(pose.getRotation(), getModulePositions(), pose);//pose.getRotation()
-    poseEstimator.resetPose(pose);
+    odometry.resetPosition(getgyro0to360(-90), getModulePositions(), new Pose2d(pose.getTranslation(), getgyro0to360(-90)));//pose.getRotation()
+    poseEstimator.resetPose(new Pose2d(pose.getTranslation(), getgyro0to360(-90)));
   }
 
   public void updateOdometry(){

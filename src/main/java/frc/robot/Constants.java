@@ -98,6 +98,10 @@ public class Constants {
         public static final Rotation2d TurretStartElevation = Rotation2d.fromDegrees(75);
     }
 
+    public static class ClimberConstants{
+      public static final int ClimberID = 30;
+    }
+
     public static class FieldConstants {
       public static class Red{
         public static final Translation3d HubFieldPoseRed = new Translation3d(11.925, 4.025, 1.8288);
