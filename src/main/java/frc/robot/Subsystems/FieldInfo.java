@@ -7,11 +7,10 @@ package frc.robot.Subsystems;
 import java.util.Optional;
 
 import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Transform2d;
-import edu.wpi.first.math.geometry.Transform3d;
-import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -22,6 +21,7 @@ import frc.robot.Subsystems.LEDSubsystem.LEDState;
 
 public class FieldInfo extends SubsystemBase {
   boolean prefireRed = false, prefireBlue = false, endgame = false;
+  public static Timer turretTimer = new Timer();
 
   public static class FieldPoints {
     public Translation3d HubPose, PassPose1, PassPose2;
@@ -39,6 +39,8 @@ public class FieldInfo extends SubsystemBase {
 
   /** Creates a new FieldInfo. */
   public FieldInfo() {
+    turretTimer.reset();
+    turretTimer.start();
     if(SwerveSubsystem.color.get() == Alliance.Blue){
       fieldPoints.HubPose = Blue.HubFieldPoseBlue;
       fieldPoints.PassPose1 = Blue.PassPose1;
@@ -56,6 +58,7 @@ public class FieldInfo extends SubsystemBase {
 
   @Override
   public void periodic() {
+    SmartDashboard.putNumber("Turret Timer", turretTimer.get());
     // This method will be called once per scheduler run
     SmartDashboard.putBoolean("Hub Active", isHubActive());
     // if(isHubActive()){

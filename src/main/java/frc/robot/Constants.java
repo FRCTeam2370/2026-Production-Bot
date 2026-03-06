@@ -4,8 +4,6 @@
 
 package frc.robot;
 
-import static edu.wpi.first.units.Units.Rotation;
-
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.SensorDirectionValue;
 import com.pathplanner.lib.path.PathConstraints;
@@ -86,6 +84,7 @@ public class Constants {
         public static final double elevationRatio = 955/12;//Kraken rotations : turret rotations
 
         public static final Transform2d RobotToTurret = new Transform2d(-0.161925, 0.0889508, Rotation2d.fromDegrees(0));
+        public static final double turretDistanceFromCenter = Math.sqrt(Math.pow(RobotToTurret.getX(), 2) + Math.pow(RobotToTurret.getY(), 2));
 
         public static final Rotation2d TurretStartOffset = Rotation2d.fromDegrees(50);//relative to the cable chain (counterclockwise positive)
         public static final Rotation2d TurretCableChainPoint = Rotation2d.fromDegrees(590);//Relative to the front of the robot (clockwise positive)
@@ -107,8 +106,8 @@ public class Constants {
         public static final Translation3d HubFieldPoseRed = new Translation3d(11.925, 4.025, 1.8288);
         public static final double neutralZoneEnterX = 12;//Meters
 
-        public static final Translation3d PassPose1 = new Translation3d(15, 1, 0);
-        public static final Translation3d PassPose2 = new Translation3d(15, 7, 0);
+        public static final Translation3d PassPose1 = new Translation3d(15.5, 1, 0);
+        public static final Translation3d PassPose2 = new Translation3d(15.5, 7, 0);
 
         public static final Pose2d ClimbLeft = new Pose2d(15.29, 3.456, Rotation2d.fromDegrees(-90));
         public static final Pose2d ClimbRight = new Pose2d(15.419, 5.36, Rotation2d.fromDegrees(90));
@@ -138,6 +137,9 @@ public class Constants {
 
         public static final double BlueTrenchStartX = 0;
         public static final double BlueTrenchEndX = 0;
+
+        public static final double fieldMaxX = 8.069326;
+        public static final double fieldMaxY = 16.540988;
         
     }
 

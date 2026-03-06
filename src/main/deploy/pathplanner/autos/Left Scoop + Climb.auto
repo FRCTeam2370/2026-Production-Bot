@@ -5,9 +5,22 @@
     "data": {
       "commands": [
         {
-          "type": "named",
+          "type": "parallel",
           "data": {
-            "name": "Aim and Shoot For 3"
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "Aim and Shoot For 3"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Prop Intake"
+                }
+              }
+            ]
           }
         },
         {

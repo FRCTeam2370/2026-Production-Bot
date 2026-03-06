@@ -4,10 +4,8 @@
 
 package frc.robot.Commands.TurretCommands;
 
-import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
-import frc.robot.Commands.Shooter.ShootAtVelocity;
 import frc.robot.Commands.Shooter.ShootAtVelocityForTime;
 import frc.robot.Subsystems.ShooterSubsystem;
 import frc.robot.Subsystems.SpindexerSubsystem;

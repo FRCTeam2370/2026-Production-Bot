@@ -5,15 +5,10 @@
 package frc.robot;
 
 
-import static edu.wpi.first.units.Units.Rotation;
-
-import com.fasterxml.jackson.databind.util.Named;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 
-import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.GenericHID;
@@ -22,25 +17,22 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Commands.ResetGyro;
-import frc.robot.Commands.SetLEDStatus;
 import frc.robot.Commands.TeleopSwerve;
 import frc.robot.Commands.ClimberCommands.ClimbForPercent;
 import frc.robot.Commands.ClimberCommands.SetClimberPos;
 import frc.robot.Commands.Intake.DeployIntake;
 import frc.robot.Commands.Intake.SetIntakePosAndSpeed;
 import frc.robot.Commands.Shooter.ShootAtVelocity;
-import frc.robot.Commands.Shooter.ShootAtVelocityForTime;
 import frc.robot.Commands.TurretCommands.AimTurretAtActiveAimPoint;
-import frc.robot.Commands.TurretCommands.PointTurretAndShoot;
+import frc.robot.Commands.TurretCommands.EnableAirStrike;
 import frc.robot.Commands.TurretCommands.PointTurretAndShootForTime;
 import frc.robot.Commands.TurretCommands.SetElevationPos;
-import frc.robot.Constants.ClimberConstants;
 import frc.robot.Subsystems.ClimberSubsystem;
 import frc.robot.Subsystems.FieldInfo;
 import frc.robot.Subsystems.IntakeSubsystem;
 import frc.robot.Subsystems.LEDSubsystem;
-import frc.robot.Subsystems.LEDSubsystem.LEDState;
 import frc.robot.Subsystems.ObjectDetection;
+import frc.robot.Subsystems.OperatorTargetingSubsystem;
 import frc.robot.Subsystems.ShooterSubsystem;
 import frc.robot.Subsystems.SpindexerSubsystem;
 import frc.robot.Subsystems.SwerveSubsystem;
@@ -66,6 +58,7 @@ public class RobotContainer {
   private final Vision mVision = new Vision();
   private final LEDSubsystem mLedSubsystem = new LEDSubsystem();
   private final ClimberSubsystem mClimberSubsystem = new ClimberSubsystem();
+  private final OperatorTargetingSubsystem mOperatorTargetingSubsystem = new OperatorTargetingSubsystem();
 
   private final SendableChooser<Command> autoChooser;
   
@@ -78,9 +71,10 @@ public class RobotContainer {
     NamedCommands.registerCommand("Test", new ResetGyro(mSwerve));
     NamedCommands.registerCommand("Aim and Shoot For 3", new PointTurretAndShootForTime(TurretSubsystem.activeAimPoint.aimPoint, 3, mTurretSubsystem, mSwerve, mUptakeSubsystem, mSpindexerSubsystem, mShooterSubsystem));
     NamedCommands.registerCommand("Aim and Shoot For 5", new PointTurretAndShootForTime(TurretSubsystem.activeAimPoint.aimPoint, 5, mTurretSubsystem, mSwerve, mUptakeSubsystem, mSpindexerSubsystem, mShooterSubsystem));
-    NamedCommands.registerCommand("Deploy Intake", new DeployIntake(Rotation2d.fromDegrees(-67).getRotations(), 70, mIntakeSubsystem, mSwerve));
+    NamedCommands.registerCommand("Deploy Intake", new DeployIntake(Rotation2d.fromDegrees(-67).getRotations(), 90, mIntakeSubsystem, mSwerve));
     NamedCommands.registerCommand("Aim and Shoot", new PointTurretAndShootForTime(TurretSubsystem.activeAimPoint.aimPoint, 20, mTurretSubsystem, mSwerve, mUptakeSubsystem, mSpindexerSubsystem, mShooterSubsystem));
-    NamedCommands.registerCommand("Deploy Hintake", new DeployIntake(Rotation2d.fromDegrees(-40).getRotations(), 70, mIntakeSubsystem, mSwerve));
+    NamedCommands.registerCommand("Deploy Hintake", new DeployIntake(Rotation2d.fromDegrees(-40).getRotations(), 90, mIntakeSubsystem, mSwerve));
+    NamedCommands.registerCommand("Prop Intake", new DeployIntake(Rotation2d.fromDegrees(45).getRotations(), 30, mIntakeSubsystem, mSwerve));
 
     autoChooser = AutoBuilder.buildAutoChooser();
     SmartDashboard.putData("Auto Chooser", autoChooser);
@@ -114,6 +108,9 @@ public class RobotContainer {
     operator.a().onTrue(new SetClimberPos(0, mClimberSubsystem));
     operator.b().onTrue(new SetClimberPos(230, mClimberSubsystem));
     operator.x().onTrue(new SetClimberPos(115, mClimberSubsystem));
+
+    operator.y().onTrue(new EnableAirStrike(true));
+    operator.povDown().onTrue(new EnableAirStrike(false));
   }
 
   public Command getAutonomousCommand() {

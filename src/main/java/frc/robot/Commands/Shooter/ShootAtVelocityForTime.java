@@ -7,16 +7,14 @@ package frc.robot.Commands.Shooter;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.Constants.FieldConstants;
-import frc.robot.Constants.FieldConstants.Red;
 import frc.robot.Constants.spindexerConstants;
 import frc.robot.Constants.uptakeConstants;
 import frc.robot.Subsystems.ShooterSubsystem;
-import frc.robot.Subsystems.UptakeSubsystem;
-import frc.robot.Utils.TurretLogic.TurretAimPose;
 import frc.robot.Subsystems.SpindexerSubsystem;
 import frc.robot.Subsystems.SwerveSubsystem;
 import frc.robot.Subsystems.TurretSubsystem;
+import frc.robot.Subsystems.UptakeSubsystem;
+import frc.robot.Utils.TurretLogic.TurretAimPose;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class ShootAtVelocityForTime extends Command {
@@ -42,7 +40,7 @@ public class ShootAtVelocityForTime extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    TurretAimPose aimpose = mSwerve.getTurretPointTowardsPose(Red.HubFieldPoseRed);
+    TurretAimPose aimpose = mSwerve.getTurretPointTowardsPose(TurretSubsystem.activeAimPoint.aimPoint);
     vel = aimpose.vel;
     usingLower = aimpose.usingLower;
     ShooterSubsystem.shootWithVelocity(vel);
@@ -50,8 +48,7 @@ public class ShootAtVelocityForTime extends Command {
       UptakeSubsystem.uptakeWithVelocity(uptakeConstants.uptakeSpeed);
       SpindexerSubsystem.spindexrWithVelocity(spindexerConstants.spindexerSpeed);
     }else{
-      UptakeSubsystem.uptakeWithVelocity(-20);
-      SpindexerSubsystem.spindexrWithVelocity(0);
+      UptakeSubsystem.uptakeWithVelocity(0);
     }
     SmartDashboard.putBoolean("using Lower", usingLower);
     SmartDashboard.putNumber("Expected Shooter vel", vel);

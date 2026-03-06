@@ -62,7 +62,7 @@ public class TurretSubsystem extends SubsystemBase {
     //SmartDashboard.putNumber("Turret Elevation Motor Current", elevationMotor.getStatorCurrent().getValueAsDouble());
     //SmartDashboard.putNumber("Turret Elevation Position", elevationMotor.getPosition().getValueAsDouble());
     SmartDashboard.putNumber("Elevation degrees", Rotation2d.fromRotations(krakenToElevationRotations(elevationMotor.getPosition().getValueAsDouble())).getDegrees());
-    //SmartDashboard.putNumber("Turret Ticks", turretRotationMotor.getPosition().getValueAsDouble());
+    SmartDashboard.putNumber("Turret Ticks", turretRotationMotor.getPosition().getValueAsDouble());
     //SmartDashboard.putNumber("Turret CAN coder", turretCANcoder.getAbsolutePosition().getValueAsDouble());
     if(RobotContainer.driver.povDown().getAsBoolean() && !RobotContainer.shouldDial){
       RobotContainer.shouldDial = true;
@@ -92,20 +92,28 @@ public class TurretSubsystem extends SubsystemBase {
   private void HandleActiveAimPoint(Pose2d pose){
     if(SwerveSubsystem.color.get() == Alliance.Blue){
       if(pose.getX() > Blue.neutralZoneEnterX){
-        if(pose.getY() > 4){
-          activeAimPoint = new ActiveAimPose(FieldConstants.Blue.PassPose2, LEDState.Point);
+        if(OperatorTargetingSubsystem.shouldAirStrike){
+            activeAimPoint = new ActiveAimPose(new Translation3d(OperatorTargetingSubsystem.operatorTargetPos.getX(), OperatorTargetingSubsystem.operatorTargetPos.getY(), 0), LEDState.Point);
         }else{
-          activeAimPoint = new ActiveAimPose(FieldConstants.Blue.PassPose1, LEDState.Point);
+          if(pose.getY() > 4){
+            activeAimPoint = new ActiveAimPose(FieldConstants.Blue.PassPose2, LEDState.Point);
+          }else{
+            activeAimPoint = new ActiveAimPose(FieldConstants.Blue.PassPose1, LEDState.Point);
+          }
         }
       }else{
         activeAimPoint = new ActiveAimPose(FieldConstants.Blue.HubFieldPoseBlue, LEDState.Hub);
       }
     }else{
       if(pose.getX() < Red.neutralZoneEnterX){
-        if(pose.getY() > 4){
-          activeAimPoint = new ActiveAimPose(Red.PassPose2, LEDState.Point);
+        if(OperatorTargetingSubsystem.shouldAirStrike){
+            activeAimPoint = new ActiveAimPose(new Translation3d(OperatorTargetingSubsystem.operatorTargetPos.getX(), OperatorTargetingSubsystem.operatorTargetPos.getY(), 0), LEDState.Point);
         }else{
-          activeAimPoint = new ActiveAimPose(Red.PassPose1, LEDState.Point);
+          if(pose.getY() > 4){
+            activeAimPoint = new ActiveAimPose(Red.PassPose2, LEDState.Point);
+          }else{
+            activeAimPoint = new ActiveAimPose(Red.PassPose1, LEDState.Point);
+          }
         }
       }else{
         activeAimPoint = new ActiveAimPose(FieldConstants.Red.HubFieldPoseRed, LEDState.Hub);
@@ -122,11 +130,12 @@ public class TurretSubsystem extends SubsystemBase {
       targetRot = turretRotationsToKraken(SwerveSubsystem.turretRotationToPose450(pose).getRotations());
       turretRotationMotor.setControl(turretRotMagicCycle.withPosition(targetRot));
     }
-    if(turretRotationMotor.getPosition().getValueAsDouble() > targetRot * 0.975 && turretRotationMotor.getPosition().getValueAsDouble() < targetRot * 1.975){
+    if(turretRotationMotor.getPosition().getValueAsDouble() > targetRot * 0.9 && turretRotationMotor.getPosition().getValueAsDouble() < targetRot * 1.1){
       canShoot = true;
     }else{
       canShoot = false;
     }
+    SmartDashboard.putNumber("targetRot", targetRot);
   }
 
   public static void aimTurretAtDegree(double degrees){
@@ -170,12 +179,12 @@ public class TurretSubsystem extends SubsystemBase {
     turretRotationMotor.setPosition(turretRotationsToKraken(TurretConstants.TurretCableChainPoint.getRotations() - TurretConstants.TurretStartOffset.getRotations()) + (turretCANcoder.getAbsolutePosition().getValueAsDouble() * TurretConstants.encoderRatio));
     //turretRotationMotor.setPosition(turretRotationsToKraken(TurretConstants.TurretCableChainPoint.getRotations() - TurretConstants.TurretStartOffset.getRotations()));
 
-    turretRotConfig.Slot0.kP = 0.22;
-    turretRotConfig.Slot0.kI = 0.005;
+    turretRotConfig.Slot0.kP = 0.23;
+    turretRotConfig.Slot0.kI = 0.007;
     turretRotConfig.Slot0.kD = 0.007;
 
     turretRotConfig.MotionMagic.MotionMagicAcceleration = 150;
-    turretRotConfig.MotionMagic.MotionMagicCruiseVelocity = 100;
+    turretRotConfig.MotionMagic.MotionMagicCruiseVelocity = 110;
 
     turretRotConfig.CurrentLimits.StatorCurrentLimit = 40;
 

@@ -4,8 +4,6 @@
 
 package frc.robot.Subsystems;
 
-import static edu.wpi.first.units.Units.Rotation;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -16,7 +14,6 @@ import java.util.function.Supplier;
 
 import com.ctre.phoenix6.configs.Pigeon2Configuration;
 import com.ctre.phoenix6.hardware.Pigeon2;
-import com.ctre.phoenix6.swerve.SwerveDrivetrain.SwerveControlParameters;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.config.ModuleConfig;
 import com.pathplanner.lib.config.PIDConstants;
@@ -48,18 +45,16 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.FieldObject2d;
-import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.DeferredCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
-import frc.robot.RobotContainer;
 import frc.robot.Constants.FieldConstants;
+import frc.robot.Constants.FieldConstants.Red;
 import frc.robot.Constants.SwerveConstants;
 import frc.robot.Constants.TurretConstants;
 import frc.robot.Constants.VisionConstants;
-import frc.robot.Constants.FieldConstants.Red;
 import frc.robot.SwerveModule;
 import frc.robot.Utils.BallLogic;
 import frc.robot.Utils.TurretLogic;
@@ -226,10 +221,11 @@ public class SwerveSubsystem extends SubsystemBase {
   }
 
   public static Rotation2d turretRotationToPose450(Pose2d pose){
+    //double distanceToPose = Math.sqrt(Math.pow(pose.getX() - turretToField().getX(), 2) + Math.pow(pose.getY() - turretToField().getY(), 2));
     double thetaWorldToTarget = Math.atan2((pose.getY()), (pose.getX()));//calculates the angle from the turret's point to the target point
     double thetaTurretToTarget = thetaWorldToTarget - 0.5*Math.PI//uses the thetaWorldToTarget and subtracts the robot's rotation to get the rotation from the turret (adding pi here is an offset)
-     - getgyro0to360(0).getRadians() //subtracting the robot's rotation
-     - (Math.toRadians(gyro.getAngularVelocityZWorld().getValueAsDouble()) * 0.02);//adding angular velocity lookahead
+     - getgyro0to360(0).getRadians(); //subtracting the robot's rotation
+    // - (Math.toRadians(gyro.getAngularVelocityZWorld().getValueAsDouble()) * 0.01);//adding angular velocity lookahead
     thetaTurretToTarget = (((thetaTurretToTarget % (2*Math.PI)) + (2*Math.PI)) % (2*Math.PI));//Returns the thetaTurretToTarget value in the range of 0-360 degrees
 
     double returnTheta;
