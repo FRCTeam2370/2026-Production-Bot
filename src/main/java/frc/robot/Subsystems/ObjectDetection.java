@@ -19,6 +19,7 @@ public class ObjectDetection extends SubsystemBase {
   private int numFuel;
   private boolean plotBalls = false;
   public static boolean intakeDown = false;
+  public static boolean coralConnected = false;
   public NetworkTable fuelCV;
   public ArrayList<Pose2d> ballPoses = new ArrayList<>();
   //public ArrayList<Ball> balls = new ArrayList<>();
@@ -32,6 +33,7 @@ public class ObjectDetection extends SubsystemBase {
     // This method will be called once per scheduler run
     if(fuelCV != null){
       handleFuelDetection();
+      coralConnected = NetworkTableInstance.getDefault().getTable("fuelCV").getEntry("coral_connected").getBoolean(coralConnected);
     }
     NetworkTableInstance.getDefault().getTable("fuelCV").getEntry("intakeDown").setBoolean(intakeDown);
     SmartDashboard.putNumber("Ball Poses Size", ballPoses.size());

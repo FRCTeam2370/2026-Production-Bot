@@ -12,8 +12,10 @@ import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
+import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.RobotContainer;
 import frc.robot.Constants.FieldConstants;
 import frc.robot.Constants.FieldConstants.Blue;
 import frc.robot.Constants.FieldConstants.Red;
@@ -67,36 +69,42 @@ public class FieldInfo extends SubsystemBase {
     SmartDashboard.putNumber("Turret Timer", turretTimer.get());
     // This method will be called once per scheduler run
     SmartDashboard.putBoolean("Hub Active", isHubActive());
-    // if(isHubActive()){
-    //     if(SwerveSubsystem.color.get() == Alliance.Blue){
-    //       LEDSubsystem.mLEDState = LEDState.Blue;
-    //     }else{
-    //       LEDSubsystem.mLEDState = LEDState.Red;
-    //     }
-    // }else{
-    //   if(SwerveSubsystem.color.get() == Alliance.Blue){
-    //     LEDSubsystem.mLEDState = LEDState.Red;
-    //   }else{
-    //     LEDSubsystem.mLEDState = LEDState.Blue;
-    //   }
-    // }
-    // if(prefireBlue){
-    //   LEDSubsystem.mLEDState = LEDState.PrepareBlue;
-    // }else if(prefireRed){
-    //   LEDSubsystem.mLEDState = LEDState.PrepareRed;
-    // }else if (endgame){
-    //   if(SwerveSubsystem.color.get() == Alliance.Blue){
-    //     LEDSubsystem.mLEDState = LEDState.EndgameBlue;
-    //   }else{
-    //     LEDSubsystem.mLEDState = LEDState.EndgameRed;
-    //   }
-    // }
+    isHubActive();
+    if(!DriverStation.isDisabled()){
+      if(DriverStation.getMatchTime() > 30){
+        if(isHubActive()){
+          if(SwerveSubsystem.color.get() == Alliance.Blue){
+            LEDSubsystem.mLEDState = LEDState.Blue;
+          }else{
+            LEDSubsystem.mLEDState = LEDState.Red;
+          }
+        }else{
+          if(SwerveSubsystem.color.get() == Alliance.Blue){
+            LEDSubsystem.mLEDState = LEDState.Red;
+          }else{
+            LEDSubsystem.mLEDState = LEDState.Blue;
+          }
+        }
 
-    if(DriverStation.getMatchTime() < 31 && DriverStation.getMatchTime() > 29){
-      if(SwerveSubsystem.color.get() == Alliance.Blue){
-        LEDSubsystem.mLEDState = LEDState.EndgameBlue;
+        if(prefireBlue){
+          LEDSubsystem.mLEDState = LEDState.PrepareBlue;
+          RobotContainer.driver.setRumble(RumbleType.kBothRumble, 1);
+        }else if(prefireRed){
+          LEDSubsystem.mLEDState = LEDState.PrepareRed;
+          RobotContainer.driver.setRumble(RumbleType.kBothRumble, 1);
+        }else{
+          RobotContainer.driver.setRumble(RumbleType.kBothRumble, 0);
+        }
       }else{
-        LEDSubsystem.mLEDState = LEDState.EndgameRed;
+        RobotContainer.driver.setRumble(RumbleType.kBothRumble, 0);
+        if(DriverStation.getMatchTime() > 29.5){
+          LEDSubsystem.startEndgame();
+          if(SwerveSubsystem.color.get() == Alliance.Blue){
+            LEDSubsystem.mLEDState = LEDState.EndgameBlue;
+          }else{
+            LEDSubsystem.mLEDState = LEDState.EndgameRed;
+          }
+        }
       }
     }
     SmartDashboard.putNumber("Match Time", DriverStation.getMatchTime());
@@ -117,22 +125,28 @@ public class FieldInfo extends SubsystemBase {
     return false;
   }
 
-  // We're teleop enabled, compute.
+  // We're teleop enabled, compute
   double matchTime = DriverStation.getMatchTime();
   String gameData = DriverStation.getGameSpecificMessage();
   // If we have no game data, we cannot compute, assume hub is active, as its likely early in teleop.
-  if (gameData.isEmpty()) {
-    return true;
-  }
   boolean redInactiveFirst = false;
-  switch (gameData.charAt(0)) {
-    case 'R' -> redInactiveFirst = true;
-    case 'B' -> redInactiveFirst = false;
-    default -> {
-      // If we have invalid game data, assume hub is active.
+  if(!gameData.isEmpty()){
+      switch (gameData.charAt(0)) {
+      case 'R' -> redInactiveFirst = true;
+      case 'B' -> redInactiveFirst = false;
+      default -> {
+        // If we have invalid game data, assume hub is active.
+        redInactiveFirst = true;
+      }
+    }
+  }else{//assume we won auto :)
+    if(alliance.get() == Alliance.Red){
       redInactiveFirst = true;
+    }else{
+      redInactiveFirst = false;
     }
   }
+  
 
   // Shift was is active for blue if red won auto, or red if blue won auto.
   boolean shift1Active = switch (alliance.get()) {
@@ -140,14 +154,14 @@ public class FieldInfo extends SubsystemBase {
     case Blue -> redInactiveFirst;
   };
 
-  if(matchTime < 115 && matchTime > 105){
-    selectPrefire(alliance.get());
-  }else if(matchTime < 90 && matchTime > 80){
-    selectPrefire(alliance.get());
-  }else if(matchTime < 65 && matchTime > 55){
-    selectPrefire(alliance.get());
-  }else if(matchTime < 40 && matchTime > 30){
-    selectPrefire(alliance.get());
+  if(matchTime < 110 && matchTime > 105){
+    selectPrefire(shift1Active);
+  }else if(matchTime < 85 && matchTime > 80){
+    selectPrefire(!shift1Active);
+  }else if(matchTime < 60 && matchTime > 55){
+    selectPrefire(shift1Active);
+  }else if(matchTime < 35 && matchTime > 30){
+    selectPrefire(shift1Active);
   }else{
     prefireBlue = false;
     prefireRed = false;
@@ -175,8 +189,8 @@ public class FieldInfo extends SubsystemBase {
   }
 }
 
-private void selectPrefire(Alliance alliance){
-  if(alliance == Alliance.Blue){
+private void selectPrefire(boolean redFirst){
+  if(redFirst){
       prefireRed= false;
       prefireBlue = true;
     }else{

@@ -32,7 +32,7 @@ public class DriveOnX extends SequentialCommandGroup {
     addCommands(mSwerve.PathfindToPose(()-> pose), 
       new TeleopSwerve(mSwerve, 
         ySupplier,
-        ()-> SwerveSubsystem.poseEstimator.getEstimatedPosition().getX() - pose.getX(), 
+        ()-> -SwerveSubsystem.poseEstimator.getEstimatedPosition().getX() + pose.getX(), 
         ()-> 2 * (SwerveSubsystem.poseEstimator.getEstimatedPosition().getRotation().getRotations() - (ySupplier.getAsDouble() > 0 ? FieldInfo.fieldPoints.RightHubSweep.getRotation().getRotations() : FieldInfo.fieldPoints.LeftHubSweep.getRotation().getRotations())),
         ()-> false, 
         false));

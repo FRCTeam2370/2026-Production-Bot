@@ -49,7 +49,7 @@ public class TeleopSwerve extends Command {
     double yVal = Math.abs(ySup.getAsDouble()) < 0.05 ? 0 : ySup.getAsDouble();
     double rotVal = Math.abs(rotSup.getAsDouble()) < 0.05 ? 0 : rotSup.getAsDouble();
 
-    if(ShooterSubsystem.getVelocity() > 5 && LEDSubsystem.mLEDState == LEDState.Hub){
+    if(ShooterSubsystem.getVelocity() > 40 && LEDSubsystem.mLEDState == LEDState.Hub){
       ActiveAimPose pose = TurretSubsystem.activeAimPoint;
       double xDistanceToTarget = pose.aimPoint.getX() - SwerveSubsystem.poseEstimator.getEstimatedPosition().getX();
       double yDistanceToTarget = pose.aimPoint.getY() - SwerveSubsystem.poseEstimator.getEstimatedPosition().getY();

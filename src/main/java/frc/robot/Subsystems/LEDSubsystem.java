@@ -7,6 +7,7 @@ package frc.robot.Subsystems;
 import static edu.wpi.first.units.Units.Meter;
 import static edu.wpi.first.units.Units.Percent;
 import static edu.wpi.first.units.Units.Second;
+import static edu.wpi.first.units.Units.Seconds;
 
 import java.util.Map;
 
@@ -32,6 +33,7 @@ public class LEDSubsystem extends SubsystemBase {
   public static Color idleLeading = new Color("#97d700");
   public static Color hubTarget = new Color("#80ff00");
   public static Color pointTarget = new Color("#ff8000");
+  public static Color coral = new Color("#ffffff");
   
   //LED Animation Parameters
   Distance ledSpacing = Meter.of(0.3048/19);
@@ -65,7 +67,7 @@ public class LEDSubsystem extends SubsystemBase {
   
     //Red Active Animation
     LEDPattern redBase = LEDPattern.solid(Color.kRed);
-    LEDPattern redPattern = redBase.blink(Second.of(LEDConstants.activePeriod)).atBrightness(Percent.of(LEDConstants.LEDBrightness));;
+    LEDPattern redPattern = redBase.blink(Second.of(LEDConstants.activePeriod)).atBrightness(Percent.of(LEDConstants.LEDBrightness));
   
     //Blue Active Animation
     LEDPattern blueBase = LEDPattern.solid(Color.kBlue);
@@ -73,11 +75,14 @@ public class LEDSubsystem extends SubsystemBase {
   
     //Add .reversed() after endgameTimer.get() / 30.0)) if LED strip is backwards
     //Endgame Red Animation
-    LEDPattern redEndPattern = LEDPattern.solid(Color.kRed).mask(LEDPattern.progressMaskLayer(() -> 1.0 - (endgameTimer.get() / 30.0))).atBrightness(Percent.of(LEDConstants.LEDBrightness));;
+    LEDPattern redEndPattern = LEDPattern.solid(Color.kRed).mask(LEDPattern.progressMaskLayer(() -> 1.0 - (endgameTimer.get() / 30.0))).reversed().atBrightness(Percent.of(LEDConstants.LEDBrightness));
     
     //Endgame Blue Animation
-    LEDPattern blueEndPattern = LEDPattern.solid(Color.kBlue).mask(LEDPattern.progressMaskLayer(() -> 1.0 - (endgameTimer.get() / 30.0))).atBrightness(Percent.of(LEDConstants.LEDBrightness));;
+    LEDPattern blueEndPattern = LEDPattern.solid(Color.kBlue).mask(LEDPattern.progressMaskLayer(() -> 1.0 - (endgameTimer.get() / 30.0))).reversed().atBrightness(Percent.of(LEDConstants.LEDBrightness));
   
+    //Coral Connected
+    LEDPattern coralConnected = LEDPattern.solid(coral).breathe(Seconds.of(LEDConstants.activePeriod * 2)).atBrightness(Percent.of(LEDConstants.LEDBrightness / 2));
+
     public static enum LEDState {
       Idle,
       Hub,
@@ -88,7 +93,8 @@ public class LEDSubsystem extends SubsystemBase {
       EndgameBlue,
       PrepareRed,
       PrepareBlue,
-      Off
+      Off,
+      Coral
     }
   
     public static LEDState mLEDState = LEDState.Off;
@@ -142,6 +148,9 @@ public class LEDSubsystem extends SubsystemBase {
           break;
         case Off:
           offPattern.applyTo(turretLedBuffer);
+          TurretLED.setData(turretLedBuffer);
+        case Coral:
+          coralConnected.applyTo(turretLedBuffer);
           TurretLED.setData(turretLedBuffer);
         default:
           break;  

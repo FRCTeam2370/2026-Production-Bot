@@ -112,8 +112,8 @@ public class Constants {
         public static final Pose2d ClimbLeft = new Pose2d(15.29, 3.456, Rotation2d.fromDegrees(-90));
         public static final Pose2d ClimbRight = new Pose2d(15.419, 5.36, Rotation2d.fromDegrees(90));
 
-        public static final Pose2d StartHubSweepLeft = new Pose2d(10.9, 0.7, Rotation2d.fromDegrees(35));
-        public static final Pose2d StartHubSweepRight = new Pose2d(10.9, 6, Rotation2d.fromDegrees(-35));
+        public static final Pose2d StartHubSweepLeft = new Pose2d(10.7, 0.7, Rotation2d.fromDegrees(35));
+        public static final Pose2d StartHubSweepRight = new Pose2d(10.7, 6, Rotation2d.fromDegrees(-35));
       }
 
       public static class Blue{

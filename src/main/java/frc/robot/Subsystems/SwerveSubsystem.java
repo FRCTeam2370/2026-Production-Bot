@@ -174,8 +174,8 @@ public class SwerveSubsystem extends SubsystemBase {
   }
 
   public void makeOdometry(){
-    odometry = new SwerveDriveOdometry(Constants.SwerveConstants.kinematics, getgyro0to360(180), getModulePositions());
-    poseEstimator = new SwerveDrivePoseEstimator(Constants.SwerveConstants.kinematics, getgyro0to360(180), getModulePositions(), new Pose2d(getPose().getTranslation(), new Rotation2d()));
+    odometry = new SwerveDriveOdometry(Constants.SwerveConstants.kinematics, getgyro0to360(-90), getModulePositions());
+    poseEstimator = new SwerveDrivePoseEstimator(Constants.SwerveConstants.kinematics, getgyro0to360(-90), getModulePositions(), new Pose2d(getPose().getTranslation(), new Rotation2d()));
   }
 
 

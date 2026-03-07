@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.Subsystems.LEDSubsystem;
+import frc.robot.Subsystems.ObjectDetection;
 import frc.robot.Subsystems.Vision;
 import frc.robot.Subsystems.LEDSubsystem.LEDState;
 
@@ -27,7 +28,6 @@ public class Robot extends TimedRobot {
 
   @Override
   public void disabledInit() {
-    LEDSubsystem.mLEDState = LEDState.Idle;    
     for(String i : Vision.limelightNames){
       LimelightHelpers.setLimelightNTDouble(i, "throttle_set", 500);
     }
@@ -35,6 +35,11 @@ public class Robot extends TimedRobot {
 
   @Override
   public void disabledPeriodic() {
+    if(ObjectDetection.coralConnected){
+      LEDSubsystem.mLEDState = LEDState.Coral;
+    }else{
+      LEDSubsystem.mLEDState = LEDState.Idle;  
+    }
   }
 
   @Override
