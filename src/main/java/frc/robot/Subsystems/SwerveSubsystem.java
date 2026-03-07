@@ -4,6 +4,8 @@
 
 package frc.robot.Subsystems;
 
+import static edu.wpi.first.units.Units.Rotation;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -86,6 +88,8 @@ public class SwerveSubsystem extends SubsystemBase {
   private static FieldObject2d nextClosestBall = field.getObject("next closest ball");
 
   private static double lastTurretTheta = 0;
+
+  public static boolean shouldAutoTrench = true;
 
   private StructPublisher<Pose2d> publisher = NetworkTableInstance.getDefault()
   .getStructTopic("MyPose", Pose2d.struct).publish();
@@ -224,8 +228,8 @@ public class SwerveSubsystem extends SubsystemBase {
     //double distanceToPose = Math.sqrt(Math.pow(pose.getX() - turretToField().getX(), 2) + Math.pow(pose.getY() - turretToField().getY(), 2));
     double thetaWorldToTarget = Math.atan2((pose.getY()), (pose.getX()));//calculates the angle from the turret's point to the target point
     double thetaTurretToTarget = thetaWorldToTarget - 0.5*Math.PI//uses the thetaWorldToTarget and subtracts the robot's rotation to get the rotation from the turret (adding pi here is an offset)
-     - getgyro0to360(0).getRadians(); //subtracting the robot's rotation
-    // - (Math.toRadians(gyro.getAngularVelocityZWorld().getValueAsDouble()) * 0.01);//adding angular velocity lookahead
+     - getgyro0to360(0).getRadians() //subtracting the robot's rotation
+     - (Math.toRadians(gyro.getAngularVelocityZWorld().getValueAsDouble()) * 0.2);//adding angular velocity lookahead
     thetaTurretToTarget = (((thetaTurretToTarget % (2*Math.PI)) + (2*Math.PI)) % (2*Math.PI));//Returns the thetaTurretToTarget value in the range of 0-360 degrees
 
     double returnTheta;
@@ -275,7 +279,7 @@ public class SwerveSubsystem extends SubsystemBase {
   }
   
   public static void resetGyro(){
-    gyro.setYaw(startOrientation.getDegrees());
+    gyro.setYaw(startOrientation.getDegrees() - 90);
   }
 
   public static Rotation2d readGyro(){
@@ -283,10 +287,26 @@ public class SwerveSubsystem extends SubsystemBase {
   }
 
   public void resetOdometry(Pose2d pose){
-    startOrientation = Rotation2d.fromDegrees(pose.getRotation().getDegrees() - SwerveConstants.gyroOffset);
-    gyro.setYaw(startOrientation.getDegrees());
-    odometry.resetPosition(getgyro0to360(-90), getModulePositions(), new Pose2d(pose.getTranslation(), getgyro0to360(-90)));//pose.getRotation()
-    poseEstimator.resetPose(new Pose2d(pose.getTranslation(), getgyro0to360(-90)));
+    System.out.println(color.get().toString());
+    System.out.println(pose.getRotation().getDegrees());
+    if(color.get() == Alliance.Blue){
+      startOrientation = Rotation2d.fromDegrees(pose.getRotation().getDegrees());
+      gyro.setYaw(startOrientation.getDegrees() - 90);
+      
+      odometry = new SwerveDriveOdometry(SwerveConstants.kinematics, Rotation2d.fromDegrees(pose.getRotation().getDegrees() - 90), getModulePositions());
+      poseEstimator = new SwerveDrivePoseEstimator(SwerveConstants.kinematics, Rotation2d.fromDegrees(pose.getRotation().getDegrees() - 90), getModulePositions(), pose);
+      odometry.resetPosition(pose.getRotation(), getModulePositions(), pose);//pose.getRotation()
+      poseEstimator.resetPose(new Pose2d(pose.getTranslation(), pose.getRotation()));
+    }else{
+      startOrientation = Rotation2d.fromDegrees(pose.getRotation().getDegrees());
+      gyro.setYaw(startOrientation.getDegrees() - 90);
+      
+      odometry = new SwerveDriveOdometry(SwerveConstants.kinematics, Rotation2d.fromDegrees(pose.getRotation().getDegrees() + 90), getModulePositions());
+      poseEstimator = new SwerveDrivePoseEstimator(SwerveConstants.kinematics, Rotation2d.fromDegrees(pose.getRotation().getDegrees() + 90), getModulePositions(), pose);
+      odometry.resetPosition(pose.getRotation(), getModulePositions(), pose);//pose.getRotation()
+      poseEstimator.resetPose(new Pose2d(pose.getTranslation(), pose.getRotation()));
+    }
+    
   }
 
   public void updateOdometry(){

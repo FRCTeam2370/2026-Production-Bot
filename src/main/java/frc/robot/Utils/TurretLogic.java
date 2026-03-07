@@ -13,6 +13,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants.TurretConstants;
 import frc.robot.Subsystems.FieldInfo;
 import frc.robot.Subsystems.SwerveSubsystem;
+import frc.robot.Subsystems.TurretSubsystem;
 
 /** Add your docs here. */
 public class TurretLogic {
@@ -95,7 +96,7 @@ public class TurretLogic {
         double vUnajustedY = Math.cos(trueAngle) * Math.sin(angleToTarget) * flattenedInitialVel;
         double vUnajustedZ = Math.sin(trueAngle) * flattenedInitialVel;
 
-        double velocityOffset = 0;
+        double velocityOffset = -flattenedRobotVel;
         TurretAimPose turretAimPose = new TurretAimPose();
         turretAimPose.aimPose = new Translation3d(-vUnajustedX - lateralOffsetVelocityX, 
             -vUnajustedY - lateralOffsetVelocityY, 

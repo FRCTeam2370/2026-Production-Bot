@@ -38,6 +38,9 @@ public class TurretSubsystem extends SubsystemBase {
   public static boolean canShoot = false;
   public static boolean canElevate = true;
 
+  private static double lastTime = 0;
+  private static Pose2d lastTurretPos = SwerveSubsystem.turretToField();
+
   public static class ActiveAimPose {
     public Translation3d aimPoint;
     public LEDState ledState;
@@ -181,7 +184,7 @@ public class TurretSubsystem extends SubsystemBase {
 
     turretRotConfig.Slot0.kP = 0.23;
     turretRotConfig.Slot0.kI = 0.007;
-    turretRotConfig.Slot0.kD = 0.007;
+    turretRotConfig.Slot0.kD = 0.005;
 
     turretRotConfig.MotionMagic.MotionMagicAcceleration = 150;
     turretRotConfig.MotionMagic.MotionMagicCruiseVelocity = 110;
@@ -193,7 +196,7 @@ public class TurretSubsystem extends SubsystemBase {
 
     turretRotationMotor.getConfigurator().apply(turretRotConfig);
   }
-
+  
   private static void turretElevationConfiguration() {
     elevationMotor.setNeutralMode(NeutralModeValue.Brake);
 

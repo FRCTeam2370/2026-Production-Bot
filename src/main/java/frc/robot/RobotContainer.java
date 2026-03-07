@@ -8,6 +8,7 @@ package frc.robot;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.DriverStation;
@@ -16,6 +17,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import frc.robot.Commands.DriveOnX;
 import frc.robot.Commands.ResetGyro;
 import frc.robot.Commands.TeleopSwerve;
 import frc.robot.Commands.ClimberCommands.ClimbForPercent;
@@ -27,6 +29,7 @@ import frc.robot.Commands.TurretCommands.AimTurretAtActiveAimPoint;
 import frc.robot.Commands.TurretCommands.EnableAirStrike;
 import frc.robot.Commands.TurretCommands.PointTurretAndShootForTime;
 import frc.robot.Commands.TurretCommands.SetElevationPos;
+import frc.robot.Constants.FieldConstants.Red;
 import frc.robot.Subsystems.ClimberSubsystem;
 import frc.robot.Subsystems.FieldInfo;
 import frc.robot.Subsystems.IntakeSubsystem;
@@ -71,10 +74,11 @@ public class RobotContainer {
     NamedCommands.registerCommand("Test", new ResetGyro(mSwerve));
     NamedCommands.registerCommand("Aim and Shoot For 3", new PointTurretAndShootForTime(TurretSubsystem.activeAimPoint.aimPoint, 3, mTurretSubsystem, mSwerve, mUptakeSubsystem, mSpindexerSubsystem, mShooterSubsystem));
     NamedCommands.registerCommand("Aim and Shoot For 5", new PointTurretAndShootForTime(TurretSubsystem.activeAimPoint.aimPoint, 5, mTurretSubsystem, mSwerve, mUptakeSubsystem, mSpindexerSubsystem, mShooterSubsystem));
-    NamedCommands.registerCommand("Deploy Intake", new DeployIntake(Rotation2d.fromDegrees(-67).getRotations(), 90, mIntakeSubsystem, mSwerve));
+    NamedCommands.registerCommand("Deploy Intake", new DeployIntake(Rotation2d.fromDegrees(-67).getRotations(), 80, mIntakeSubsystem, mSwerve));
     NamedCommands.registerCommand("Aim and Shoot", new PointTurretAndShootForTime(TurretSubsystem.activeAimPoint.aimPoint, 20, mTurretSubsystem, mSwerve, mUptakeSubsystem, mSpindexerSubsystem, mShooterSubsystem));
-    NamedCommands.registerCommand("Deploy Hintake", new DeployIntake(Rotation2d.fromDegrees(-40).getRotations(), 90, mIntakeSubsystem, mSwerve));
+    NamedCommands.registerCommand("Deploy Hintake", new DeployIntake(Rotation2d.fromDegrees(-40).getRotations(), 80, mIntakeSubsystem, mSwerve));
     NamedCommands.registerCommand("Prop Intake", new DeployIntake(Rotation2d.fromDegrees(45).getRotations(), 30, mIntakeSubsystem, mSwerve));
+    NamedCommands.registerCommand("Feed Right", new PointTurretAndShootForTime(FieldInfo.fieldPoints.PassPose2, 2.5, mTurretSubsystem, mSwerve, mUptakeSubsystem, mSpindexerSubsystem, mShooterSubsystem));
 
     autoChooser = AutoBuilder.buildAutoChooser();
     SmartDashboard.putData("Auto Chooser", autoChooser);
@@ -84,7 +88,7 @@ public class RobotContainer {
 
   //TODO: 35 degrees from the wall is best for picking up against the wall
   private void configureBindings() {
-    mSwerve.setDefaultCommand(new TeleopSwerve(mSwerve, ()-> -driver.getRawAxis(0), ()-> driver.getRawAxis(1), ()-> driver.getRawAxis(4), ()-> false));
+    mSwerve.setDefaultCommand(new TeleopSwerve(mSwerve, ()-> -driver.getRawAxis(0), ()-> driver.getRawAxis(1), ()-> driver.getRawAxis(4), ()-> false, true));
     driver.b().toggleOnTrue(new AimTurretAtActiveAimPoint(mSwerve, mTurretSubsystem));
 
     driver.back().onTrue(new ResetGyro(mSwerve));
@@ -97,8 +101,7 @@ public class RobotContainer {
     //driver.y().toggleOnTrue(new PointTurretAtPoint(FieldConstants.AimPose1, mTurretSubsystem, mSwerve));
     // driver.x().toggleOnTrue(new PointTurretAtPoint(FieldConstants.AimPose2, mTurretSubsystem, mSwerve));
 
-    driver.x().onTrue(new SetElevationPos(50, mTurretSubsystem));
-    driver.a().onTrue(new SetElevationPos(75, mTurretSubsystem));
+    driver.a().whileTrue(new DriveOnX(mSwerve, ()-> -driver.getRawAxis(0)));
     driver.leftTrigger().whileTrue(mSwerve.driveThroughBalls());
     driver.povUp().whileTrue(mSwerve.driveToClosestBall(()-> mSwerve.getClosestBall()));
     driver.povLeft().whileTrue(mSwerve.PathfindToPose(()-> FieldInfo.fieldPoints.ClimbRight));
