@@ -7,6 +7,7 @@ package frc.robot.Commands.TurretCommands;
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import frc.robot.Commands.Shooter.ShootAtVelocity;
+import frc.robot.Subsystems.FieldInfo;
 import frc.robot.Subsystems.ShooterSubsystem;
 import frc.robot.Subsystems.SpindexerSubsystem;
 import frc.robot.Subsystems.SwerveSubsystem;
@@ -18,9 +19,9 @@ import frc.robot.Subsystems.UptakeSubsystem;
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
 public class PointTurretAndShoot extends ParallelCommandGroup {
   /** Creates a new PointTurretAndShoot. */
-  public PointTurretAndShoot(Translation3d pose, TurretSubsystem mTurretSubsystem, SwerveSubsystem mSwerve, UptakeSubsystem mUptakeSubsystem, SpindexerSubsystem mSpindexerSubsystem, ShooterSubsystem mShooterSubsystem) {
+  public PointTurretAndShoot(Translation3d pose, TurretSubsystem mTurretSubsystem, SwerveSubsystem mSwerve, UptakeSubsystem mUptakeSubsystem, SpindexerSubsystem mSpindexerSubsystem, ShooterSubsystem mShooterSubsystem, FieldInfo mFieldInfo) {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
-    addCommands(new PointTurretAtPoint(pose, mTurretSubsystem, mSwerve), new ShootAtVelocity(mShooterSubsystem, mUptakeSubsystem, mSpindexerSubsystem, mSwerve));
+    addCommands(new PointTurretAtPoint(pose, mTurretSubsystem, mSwerve), new ShootAtVelocity(mShooterSubsystem, mUptakeSubsystem, mSpindexerSubsystem, mSwerve, mFieldInfo));
   }
 }

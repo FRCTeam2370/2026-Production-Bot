@@ -111,91 +111,109 @@ public class FieldInfo extends SubsystemBase {
   }
 
   public boolean isHubActive() {
-  Optional<Alliance> alliance = SwerveSubsystem.color;
-  // If we have no alliance, we cannot be enabled, therefore no hub.
-  if (alliance.isEmpty()) {
-    return false;
-  }
-  // Hub is always enabled in autonomous.
-  if (DriverStation.isAutonomousEnabled()) {
-    return true;
-  }
-  // At this point, if we're not teleop enabled, there is no hub.
-  if (!DriverStation.isTeleopEnabled()) {
-    return false;
-  }
+    Optional<Alliance> alliance = SwerveSubsystem.color;
+    // If we have no alliance, we cannot be enabled, therefore no hub.
+    if (alliance.isEmpty()) {
+      return false;
+    }
+    // Hub is always enabled in autonomous.
+    if (DriverStation.isAutonomousEnabled()) {
+      return true;
+    }
+    // At this point, if we're not teleop enabled, there is no hub.
+    if (!DriverStation.isTeleopEnabled()) {
+      return false;
+    }
 
-  // We're teleop enabled, compute
-  double matchTime = DriverStation.getMatchTime();
-  String gameData = DriverStation.getGameSpecificMessage();
-  // If we have no game data, we cannot compute, assume hub is active, as its likely early in teleop.
-  boolean redInactiveFirst = false;
-  if(!gameData.isEmpty()){
-      switch (gameData.charAt(0)) {
-      case 'R' -> redInactiveFirst = true;
-      case 'B' -> redInactiveFirst = false;
-      default -> {
-        // If we have invalid game data, assume hub is active.
+    // We're teleop enabled, compute
+    double matchTime = DriverStation.getMatchTime();
+    String gameData = DriverStation.getGameSpecificMessage();
+    // If we have no game data, we cannot compute, assume hub is active, as its likely early in teleop.
+    boolean redInactiveFirst = false;
+    if(!gameData.isEmpty()){
+        switch (gameData.charAt(0)) {
+        case 'R' -> redInactiveFirst = true;
+        case 'B' -> redInactiveFirst = false;
+        default -> {
+          // If we have invalid game data, assume hub is active.
+          redInactiveFirst = true;
+        }
+      }
+    }else{//assume we won auto :)
+      if(alliance.get() == Alliance.Red){
         redInactiveFirst = true;
+      }else{
+        redInactiveFirst = false;
       }
     }
-  }else{//assume we won auto :)
-    if(alliance.get() == Alliance.Red){
-      redInactiveFirst = true;
-    }else{
-      redInactiveFirst = false;
-    }
-  }
-  
+    
 
-  // Shift was is active for blue if red won auto, or red if blue won auto.
-  boolean shift1Active = switch (alliance.get()) {
-    case Red -> !redInactiveFirst;
-    case Blue -> redInactiveFirst;
-  };
+    // Shift was is active for blue if red won auto, or red if blue won auto.
+    boolean shift1Active = switch (alliance.get()) {
+      case Red -> !redInactiveFirst;
+      case Blue -> redInactiveFirst;
+    };
 
-  if(matchTime < 110 && matchTime > 105){
-    selectPrefire(shift1Active);
-  }else if(matchTime < 85 && matchTime > 80){
-    selectPrefire(!shift1Active);
-  }else if(matchTime < 60 && matchTime > 55){
-    selectPrefire(shift1Active);
-  }else if(matchTime < 35 && matchTime > 30){
-    selectPrefire(shift1Active);
-  }else{
-    prefireBlue = false;
-    prefireRed = false;
-  }
-
-  if (matchTime > 130) {
-    // Transition shift, hub is active.
-    return true;
-  } else if (matchTime > 105) {
-    // Shift 1
-    return shift1Active;
-  } else if (matchTime > 80) {
-    // Shift 2
-    return !shift1Active;
-  } else if (matchTime > 55) {
-    // Shift 3
-    return shift1Active;
-  } else if (matchTime > 30) {
-    // Shift 4
-    return !shift1Active;
-  } else {
-    // End game, hub always active.
-    endgame = true;
-    return true;
-  }
-}
-
-private void selectPrefire(boolean redFirst){
-  if(redFirst){
-      prefireRed= false;
-      prefireBlue = true;
+    if(matchTime < 110 && matchTime > 105){
+      selectPrefire(shift1Active);
+    }else if(matchTime < 85 && matchTime > 80){
+      selectPrefire(!shift1Active);
+    }else if(matchTime < 60 && matchTime > 55){
+      selectPrefire(shift1Active);
+    }else if(matchTime < 35 && matchTime > 30){
+      selectPrefire(shift1Active);
     }else{
       prefireBlue = false;
-      prefireRed = true;
+      prefireRed = false;
     }
-}
+
+    if (matchTime > 120) {// could be -> (matchTime > 130)
+      // Transition shift, hub is active.
+      return true;
+    } else if (matchTime > 105) {
+      // Shift 1
+      return shift1Active;
+    } else if (matchTime > 80) {
+      // Shift 2
+      return !shift1Active;
+    } else if (matchTime > 55) {
+      // Shift 3
+      return shift1Active;
+    } else if (matchTime > 30) {
+      // Shift 4
+      return !shift1Active;
+    } else {
+      // End game, hub always active.
+      endgame = true;
+      return true;
+    }
+  }
+
+  private void selectPrefire(boolean redFirst){
+    if(redFirst){
+        prefireRed= false;
+        prefireBlue = true;
+      }else{
+        prefireBlue = false;
+        prefireRed = true;
+      }
+  }
+
+  public boolean canShoot(){
+    if(isHubActive()){
+      return true;
+    }else if(SwerveSubsystem.color.get() == Alliance.Blue){
+      if(prefireBlue){
+        return true;
+      }
+    }else{
+      if(prefireRed){
+        return true;
+      }else{
+        return false;
+      }
+    }
+
+    return false;
+  }
 }

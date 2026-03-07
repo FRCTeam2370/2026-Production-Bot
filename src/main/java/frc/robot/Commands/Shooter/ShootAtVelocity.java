@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants.FieldConstants.Red;
 import frc.robot.Constants.spindexerConstants;
 import frc.robot.Constants.uptakeConstants;
+import frc.robot.Subsystems.FieldInfo;
 import frc.robot.Subsystems.ShooterSubsystem;
 import frc.robot.Subsystems.SpindexerSubsystem;
 import frc.robot.Subsystems.SwerveSubsystem;
@@ -21,10 +22,12 @@ public class ShootAtVelocity extends Command {
   double vel;
   boolean usingLower;
   SwerveSubsystem mSwerve;
+  FieldInfo mFieldInfo;
   /** Creates a new ShootAtVeolcity. */
-  public ShootAtVelocity(ShooterSubsystem mShooterSubsystem, UptakeSubsystem mUptakeSubsystem, SpindexerSubsystem mSpindexerSubsystem, SwerveSubsystem mSwerve) {
+  public ShootAtVelocity(ShooterSubsystem mShooterSubsystem, UptakeSubsystem mUptakeSubsystem, SpindexerSubsystem mSpindexerSubsystem, SwerveSubsystem mSwerve, FieldInfo mFieldInfo) {
     // Use addRequirements() here to declare subsystem dependencies.
     this.mSwerve = mSwerve;
+    this.mFieldInfo = mFieldInfo;
     addRequirements(mShooterSubsystem, mUptakeSubsystem, mSpindexerSubsystem);
   }
 
@@ -39,7 +42,7 @@ public class ShootAtVelocity extends Command {
     vel = aimpose.vel;
     usingLower = aimpose.usingLower;
     ShooterSubsystem.shootWithVelocity(vel);
-    if(ShooterSubsystem.getVelocity() > vel * 0.9 && TurretSubsystem.canShoot){
+    if(ShooterSubsystem.getVelocity() > vel * 0.9 && TurretSubsystem.canShoot && mFieldInfo.canShoot()){
       UptakeSubsystem.uptakeWithVelocity(uptakeConstants.uptakeSpeed);
       SpindexerSubsystem.spindexrWithVelocity(spindexerConstants.spindexerSpeed);
     }else{

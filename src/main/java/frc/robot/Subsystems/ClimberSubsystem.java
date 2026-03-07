@@ -16,7 +16,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.ClimberConstants;
 
 public class ClimberSubsystem extends SubsystemBase {
-  public static TalonFX ClimberMotor = new TalonFX(ClimberConstants.ClimberID, "*");
+  public static TalonFX ClimberMotor = new TalonFX(ClimberConstants.ClimberID);
   public static TalonFXConfiguration ClimberConfig = new TalonFXConfiguration();
 
   private static PositionDutyCycle ClimberPosCycle = new PositionDutyCycle(0);
