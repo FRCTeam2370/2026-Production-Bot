@@ -77,7 +77,7 @@ public class RobotContainer {
     NamedCommands.registerCommand("Deploy Intake", new DeployIntake(Rotation2d.fromDegrees(-67).getRotations(), 80, mIntakeSubsystem, mSwerve));
     NamedCommands.registerCommand("Aim and Shoot", new PointTurretAndShootForTime(TurretSubsystem.activeAimPoint.aimPoint, 20, mTurretSubsystem, mSwerve, mUptakeSubsystem, mSpindexerSubsystem, mShooterSubsystem));
     NamedCommands.registerCommand("Deploy Hintake", new DeployIntake(Rotation2d.fromDegrees(-40).getRotations(), 80, mIntakeSubsystem, mSwerve));
-    NamedCommands.registerCommand("Prop Intake", new DeployIntake(Rotation2d.fromDegrees(45).getRotations(), 30, mIntakeSubsystem, mSwerve));
+    NamedCommands.registerCommand("Prop Intake", new DeployIntake(Rotation2d.fromDegrees(30).getRotations(), 30, mIntakeSubsystem, mSwerve));
     NamedCommands.registerCommand("Feed Right", new PointTurretAndShootForTime(FieldInfo.fieldPoints.PassPose2, 2.5, mTurretSubsystem, mSwerve, mUptakeSubsystem, mSpindexerSubsystem, mShooterSubsystem));
 
     autoChooser = AutoBuilder.buildAutoChooser();

@@ -27,12 +27,6 @@
           "data": {
             "commands": [
               {
-                "type": "path",
-                "data": {
-                  "pathName": "We need time Left"
-                }
-              },
-              {
                 "type": "named",
                 "data": {
                   "name": "Aim and Shoot For 5"

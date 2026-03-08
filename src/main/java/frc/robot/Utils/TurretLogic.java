@@ -10,6 +10,7 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.util.MsvcRuntimeException;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.Constants.FieldConstants;
 import frc.robot.Constants.TurretConstants;
 import frc.robot.Subsystems.FieldInfo;
 import frc.robot.Subsystems.SwerveSubsystem;
@@ -84,7 +85,7 @@ public class TurretLogic {
          * then, we calculate the flattened initial velocity of the ball by subtracting our turret's flattened velocity from the launch speed
          */
         double flattenedRobotVel = /*robotSpeed*/turretSpeed * Math.cos(angleRobotVelocityToTarget);
-        double shooterVel = (5.769 * distanceToTarget + (/*robotSpeed*/ turretSpeed*0.5)) + 35.92 + (9.06 * -flattenedRobotVel) + (0.964 * Math.pow(flattenedRobotVel,2)) + 3 /*constant*/;//robot speed added
+        double shooterVel = (5.769 * distanceToTarget + (/*robotSpeed*/ turretSpeed*0.5)) + 35.92 + (9.06 * -flattenedRobotVel) + (0.964 * Math.pow(flattenedRobotVel,2)) + (TurretSubsystem.activeAimPoint.aimPoint == FieldInfo.fieldPoints.PassPose1 || TurretSubsystem.activeAimPoint.aimPoint == FieldInfo.fieldPoints.PassPose2 ? 0 : 3) /*constant*/;//robot speed added
         //double shooterVel = (23.66 + 6.13*distanceToTarget - 0.151*Math.pow(distanceToTarget, 2) - 8*flattenedRobotVel + 0.634*Math.pow(flattenedRobotVel, 2));
         double launchSpeed = 0.0754888*Math.PI*0.5*shooterVel *20/18;
         double flattenedInitialVel = Math.sqrt(Math.pow(launchSpeed, 2) - Math.pow(/*robotSpeed*/turretSpeed * Math.sin(angleRobotVelocityToTarget), 2));

@@ -106,14 +106,14 @@ public class Constants {
         public static final Translation3d HubFieldPoseRed = new Translation3d(11.925, 4.025, 1.8288);
         public static final double neutralZoneEnterX = 12;//Meters
 
-        public static final Translation3d PassPose1 = new Translation3d(15.5, 1, 0);
-        public static final Translation3d PassPose2 = new Translation3d(16, 7.6, 0);
+        public static final Translation3d PassPose1 = new Translation3d(14, 1, 0);
+        public static final Translation3d PassPose2 = new Translation3d(14, 7.6, 0);
 
         public static final Pose2d ClimbLeft = new Pose2d(15.29, 3.456, Rotation2d.fromDegrees(-90));
         public static final Pose2d ClimbRight = new Pose2d(15.419, 5.36, Rotation2d.fromDegrees(90));
 
-        public static final Pose2d StartHubSweepLeft = new Pose2d(10.7, 0.7, Rotation2d.fromDegrees(35));
-        public static final Pose2d StartHubSweepRight = new Pose2d(10.7, 6, Rotation2d.fromDegrees(-35));
+        public static final Pose2d StartHubSweepLeft = new Pose2d(10.7, 0.7, Rotation2d.fromDegrees(50));
+        public static final Pose2d StartHubSweepRight = new Pose2d(10.7, 6, Rotation2d.fromDegrees(-50));
       }
 
       public static class Blue{
