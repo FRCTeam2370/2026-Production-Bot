@@ -43,7 +43,9 @@ public class Robot extends TimedRobot {
   }
 
   @Override
-  public void disabledExit() {}
+  public void disabledExit() {
+    LEDSubsystem.mLEDState = LEDState.Off;
+  }
 
   @Override
   public void autonomousInit() {
