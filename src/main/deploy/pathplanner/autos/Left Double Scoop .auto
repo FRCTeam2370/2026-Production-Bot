@@ -11,15 +11,28 @@
           }
         },
         {
-          "type": "wait",
+          "type": "path",
           "data": {
-            "waitTime": 0.5
+            "pathName": "Neutral Scoop Left"
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "Aim and Shoot For 5"
+                }
+              }
+            ]
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "Right To Neutral To HP"
+            "pathName": "Neutral Second Scoop Left"
           }
         },
         {
@@ -32,6 +45,6 @@
     }
   },
   "resetOdom": true,
-  "folder": "Right Autos",
+  "folder": "Left Autos",
   "choreoAuto": false
 }
