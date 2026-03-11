@@ -29,7 +29,7 @@ public class DeployIntake extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    velocityOffset = Math.abs(mSwerve.getRobotRelativeSpeeds().vxMetersPerSecond / SwerveConstants.maxSpeed) * (100 - initialTargetSpeed);
+    velocityOffset = (mSwerve.getRobotRelativeSpeeds().vxMetersPerSecond / SwerveConstants.maxSpeed) * (100 - initialTargetSpeed);
     IntakeSubsystem.setIntakePos(pos);
     IntakeSubsystem.intakeWithVelocity(initialTargetSpeed + velocityOffset);
   }

@@ -126,8 +126,8 @@ public class Constants {
         public static final Pose2d ClimbLeft = new Pose2d();
         public static final Pose2d ClimbRight = new Pose2d();
 
-        public static final Pose2d StartHubSweepLeft = new Pose2d();
-        public static final Pose2d StartHubSweepRight = new Pose2d();
+        public static final Pose2d StartHubSweepLeft = new Pose2d(5.85, 6, Rotation2d.fromDegrees(130));
+        public static final Pose2d StartHubSweepRight = new Pose2d(5.85, 0.7, Rotation2d.fromDegrees(-130));
       }
 
         public static final double bottomTrenchStartY = 0;
@@ -141,8 +141,8 @@ public class Constants {
         public static final double RedTrenchStartX = 10.5;// start x coordinate of the red trench
         public static final double RedTrenchEndX = 13.5;// end x coordinate of the red trench
 
-        public static final double BlueTrenchStartX = 0;
-        public static final double BlueTrenchEndX = 0;
+        public static final double BlueTrenchStartX = 3.270;
+        public static final double BlueTrenchEndX = 5.967;
 
         public static final double fieldMaxX = 8.069326;
         public static final double fieldMaxY = 16.540988;

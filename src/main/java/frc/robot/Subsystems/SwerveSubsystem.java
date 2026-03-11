@@ -174,8 +174,14 @@ public class SwerveSubsystem extends SubsystemBase {
   }
 
   public void makeOdometry(){
-    odometry = new SwerveDriveOdometry(Constants.SwerveConstants.kinematics, getgyro0to360(-90), getModulePositions());
+    if(color.isPresent() && color.get() == Alliance.Blue){
+      odometry = new SwerveDriveOdometry(Constants.SwerveConstants.kinematics, getgyro0to360(90), getModulePositions());
+      poseEstimator = new SwerveDrivePoseEstimator(Constants.SwerveConstants.kinematics, getgyro0to360(90), getModulePositions(), new Pose2d(getPose().getTranslation(), new Rotation2d()));
+    }else{
+          odometry = new SwerveDriveOdometry(Constants.SwerveConstants.kinematics, getgyro0to360(-90), getModulePositions());
     poseEstimator = new SwerveDrivePoseEstimator(Constants.SwerveConstants.kinematics, getgyro0to360(-90), getModulePositions(), new Pose2d(getPose().getTranslation(), new Rotation2d()));
+    }
+
   }
 
 
@@ -279,7 +285,7 @@ public class SwerveSubsystem extends SubsystemBase {
   }
   
   public static void resetGyro(){
-    gyro.setYaw(startOrientation.getDegrees() - 90);
+      gyro.setYaw(startOrientation.getDegrees() - 90);
   }
 
   public static Rotation2d readGyro(){
@@ -515,13 +521,13 @@ public class SwerveSubsystem extends SubsystemBase {
   public static double getTrenchOffsetY(){
     Pose2d pose = poseEstimator.getEstimatedPosition();
     if(pose.getY() < 4){//on the bottom half of the field
-      if(pose.getX() < FieldConstants.RedTrenchEndX && pose.getX() > FieldConstants.RedTrenchStartX && pose.getY() > FieldConstants.bottomTrenchStartY && pose.getY() < FieldConstants.bottomTrenchEndY){
+      if((pose.getX() < FieldConstants.RedTrenchEndX && pose.getX() > FieldConstants.RedTrenchStartX) || (pose.getX() > FieldConstants.BlueTrenchStartX && pose.getX() < FieldConstants.BlueTrenchEndX) && pose.getY() > FieldConstants.bottomTrenchStartY && pose.getY() < FieldConstants.bottomTrenchEndY){
         return Clamp(FieldConstants.bottomTrenchMiddleY - pose.getY(), -0.2, 0.2);
       }else{
         return 0;
       }
     }else{//on the top half of the field
-      if(pose.getX() < FieldConstants.RedTrenchEndX && pose.getX() > FieldConstants.RedTrenchStartX && pose.getY() > FieldConstants.topTrenchStartY && pose.getY() < FieldConstants.topTrenchEndY){
+      if((pose.getX() < FieldConstants.RedTrenchEndX && pose.getX() > FieldConstants.RedTrenchStartX) || (pose.getX() > FieldConstants.BlueTrenchStartX && pose.getX() < FieldConstants.BlueTrenchEndX) && pose.getY() > FieldConstants.topTrenchStartY && pose.getY() < FieldConstants.topTrenchEndY){
         return Clamp(FieldConstants.topTrenchMiddleY - pose.getY(), -0.2, 0.2);
       }else{
         return 0;
