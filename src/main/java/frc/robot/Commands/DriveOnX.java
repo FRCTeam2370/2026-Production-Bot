@@ -45,7 +45,6 @@ public class DriveOnX extends SequentialCommandGroup {
         ySupplier,
         ()-> xMultiplier*(-SwerveSubsystem.poseEstimator.getEstimatedPosition().getX() + pose.getX()), 
         ()-> 2 * (SwerveSubsystem.poseEstimator.getEstimatedPosition().getRotation().getRotations() - (yMultiplier * ySupplier.getAsDouble() > 0 ? FieldInfo.fieldPoints.RightHubSweep.getRotation().getRotations() : FieldInfo.fieldPoints.LeftHubSweep.getRotation().getRotations())),
-        ()-> false, 
-        false));
+        ()-> false));
   }
 }

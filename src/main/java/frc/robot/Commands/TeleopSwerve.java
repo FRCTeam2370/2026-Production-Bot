@@ -28,9 +28,8 @@ public class TeleopSwerve extends Command {
   private SlewRateLimiter xLimiter = new SlewRateLimiter(3);
   private SlewRateLimiter yLimiter = new SlewRateLimiter(3);
   private SlewRateLimiter rotLimiter = new SlewRateLimiter(3);
-  private boolean shouldAutoCorrect;
   /** Creates a new TeleopSwerve. */
-  public TeleopSwerve(SwerveSubsystem mSwerve, DoubleSupplier xSup, DoubleSupplier ySup, DoubleSupplier rotSup, BooleanSupplier robotCentricSup, boolean shouldAutoCorrect) {
+  public TeleopSwerve(SwerveSubsystem mSwerve, DoubleSupplier xSup, DoubleSupplier ySup, DoubleSupplier rotSup, BooleanSupplier robotCentricSup) {
     // Use addRequirements() here to declare subsystem dependencies.
     this.mSwerve = mSwerve;
     addRequirements(mSwerve);
@@ -38,7 +37,6 @@ public class TeleopSwerve extends Command {
     this.ySup = ySup;
     this.rotSup = rotSup;
     this.robotCentricSup = robotCentricSup;
-    this.shouldAutoCorrect = shouldAutoCorrect;
     SwerveSubsystem.resetGyro();
   }
 
@@ -68,7 +66,7 @@ public class TeleopSwerve extends Command {
     xVal *= SwerveSubsystem.color.isPresent() && SwerveSubsystem.color.get() == Alliance.Blue ? -1 : 1;
     yVal *= SwerveSubsystem.color.isPresent() && SwerveSubsystem.color.get() == Alliance.Blue ? -1 : 1;
 
-    if(shouldAutoCorrect){
+    if(SwerveSubsystem.shouldAutoTrench){
       xVal = SwerveSubsystem.Clamp(xVal - SwerveSubsystem.getTrenchOffsetY(), -1, 1);
     }
 

@@ -190,19 +190,30 @@ public class FieldInfo extends SubsystemBase {
   }
 
   private void selectPrefire(boolean redFirst){
-    if(redFirst){
+    if(SwerveSubsystem.color.isPresent() && SwerveSubsystem.color.get() == Alliance.Blue){
+      if(redFirst){
+          prefireRed= true;
+          prefireBlue = false;
+        }else{
+          prefireBlue = true;
+          prefireRed = false;
+        }
+    }else{
+      if(redFirst){
         prefireRed= false;
         prefireBlue = true;
       }else{
         prefireBlue = false;
         prefireRed = true;
       }
+    }
+    
   }
 
   public boolean canShoot(){
     if(isHubActive()){
       return true;
-    }else if(SwerveSubsystem.color.get() == Alliance.Blue){
+    }else if(SwerveSubsystem.color.isPresent() && SwerveSubsystem.color.get() == Alliance.Blue){
       if(prefireBlue){
         return true;
       }

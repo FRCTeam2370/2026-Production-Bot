@@ -52,6 +52,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.DeferredCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.RobotContainer;
 import frc.robot.Constants.FieldConstants;
 import frc.robot.Constants.FieldConstants.Red;
 import frc.robot.Constants.SwerveConstants;
@@ -90,6 +91,7 @@ public class SwerveSubsystem extends SubsystemBase {
   private static double lastTurretTheta = 0;
 
   public static boolean shouldAutoTrench = true;
+  public static boolean shouldAutoTurret = true;
 
   private StructPublisher<Pose2d> publisher = NetworkTableInstance.getDefault()
   .getStructTopic("MyPose", Pose2d.struct).publish();
@@ -174,14 +176,12 @@ public class SwerveSubsystem extends SubsystemBase {
   }
 
   public void makeOdometry(){
-    if(color.isPresent() && color.get() == Alliance.Blue){
-      odometry = new SwerveDriveOdometry(Constants.SwerveConstants.kinematics, getgyro0to360(90), getModulePositions());
-      poseEstimator = new SwerveDrivePoseEstimator(Constants.SwerveConstants.kinematics, getgyro0to360(90), getModulePositions(), new Pose2d(getPose().getTranslation(), new Rotation2d()));
-    }else{
-          odometry = new SwerveDriveOdometry(Constants.SwerveConstants.kinematics, getgyro0to360(-90), getModulePositions());
-    poseEstimator = new SwerveDrivePoseEstimator(Constants.SwerveConstants.kinematics, getgyro0to360(-90), getModulePositions(), new Pose2d(getPose().getTranslation(), new Rotation2d()));
-    }
-
+    // if(color.isPresent() && color.get() == Alliance.Blue){
+    //   odometry = new SwerveDriveOdometry(Constants.SwerveConstants.kinematics, getgyro0to360(90), getModulePositions());
+    //   poseEstimator = new SwerveDrivePoseEstimator(Constants.SwerveConstants.kinematics, getgyro0to360(90), getModulePositions(), new Pose2d(getPose().getTranslation(), new Rotation2d()));
+    // }else{
+        odometry = new SwerveDriveOdometry(Constants.SwerveConstants.kinematics, getgyro0to360(-90), getModulePositions());
+        poseEstimator = new SwerveDrivePoseEstimator(Constants.SwerveConstants.kinematics, getgyro0to360(-90), getModulePositions(), new Pose2d(getPose().getTranslation(), new Rotation2d()));
   }
 
 
@@ -285,7 +285,11 @@ public class SwerveSubsystem extends SubsystemBase {
   }
   
   public static void resetGyro(){
+    if(color.isPresent() && color.get() == Alliance.Blue){
+      gyro.setYaw(startOrientation.getDegrees() + 90);
+    }else{
       gyro.setYaw(startOrientation.getDegrees() - 90);
+    }
   }
 
   public static Rotation2d readGyro(){
@@ -297,15 +301,15 @@ public class SwerveSubsystem extends SubsystemBase {
     System.out.println(pose.getRotation().getDegrees());
     if(color.get() == Alliance.Blue){
       startOrientation = Rotation2d.fromDegrees(pose.getRotation().getDegrees());
-      gyro.setYaw(startOrientation.getDegrees() - 90);
+      resetGyro();
       
-      odometry = new SwerveDriveOdometry(SwerveConstants.kinematics, Rotation2d.fromDegrees(pose.getRotation().getDegrees() - 90), getModulePositions());
-      poseEstimator = new SwerveDrivePoseEstimator(SwerveConstants.kinematics, Rotation2d.fromDegrees(pose.getRotation().getDegrees() - 90), getModulePositions(), pose);
+      odometry = new SwerveDriveOdometry(SwerveConstants.kinematics, Rotation2d.fromDegrees(pose.getRotation().getDegrees() + 90), getModulePositions());
+      poseEstimator = new SwerveDrivePoseEstimator(SwerveConstants.kinematics, Rotation2d.fromDegrees(pose.getRotation().getDegrees() + 90), getModulePositions(), pose);
       odometry.resetPosition(pose.getRotation(), getModulePositions(), pose);//pose.getRotation()
       poseEstimator.resetPose(new Pose2d(pose.getTranslation(), pose.getRotation()));
     }else{
       startOrientation = Rotation2d.fromDegrees(pose.getRotation().getDegrees());
-      gyro.setYaw(startOrientation.getDegrees() - 90);
+      resetGyro();
       
       odometry = new SwerveDriveOdometry(SwerveConstants.kinematics, Rotation2d.fromDegrees(pose.getRotation().getDegrees() + 90), getModulePositions());
       poseEstimator = new SwerveDrivePoseEstimator(SwerveConstants.kinematics, Rotation2d.fromDegrees(pose.getRotation().getDegrees() + 90), getModulePositions(), pose);

@@ -8,7 +8,6 @@ package frc.robot;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 
-import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.DriverStation;
@@ -20,16 +19,17 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Commands.DriveOnX;
 import frc.robot.Commands.ResetGyro;
 import frc.robot.Commands.TeleopSwerve;
+import frc.robot.Commands.ToggleDriveFeatures;
+import frc.robot.Commands.ToggleTurretFeatures;
 import frc.robot.Commands.ClimberCommands.ClimbForPercent;
 import frc.robot.Commands.ClimberCommands.SetClimberPos;
 import frc.robot.Commands.Intake.DeployIntake;
+import frc.robot.Commands.Intake.IntakeControl;
 import frc.robot.Commands.Intake.SetIntakePosAndSpeed;
 import frc.robot.Commands.Shooter.ShootAtVelocity;
 import frc.robot.Commands.TurretCommands.AimTurretAtActiveAimPoint;
 import frc.robot.Commands.TurretCommands.EnableAirStrike;
 import frc.robot.Commands.TurretCommands.PointTurretAndShootForTime;
-import frc.robot.Commands.TurretCommands.SetElevationPos;
-import frc.robot.Constants.FieldConstants.Red;
 import frc.robot.Subsystems.ClimberSubsystem;
 import frc.robot.Subsystems.FieldInfo;
 import frc.robot.Subsystems.IntakeSubsystem;
@@ -86,10 +86,10 @@ public class RobotContainer {
     configureBindings();
   }
 
-  //TODO: 35 degrees from the wall is best for picking up against the wall
+  //TODO: fix blue driving backwards after auto
   private void configureBindings() {
-    mSwerve.setDefaultCommand(new TeleopSwerve(mSwerve, ()-> -driver.getRawAxis(0), ()-> driver.getRawAxis(1), ()-> driver.getRawAxis(4), ()-> false, true));
-    driver.b().toggleOnTrue(new AimTurretAtActiveAimPoint(mSwerve, mTurretSubsystem));
+    mSwerve.setDefaultCommand(new TeleopSwerve(mSwerve, ()-> -driver.getRawAxis(0), ()-> driver.getRawAxis(1), ()-> driver.getRawAxis(4), ()-> false));
+    mTurretSubsystem.setDefaultCommand(new AimTurretAtActiveAimPoint(mSwerve, mTurretSubsystem, ()-> SwerveSubsystem.shouldAutoTurret));
 
     driver.back().onTrue(new ResetGyro(mSwerve));
 
@@ -98,18 +98,22 @@ public class RobotContainer {
     driver.povRight().toggleOnTrue(new SetIntakePosAndSpeed(Rotation2d.fromDegrees(-40).getRotations(), 60, mIntakeSubsystem, mSwerve));
 
     driver.rightStick().toggleOnTrue(new DriveOnX(mSwerve, ()-> -driver.getRawAxis(0)));
-    driver.leftTrigger().whileTrue(mSwerve.driveThroughBalls());
+    //driver.leftTrigger().whileTrue(mSwerve.driveThroughBalls());
     driver.povUp().whileTrue(mSwerve.driveToClosestBall(()-> mSwerve.getClosestBall()));
     driver.povLeft().whileTrue(mSwerve.PathfindToPose(()-> FieldInfo.fieldPoints.ClimbLeft));
+    driver.leftTrigger().whileTrue(new IntakeControl(mIntakeSubsystem, -30));
 
-    operator.rightBumper().whileTrue(new ClimbForPercent(30, mClimberSubsystem));
-    operator.leftBumper().whileTrue(new ClimbForPercent(-30, mClimberSubsystem));
-    operator.a().onTrue(new SetClimberPos(0, mClimberSubsystem));
-    operator.b().onTrue(new SetClimberPos(230, mClimberSubsystem));
-    operator.x().onTrue(new SetClimberPos(115, mClimberSubsystem));
+    // operator.rightBumper().whileTrue(new ClimbForPercent(30, mClimberSubsystem));
+    // operator.leftBumper().whileTrue(new ClimbForPercent(-30, mClimberSubsystem));
+    // operator.a().onTrue(new SetClimberPos(0, mClimberSubsystem));
+    // operator.b().onTrue(new SetClimberPos(230, mClimberSubsystem));
+    // operator.x().onTrue(new SetClimberPos(115, mClimberSubsystem));
 
-    operator.y().onTrue(new EnableAirStrike(true));
-    operator.povDown().onTrue(new EnableAirStrike(false));
+    // operator.y().onTrue(new EnableAirStrike(true));
+    // operator.povDown().onTrue(new EnableAirStrike(false));
+
+    operator.a().toggleOnTrue(new ToggleDriveFeatures());
+    operator.b().toggleOnFalse(new ToggleTurretFeatures());
   }
 
   public Command getAutonomousCommand() {

@@ -4,10 +4,14 @@
 
 package frc.robot.Commands.TurretCommands;
 
+import java.util.function.BooleanSupplier;
+
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants.TurretConstants;
+import frc.robot.Subsystems.FieldInfo;
 import frc.robot.Subsystems.LEDSubsystem;
 import frc.robot.Subsystems.ShooterSubsystem;
 import frc.robot.Subsystems.SwerveSubsystem;
@@ -18,10 +22,12 @@ import frc.robot.Subsystems.LEDSubsystem.LEDState;
 public class AimTurretAtActiveAimPoint extends Command {
   private SwerveSubsystem mSwerve;
   private LEDState lastState;
+  private BooleanSupplier shouldTurret;
   /** Creates a new AimTurretAtActiveAimPoint. */
-  public AimTurretAtActiveAimPoint(SwerveSubsystem mSwerve, TurretSubsystem mTurretSubsystem) {
+  public AimTurretAtActiveAimPoint(SwerveSubsystem mSwerve, TurretSubsystem mTurretSubsystem, BooleanSupplier shouldTurret) {
     // Use addRequirements() here to declare subsystem dependencies.
     this.mSwerve = mSwerve;
+    this.shouldTurret = shouldTurret;
     addRequirements(mTurretSubsystem);
   }
 
@@ -35,17 +41,22 @@ public class AimTurretAtActiveAimPoint extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if(ShooterSubsystem.getVelocity() > 10 && TurretSubsystem.canElevate){
-      TurretSubsystem.aimTurretAtPoint(new Pose2d(mSwerve.getTurretPointTowardsPose(TurretSubsystem.activeAimPoint.aimPoint).aimPose.getX(), mSwerve.getTurretPointTowardsPose(TurretSubsystem.activeAimPoint.aimPoint).aimPose.getY(), new Rotation2d()));
-      TurretSubsystem.setElevation(mSwerve.getTurretPointTowardsPose(TurretSubsystem.activeAimPoint.aimPoint).elevationAngleDegrees + 5);
-    }else{
-      TurretSubsystem.aimTurretAtPoint(new Pose2d(TurretSubsystem.activeAimPoint.aimPoint.getX(), TurretSubsystem.activeAimPoint.aimPoint.getY(), new Rotation2d()));
-      TurretSubsystem.setElevation(TurretConstants.TurretMaxAngle.getDegrees());
-    }
+    if(shouldTurret.getAsBoolean()){
+      if(ShooterSubsystem.getVelocity() > 10 && TurretSubsystem.canElevate){
+        TurretSubsystem.aimTurretAtPoint(new Pose2d(mSwerve.getTurretPointTowardsPose(TurretSubsystem.activeAimPoint.aimPoint).aimPose.getX(), mSwerve.getTurretPointTowardsPose(TurretSubsystem.activeAimPoint.aimPoint).aimPose.getY(), new Rotation2d()));
+        TurretSubsystem.setElevation(mSwerve.getTurretPointTowardsPose(TurretSubsystem.activeAimPoint.aimPoint).elevationAngleDegrees + 5);
+      }else{
+        TurretSubsystem.aimTurretAtPoint(new Pose2d(TurretSubsystem.activeAimPoint.aimPoint.getX(), TurretSubsystem.activeAimPoint.aimPoint.getY(), new Rotation2d()));
+        TurretSubsystem.setElevation(TurretConstants.TurretMaxAngle.getDegrees());
+      }
 
-    if(lastState != TurretSubsystem.activeAimPoint.ledState){
-      lastState = TurretSubsystem.activeAimPoint.ledState;
-      LEDSubsystem.mLEDState = lastState;
+      if(lastState != TurretSubsystem.activeAimPoint.ledState && DriverStation.getMatchTime() > 30){
+        lastState = TurretSubsystem.activeAimPoint.ledState;
+        LEDSubsystem.mLEDState = lastState;
+      }
+    }else{
+      TurretSubsystem.aimTurretAtDegree(540);
+      TurretSubsystem.setElevation(TurretConstants.TurretMaxAngle.getDegrees());
     }
   }
 

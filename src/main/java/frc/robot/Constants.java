@@ -58,7 +58,7 @@ public class Constants {
     public static final Rotation2d intakeMax = Rotation2d.fromDegrees(90);
     public static final Rotation2d intakeMin = Rotation2d.fromDegrees(-63);
 
-    public static final Rotation2d CANcoderOffset = Rotation2d.fromRotations(-0.179931640625);
+    public static final Rotation2d CANcoderOffset = Rotation2d.fromRotations(0.155517578125);
   }
 
   public static class pigeonConstants{
