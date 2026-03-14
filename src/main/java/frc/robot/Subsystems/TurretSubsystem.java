@@ -4,6 +4,7 @@
 
 package frc.robot.Subsystems;
 
+import com.ctre.phoenix6.configs.CANcoderConfiguration;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.MotionMagicDutyCycle;
 import com.ctre.phoenix6.hardware.CANcoder;
@@ -31,6 +32,7 @@ public class TurretSubsystem extends SubsystemBase {
 
   private static TalonFXConfiguration turretRotConfig = new TalonFXConfiguration();
   public static TalonFXConfiguration turretElevationMotorConfig = new TalonFXConfiguration();
+  public static CANcoderConfiguration turretCANCoderConfig = new CANcoderConfiguration();
 
   private static MotionMagicDutyCycle turretRotMagicCycle = new MotionMagicDutyCycle(0);
   public static MotionMagicDutyCycle elevationMagicCycle = new MotionMagicDutyCycle(0);
@@ -54,6 +56,7 @@ public class TurretSubsystem extends SubsystemBase {
 
   /** Creates a new TurretSubsystem. */
   public TurretSubsystem() {
+    configTurretCANCoder();
     configTurret();
     turretElevationConfiguration();
   }
@@ -66,7 +69,7 @@ public class TurretSubsystem extends SubsystemBase {
     //SmartDashboard.putNumber("Turret Elevation Position", elevationMotor.getPosition().getValueAsDouble());
     SmartDashboard.putNumber("Elevation degrees", Rotation2d.fromRotations(krakenToElevationRotations(elevationMotor.getPosition().getValueAsDouble())).getDegrees());
     SmartDashboard.putNumber("Turret Ticks", turretRotationMotor.getPosition().getValueAsDouble());
-    //SmartDashboard.putNumber("Turret CAN coder", turretCANcoder.getAbsolutePosition().getValueAsDouble());
+    SmartDashboard.putNumber("Turret CAN coder", turretCANcoder.getAbsolutePosition().getValueAsDouble());
     if(RobotContainer.driver.povDown().getAsBoolean() && !RobotContainer.shouldDial){
       RobotContainer.shouldDial = true;
     }else if(RobotContainer.driver.povDown().getAsBoolean() && RobotContainer.shouldDial){
@@ -177,9 +180,16 @@ public class TurretSubsystem extends SubsystemBase {
     elevationMotor.setControl(elevationMagicCycle.withPosition(elevationRotationsToKraken(returnDegrees / 360)));
   }
 
+  private static void configTurretCANCoder(){
+    turretCANCoderConfig.MagnetSensor.AbsoluteSensorDiscontinuityPoint = 1;
+    turretCANCoderConfig.MagnetSensor.MagnetOffset = 0.5654296875 - 0.051513671875;
+
+    turretCANcoder.getConfigurator().apply(turretCANCoderConfig);
+  }
+
   private static void configTurret(){
     turretRotationMotor.setNeutralMode(NeutralModeValue.Coast);
-    turretRotationMotor.setPosition(turretRotationsToKraken(TurretConstants.TurretCableChainPoint.getRotations() - TurretConstants.TurretStartOffset.getRotations()) + (turretCANcoder.getAbsolutePosition().getValueAsDouble() * TurretConstants.encoderRatio));
+    turretRotationMotor.setPosition(turretRotationsToKraken(TurretConstants.TurretCableChainPoint.getRotations() - TurretConstants.TurretStartOffset.getRotations()) + ((turretCANcoder.getAbsolutePosition().getValueAsDouble() - TurretConstants.CANcoderOffset.getRotations()) * TurretConstants.encoderRatio));
     //turretRotationMotor.setPosition(turretRotationsToKraken(TurretConstants.TurretCableChainPoint.getRotations() - TurretConstants.TurretStartOffset.getRotations()));
 
     turretRotConfig.Slot0.kP = 0.23;

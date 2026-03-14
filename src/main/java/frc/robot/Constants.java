@@ -77,8 +77,11 @@ public class Constants {
         public static final int TurretRotationID = 7;
         public static final int shooterElevationMotorID = 26;
         public static final int turretEncoderID = 27;
+//0.598876953125
+//0.1652553854491267
+        public static final double encoderRatio = 4;//3.623948178737946;//30/12;
 
-        public static final double encoderRatio = 30/12;
+        public static final Rotation2d CANcoderOffset = Rotation2d.fromRotations(0.545654296875);
 
         public static final double turretRatio = 18.09912109375 - 3.68310546875;//30/12 * 150/26;//Kraken rotations : turret rotations, 14.345
         public static final double elevationRatio = 955/12;//Kraken rotations : turret rotations
@@ -107,7 +110,7 @@ public class Constants {
         public static final double neutralZoneEnterX = 12;//Meters
 
         public static final Translation3d PassPose1 = new Translation3d(14, 1, 0);
-        public static final Translation3d PassPose2 = new Translation3d(14, 7.6, 0);
+        public static final Translation3d PassPose2 = new Translation3d(14, 7, 0);
 
         public static final Pose2d ClimbLeft = new Pose2d(15.29, 3.456, Rotation2d.fromDegrees(-90));
         public static final Pose2d ClimbRight = new Pose2d(15.419, 5.36, Rotation2d.fromDegrees(90));

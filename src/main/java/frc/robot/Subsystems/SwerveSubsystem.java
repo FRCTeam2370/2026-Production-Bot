@@ -131,6 +131,8 @@ public class SwerveSubsystem extends SubsystemBase {
   public void periodic() {
 
     SmartDashboard.putNumber("Robot Rotational Velocity", gyro.getAngularVelocityZWorld().getValueAsDouble());
+    SmartDashboard.putBoolean("Auto Drive Features", shouldAutoTrench);
+    SmartDashboard.putBoolean("Auto Turret Aiming", shouldAutoTurret);
     // This method will be called once per scheduler run
     // SmartDashboard.putNumber("Mod 0 CAN Pose", Rotation2d.fromDegrees(mSwerveModules[0].getCANcoder().getDegrees()).getDegrees());
     // SmartDashboard.putNumber("Mod 1 CAN Pose", Rotation2d.fromDegrees(mSwerveModules[1].getCANcoder().getDegrees()).getDegrees());
@@ -525,13 +527,13 @@ public class SwerveSubsystem extends SubsystemBase {
   public static double getTrenchOffsetY(){
     Pose2d pose = poseEstimator.getEstimatedPosition();
     if(pose.getY() < 4){//on the bottom half of the field
-      if((pose.getX() < FieldConstants.RedTrenchEndX && pose.getX() > FieldConstants.RedTrenchStartX) || (pose.getX() > FieldConstants.BlueTrenchStartX && pose.getX() < FieldConstants.BlueTrenchEndX) && pose.getY() > FieldConstants.bottomTrenchStartY && pose.getY() < FieldConstants.bottomTrenchEndY){
+      if(((pose.getX() < FieldConstants.RedTrenchEndX && pose.getX() > FieldConstants.RedTrenchStartX) || (pose.getX() > FieldConstants.BlueTrenchStartX && pose.getX() < FieldConstants.BlueTrenchEndX)) && pose.getY() > FieldConstants.bottomTrenchStartY && pose.getY() < FieldConstants.bottomTrenchEndY){
         return Clamp(FieldConstants.bottomTrenchMiddleY - pose.getY(), -0.2, 0.2);
       }else{
         return 0;
       }
     }else{//on the top half of the field
-      if((pose.getX() < FieldConstants.RedTrenchEndX && pose.getX() > FieldConstants.RedTrenchStartX) || (pose.getX() > FieldConstants.BlueTrenchStartX && pose.getX() < FieldConstants.BlueTrenchEndX) && pose.getY() > FieldConstants.topTrenchStartY && pose.getY() < FieldConstants.topTrenchEndY){
+      if(((pose.getX() < FieldConstants.RedTrenchEndX && pose.getX() > FieldConstants.RedTrenchStartX) || (pose.getX() > FieldConstants.BlueTrenchStartX && pose.getX() < FieldConstants.BlueTrenchEndX)) && pose.getY() > FieldConstants.topTrenchStartY && pose.getY() < FieldConstants.topTrenchEndY){
         return Clamp(FieldConstants.topTrenchMiddleY - pose.getY(), -0.2, 0.2);
       }else{
         return 0;
