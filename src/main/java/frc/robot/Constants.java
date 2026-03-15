@@ -58,7 +58,7 @@ public class Constants {
     public static final Rotation2d intakeMax = Rotation2d.fromDegrees(90);
     public static final Rotation2d intakeMin = Rotation2d.fromDegrees(-63);
 
-    public static final Rotation2d CANcoderOffset = Rotation2d.fromRotations(0.155517578125);
+    public static final Rotation2d CANcoderOffset = Rotation2d.fromRotations(-0.797607421875);//0.155517578125);
   }
 
   public static class pigeonConstants{
@@ -81,7 +81,7 @@ public class Constants {
 //0.1652553854491267
         public static final double encoderRatio = 4;//3.623948178737946;//30/12;
 
-        public static final Rotation2d CANcoderOffset = Rotation2d.fromRotations(0.545654296875);
+        public static final Rotation2d CANcoderOffset = Rotation2d.fromRotations(0.125);
 
         public static final double turretRatio = 18.09912109375 - 3.68310546875;//30/12 * 150/26;//Kraken rotations : turret rotations, 14.345
         public static final double elevationRatio = 955/12;//Kraken rotations : turret rotations
@@ -109,8 +109,8 @@ public class Constants {
         public static final Translation3d HubFieldPoseRed = new Translation3d(11.925, 4.025, 1.8288);
         public static final double neutralZoneEnterX = 12;//Meters
 
-        public static final Translation3d PassPose1 = new Translation3d(14, 1, 0);
-        public static final Translation3d PassPose2 = new Translation3d(14, 7, 0);
+        public static final Translation3d PassPose1 = new Translation3d(14, 1.5, 0);
+        public static final Translation3d PassPose2 = new Translation3d(14, 6.5, 0);
 
         public static final Pose2d ClimbLeft = new Pose2d(15.29, 3.456, Rotation2d.fromDegrees(-90));
         public static final Pose2d ClimbRight = new Pose2d(15.419, 5.36, Rotation2d.fromDegrees(90));
@@ -121,8 +121,8 @@ public class Constants {
 
       public static class Blue{
         public static final Translation3d HubFieldPoseBlue = new Translation3d(4.625,4.025, 1.8288);  
-        public static final Translation3d PassPose1 = new Translation3d(1, 1, 0);
-        public static final Translation3d PassPose2 = new Translation3d(1, 7, 0);
+        public static final Translation3d PassPose1 = new Translation3d(1, 1.5, 0);
+        public static final Translation3d PassPose2 = new Translation3d(1, 6.5, 0);
 
         public static final double neutralZoneEnterX = 4;
 

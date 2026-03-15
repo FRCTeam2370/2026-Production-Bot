@@ -70,9 +70,9 @@ public class TurretSubsystem extends SubsystemBase {
     SmartDashboard.putNumber("Elevation degrees", Rotation2d.fromRotations(krakenToElevationRotations(elevationMotor.getPosition().getValueAsDouble())).getDegrees());
     SmartDashboard.putNumber("Turret Ticks", turretRotationMotor.getPosition().getValueAsDouble());
     SmartDashboard.putNumber("Turret CAN coder", turretCANcoder.getAbsolutePosition().getValueAsDouble());
-    if(RobotContainer.driver.povDown().getAsBoolean() && !RobotContainer.shouldDial){
+    if(RobotContainer.operator.povDown().getAsBoolean() && !RobotContainer.shouldDial){
       RobotContainer.shouldDial = true;
-    }else if(RobotContainer.driver.povDown().getAsBoolean() && RobotContainer.shouldDial){
+    }else if(RobotContainer.operator.povDown().getAsBoolean() && RobotContainer.shouldDial){
       RobotContainer.shouldDial = false;
     }
 

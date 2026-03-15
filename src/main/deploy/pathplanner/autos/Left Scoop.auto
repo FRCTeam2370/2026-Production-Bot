@@ -24,12 +24,6 @@
           }
         },
         {
-          "type": "named",
-          "data": {
-            "name": "Deploy Intake"
-          }
-        },
-        {
           "type": "path",
           "data": {
             "pathName": "Neutral Scoop Left"

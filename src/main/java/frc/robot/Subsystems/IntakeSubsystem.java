@@ -80,14 +80,17 @@ public class IntakeSubsystem extends SubsystemBase {
   }
 
   public static void intakeConfig() {
-    intakeMotor.setNeutralMode(NeutralModeValue.Brake);
+    intakeMotor.setNeutralMode(NeutralModeValue.Coast);
 
     intakeMotorConfig.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;
 
     intakeMotorConfig.Slot0.kP = 0.01;
     intakeMotorConfig.Slot0.kV = 0.01;
 
-    intakeMotorConfig.CurrentLimits.StatorCurrentLimit = 40;
+    intakeMotorConfig.CurrentLimits.StatorCurrentLimit = 30;
+
+    intakeMotorConfig.ClosedLoopRamps.VoltageClosedLoopRampPeriod = 1;
+    intakeMotorConfig.OpenLoopRamps.DutyCycleOpenLoopRampPeriod = 1;
 
     intakeMotor.getConfigurator().apply(intakeMotorConfig);
   }

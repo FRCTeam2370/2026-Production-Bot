@@ -5,21 +5,9 @@
     "data": {
       "commands": [
         {
-          "type": "named",
-          "data": {
-            "name": "Deploy Intake"
-          }
-        },
-        {
           "type": "path",
           "data": {
-            "pathName": "Neutral Scoop Left"
-          }
-        },
-        {
-          "type": "wait",
-          "data": {
-            "waitTime": 0.2
+            "pathName": "Fast Neutral Scoop Left"
           }
         },
         {
@@ -39,12 +27,6 @@
           "type": "path",
           "data": {
             "pathName": "Neutral Scoop Far Left"
-          }
-        },
-        {
-          "type": "wait",
-          "data": {
-            "waitTime": 0.2
           }
         },
         {
