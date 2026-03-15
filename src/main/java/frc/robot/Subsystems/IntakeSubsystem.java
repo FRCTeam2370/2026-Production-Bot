@@ -96,7 +96,8 @@ public class IntakeSubsystem extends SubsystemBase {
   }
 
   public static void intakeRotationConfig() {
-    intakeRotationMotor.setPosition(intakeToKraken(intakeCANcoder.getAbsolutePosition().getValueAsDouble() - intakeConstants.CANcoderOffset.getRotations() + intakeConstants.intakeMax.getRotations()));
+    //intakeRotationMotor.setPosition(intakeToKraken(intakeCANcoder.getAbsolutePosition().getValueAsDouble() - intakeConstants.CANcoderOffset.getRotations() + intakeConstants.intakeMax.getRotations()));
+    intakeRotationMotor.setPosition(intakeToKraken(intakeConstants.intakeMax.getRotations()));
 
     intakeRotationMotor.setNeutralMode(NeutralModeValue.Coast);
 
@@ -104,7 +105,7 @@ public class IntakeSubsystem extends SubsystemBase {
     CANcoderConfig.MagnetSensor.SensorDirection = SensorDirectionValue.CounterClockwise_Positive;
 
     intakeRotationMotorConfig.Feedback.RotorToSensorRatio = intakeConstants.intakeRatio;
-    CANcoderConfig.MagnetSensor.AbsoluteSensorDiscontinuityPoint = 0.2;
+    CANcoderConfig.MagnetSensor.AbsoluteSensorDiscontinuityPoint = 0;
 
     intakeRotationMotorConfig.Slot0.kP = 0.15;
     intakeRotationMotorConfig.Slot0.kI = 0;

@@ -58,7 +58,7 @@ public class Constants {
     public static final Rotation2d intakeMax = Rotation2d.fromDegrees(90);
     public static final Rotation2d intakeMin = Rotation2d.fromDegrees(-63);
 
-    public static final Rotation2d CANcoderOffset = Rotation2d.fromRotations(-0.797607421875);//0.155517578125);
+    public static final Rotation2d CANcoderOffset = Rotation2d.fromRotations(-0.797607421875);//0.184326171875);//0.155517578125);//Rotation2d.fromRotations(-0.797607421875);//
   }
 
   public static class pigeonConstants{
@@ -81,7 +81,7 @@ public class Constants {
 //0.1652553854491267
         public static final double encoderRatio = 4;//3.623948178737946;//30/12;
 
-        public static final Rotation2d CANcoderOffset = Rotation2d.fromRotations(0.125);
+        public static final Rotation2d CANcoderOffset = Rotation2d.fromRotations(0.736572265625);
 
         public static final double turretRatio = 18.09912109375 - 3.68310546875;//30/12 * 150/26;//Kraken rotations : turret rotations, 14.345
         public static final double elevationRatio = 955/12;//Kraken rotations : turret rotations
