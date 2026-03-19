@@ -524,6 +524,19 @@ public class SwerveSubsystem extends SubsystemBase {
     return turretAimPose;
   }
 
+  public TurretAimPose getTurretPointTowardsPoseJacobMethod(Translation3d targetPose){
+    TurretAimPose turretAimPose = turretLogic.jacobsStupidOne(targetPose, true);
+    
+    SmartDashboard.putNumber("Raw Calculated Elevation Angle", turretAimPose.elevationAngleDegrees);
+    SmartDashboard.putNumber("Calculated Velocity", turretAimPose.vel);
+
+    turretAimPose.elevationAngleDegrees = turretAimPose.elevationAngleDegrees;
+
+    field.getObject("Aim Point").setPose(new Pose2d(turretAimPose.aimPose.getX(), turretAimPose.aimPose.getY(), new Rotation2d()));
+
+    return turretAimPose;
+  }
+
   public static double getTrenchOffsetY(){
     Pose2d pose = poseEstimator.getEstimatedPosition();
     if(pose.getY() < 4){//on the bottom half of the field

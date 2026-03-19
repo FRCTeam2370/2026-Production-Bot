@@ -7,13 +7,19 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Neutral FeedAll"
+            "pathName": "Right To Neutral"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Aim and Shoot For 5"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "Collector after FeedAll"
+            "pathName": "Right To Neutral Second To HP"
           }
         },
         {
@@ -26,6 +32,6 @@
     }
   },
   "resetOdom": true,
-  "folder": "Left Autos",
+  "folder": "Right Autos",
   "choreoAuto": false
 }

@@ -47,7 +47,7 @@ public class AimTurretAtActiveAimPoint extends Command {
         TurretSubsystem.setElevation(mSwerve.getTurretPointTowardsPose(TurretSubsystem.activeAimPoint.aimPoint).elevationAngleDegrees + 5);
       }else{
         TurretSubsystem.aimTurretAtPoint(new Pose2d(TurretSubsystem.activeAimPoint.aimPoint.getX(), TurretSubsystem.activeAimPoint.aimPoint.getY(), new Rotation2d()));
-        TurretSubsystem.setElevation(TurretConstants.TurretMaxAngle.getDegrees());
+        TurretSubsystem.setElevation(TurretConstants.ElevationMaxAngle.getDegrees());
       }
 
       if(lastState != TurretSubsystem.activeAimPoint.ledState && DriverStation.getMatchTime() > 30){
@@ -56,7 +56,7 @@ public class AimTurretAtActiveAimPoint extends Command {
       }
     }else{
       TurretSubsystem.aimTurretAtDegree(540);
-      TurretSubsystem.setElevation(TurretConstants.TurretMaxAngle.getDegrees());
+      TurretSubsystem.setElevation(TurretConstants.ElevationMaxAngle.getDegrees());
     }
   }
 
@@ -64,7 +64,7 @@ public class AimTurretAtActiveAimPoint extends Command {
   @Override
   public void end(boolean interrupted) {
     TurretSubsystem.aimTurretAtDegree(540);
-    TurretSubsystem.setElevation(TurretConstants.TurretMaxAngle.getDegrees());
+    TurretSubsystem.setElevation(TurretConstants.ElevationMaxAngle.getDegrees());
     LEDSubsystem.mLEDState = LEDState.Off;
   }
 

@@ -86,7 +86,8 @@ public class RobotContainer {
     configureBindings();
   }
 
-  //TODO: fix blue driving backwards after auto
+  //TODO: You did good. there is nothing to fix
+  //JK you must test you sill goober code for shooting!
   private void configureBindings() {
     mSwerve.setDefaultCommand(new TeleopSwerve(mSwerve, ()-> -driver.getRawAxis(0), ()-> driver.getRawAxis(1), ()-> driver.getRawAxis(4), ()-> false));
     mTurretSubsystem.setDefaultCommand(new AimTurretAtActiveAimPoint(mSwerve, mTurretSubsystem, ()-> SwerveSubsystem.shouldAutoTurret));

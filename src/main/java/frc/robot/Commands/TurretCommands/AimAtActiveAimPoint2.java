@@ -4,42 +4,47 @@
 
 package frc.robot.Commands.TurretCommands;
 
+import java.util.function.BooleanSupplier;
+
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Translation3d;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants.TurretConstants;
 import frc.robot.Subsystems.LEDSubsystem;
+import frc.robot.Subsystems.ShooterSubsystem;
 import frc.robot.Subsystems.SwerveSubsystem;
 import frc.robot.Subsystems.TurretSubsystem;
-import frc.robot.Subsystems.LEDSubsystem.LEDState;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
-public class PointTurretAtPoint extends Command {
-  private Translation3d pose;
-  private SwerveSubsystem mSwerve;
-  /** Creates a new PointTurretAtPoint. */
-  public PointTurretAtPoint(Translation3d pose, TurretSubsystem mTurretSubsystem, SwerveSubsystem mSwerve) {
+public class AimAtActiveAimPoint2 extends Command {
+  BooleanSupplier shouldTurret;
+  SwerveSubsystem mSwerve;
+  /** Creates a new AimAtActiveAimPoint2. */
+  public AimAtActiveAimPoint2(TurretSubsystem mTurretSubsystem, SwerveSubsystem mSwerve, BooleanSupplier shouldTurret) {
     // Use addRequirements() here to declare subsystem dependencies.
-    this.pose = pose;
     this.mSwerve = mSwerve;
+    this.shouldTurret = shouldTurret;
     addRequirements(mTurretSubsystem);
   }
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {
-    LEDSubsystem.mLEDState = LEDState.Hub;
-  }
+  public void initialize() {}
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    TurretSubsystem.aimTurretAtPoint(new Pose2d(mSwerve.getTurretPointTowardsPose(pose).aimPose.getX(), mSwerve.getTurretPointTowardsPose(pose).aimPose.getY(), new Rotation2d()));
-
-    if(TurretSubsystem.canElevate){
-      TurretSubsystem.setElevation(mSwerve.getTurretPointTowardsPose(pose).elevationAngleDegrees + 5);
+    if(shouldTurret.getAsBoolean()){
+      if(ShooterSubsystem.getVelocity() > 10 && TurretSubsystem.canElevate){
+        TurretSubsystem.aimTurretAtPoint(new Pose2d(mSwerve.getTurretPointTowardsPoseJacobMethod(TurretSubsystem.activeAimPoint.aimPoint).aimPose.getX(), mSwerve.getTurretPointTowardsPoseJacobMethod(TurretSubsystem.activeAimPoint.aimPoint).aimPose.getY(), new Rotation2d()));
+        TurretSubsystem.setElevation(mSwerve.getTurretPointTowardsPoseJacobMethod(TurretSubsystem.activeAimPoint.aimPoint).elevationAngleDegrees + 5);
+      }else{
+        TurretSubsystem.aimTurretAtPoint(new Pose2d(TurretSubsystem.activeAimPoint.aimPoint.getX(), TurretSubsystem.activeAimPoint.aimPoint.getY(), new Rotation2d()));
+        TurretSubsystem.setElevation(TurretConstants.ElevationMaxAngle.getDegrees());
+      }
     }else{
+      TurretSubsystem.aimTurretAtDegree(540);
       TurretSubsystem.setElevation(TurretConstants.ElevationMaxAngle.getDegrees());
     }
   }
@@ -49,7 +54,6 @@ public class PointTurretAtPoint extends Command {
   public void end(boolean interrupted) {
     TurretSubsystem.aimTurretAtDegree(540);
     TurretSubsystem.setElevation(TurretConstants.ElevationMaxAngle.getDegrees());
-    LEDSubsystem.mLEDState = LEDState.Off;
   }
 
   // Returns true when the command should end.

@@ -33,7 +33,7 @@ public class SetElevationPos extends Command {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    TurretSubsystem.setElevation(TurretConstants.TurretMaxAngle.getDegrees());
+    TurretSubsystem.setElevation(TurretConstants.ElevationMaxAngle.getDegrees());
   }
 
   // Returns true when the command should end.

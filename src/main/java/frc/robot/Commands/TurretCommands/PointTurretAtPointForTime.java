@@ -49,7 +49,7 @@ public class PointTurretAtPointForTime extends Command {
   @Override
   public void end(boolean interrupted) {
     TurretSubsystem.aimTurretAtDegree(540);
-    TurretSubsystem.setElevation(TurretConstants.TurretMaxAngle.getDegrees());
+    TurretSubsystem.setElevation(TurretConstants.ElevationMaxAngle.getDegrees());
     LEDSubsystem.mLEDState = LEDState.Off;
   }
 
