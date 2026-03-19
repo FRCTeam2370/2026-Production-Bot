@@ -140,7 +140,7 @@ public class TurretLogic {
         return turretAimPose;
     }
 
-    public TurretAimPose jacobsStupidOne(Translation3d targetPose){
+    public TurretAimPose jacobsStupidOne(Translation3d targetPose, boolean useGreater){
         Pose2d turretFieldPose = SwerveSubsystem.turretToField();
         //this block of code calculates the velocity and speed of the Turret relative to the field using the velocity of the robot and some math
         //Because the turret isn't in the center of the robot, we need to calculate its velocity when we are turning
@@ -173,20 +173,35 @@ public class TurretLogic {
 
         SmartDashboard.putBoolean("valid lauch speed", Math.pow(launchSpeed, 4) > (-9.81 * (-9.81*(Math.pow(flattenedX, 2) + 2*flattenedY*Math.pow(launchSpeed, 4)))));
 
-        double aimTheta1 = Math.atan2(Math.pow(launchSpeed, 2) + Math.sqrt(Math.pow(launchSpeed, 4) - (-9.81 * (-9.81*(Math.pow(flattenedX, 2) + 2*flattenedY*Math.pow(launchSpeed, 4))))), -9.81 * flattenedX);
-        double aimTheta2 = Math.atan2(Math.pow(launchSpeed, 2) - Math.sqrt(Math.pow(launchSpeed, 4) - (-9.81 * (-9.81*(Math.pow(flattenedX, 2) + 2*flattenedY*Math.pow(launchSpeed, 4))))), -9.81 * flattenedX);
+        double g = -9.81;
+        double a = (g*Math.pow(distanceToAdjustedTarget, 2)) / 2*Math.pow(launchSpeed, 2);
+        double b = -distanceToAdjustedTarget;
+        double c = flattenedY + a;
 
-        double aimPoseFieldX = targetPoseRelativeToTurretVelX * Math.cos(SwerveSubsystem.getgyro0to360(270).getRadians()) - targetPoseRelativeToTurretVelX * Math.sin(SwerveSubsystem.getgyro0to360(270).getRadians());
-        double aimPoseFieldY = targetPoseRelativeToTurretVelX * Math.sin(SwerveSubsystem.getgyro0to360(270).getRadians()) + targetPoseRelativeToTurretVelY * Math.cos(SwerveSubsystem.getgyro0to360(270).getRadians());
+        double theta = Math.atan2(-b + Math.sqrt(Math.pow(b, 2) - 4*a*c),  2*a);
+        double theta2 = Math.atan2(-b - Math.sqrt(Math.pow(b, 2) - 4*a*c),  2*a);
 
-        SmartDashboard.putNumber("aimTheta1", aimTheta1);
-        SmartDashboard.putNumber("aimTheta2", aimTheta2);
+        // double aimTheta1 = Math.atan2(Math.pow(launchSpeed, 2) + Math.sqrt(Math.pow(launchSpeed, 4) - (-9.81 * (-9.81*(Math.pow(flattenedX, 2) + 2*flattenedY*Math.pow(launchSpeed, 4))))), -9.81 * flattenedX);
+        // double aimTheta2 = Math.atan2(Math.pow(launchSpeed, 2) - Math.sqrt(Math.pow(launchSpeed, 4) - (-9.81 * (-9.81*(Math.pow(flattenedX, 2) + 2*flattenedY*Math.pow(launchSpeed, 4))))), -9.81 * flattenedX);
+
+        // double aimPoseFieldX = targetPoseRelativeToTurretVelX * Math.cos(SwerveSubsystem.getgyro0to360(270).getRadians()) - targetPoseRelativeToTurretVelX * Math.sin(SwerveSubsystem.getgyro0to360(270).getRadians());
+        // double aimPoseFieldY = targetPoseRelativeToTurretVelX * Math.sin(SwerveSubsystem.getgyro0to360(270).getRadians()) + targetPoseRelativeToTurretVelY * Math.cos(SwerveSubsystem.getgyro0to360(270).getRadians());
+        double aimPoseFieldX = targetPoseRelativeToTurretVelX + turretFieldPose.getX();
+        double aimPoseFieldY = targetPoseRelativeToTurretVelX + turretFieldPose.getY();
+
+        SmartDashboard.putNumber("aimTheta1", theta);
+        SmartDashboard.putNumber("aimTheta2", theta2);
         SwerveSubsystem.field.getObject("Jacob's AimPose").setPose(new Pose2d(aimPoseFieldX, aimPoseFieldY, new Rotation2d()));
 
         TurretAimPose returnPose = new TurretAimPose();
         returnPose.vel = shooterVel;
-        returnPose.aimPose = new Translation3d(aimPoseFieldX, aimPoseFieldY, targetPose.getZ());
-        returnPose.elevationAngleDegrees = Math.toDegrees(aimTheta1);
+        returnPose.aimPose = new Translation3d(aimPoseFieldX, aimPoseFieldY, flattenedY);
+        if(useGreater){
+            returnPose.elevationAngleDegrees = Math.toDegrees(theta);
+        }else{
+            returnPose.elevationAngleDegrees = Math.toDegrees(theta2);
+        }
+        
 
         return returnPose;
     }
