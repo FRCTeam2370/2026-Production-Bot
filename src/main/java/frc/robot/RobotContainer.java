@@ -21,6 +21,7 @@ import frc.robot.Commands.ResetGyro;
 import frc.robot.Commands.TeleopSwerve;
 import frc.robot.Commands.ToggleDriveFeatures;
 import frc.robot.Commands.ToggleTurretFeatures;
+import frc.robot.Commands.XMode;
 import frc.robot.Commands.ClimberCommands.ClimbForPercent;
 import frc.robot.Commands.ClimberCommands.SetClimberPos;
 import frc.robot.Commands.Intake.DeployIntake;
@@ -91,6 +92,8 @@ public class RobotContainer {
   private void configureBindings() {
     mSwerve.setDefaultCommand(new TeleopSwerve(mSwerve, ()-> -driver.getRawAxis(0), ()-> driver.getRawAxis(1), ()-> driver.getRawAxis(4), ()-> false));
     mTurretSubsystem.setDefaultCommand(new AimTurretAtActiveAimPoint(mSwerve, mTurretSubsystem, ()-> SwerveSubsystem.shouldAutoTurret));
+
+    driver.povDown().toggleOnTrue(new XMode(mSwerve));
 
     driver.back().onTrue(new ResetGyro(mSwerve));
 

@@ -259,13 +259,19 @@ public class SwerveSubsystem extends SubsystemBase {
       fieldRelative ? ChassisSpeeds.fromFieldRelativeSpeeds(translation.getX(), translation.getY(), rotationPID.calculate(rotation), readGyro()) :
       new ChassisSpeeds(translation.getX(), translation.getY(), rotationPIDauto.calculate(rotation))
     );
-
     SwerveDriveKinematics.desaturateWheelSpeeds(swerveModuleStates, Constants.SwerveConstants.maxSpeed);
 
     mSwerveModules[0].setDesiredState(swerveModuleStates[0], isOpenLoop);
     mSwerveModules[1].setDesiredState(swerveModuleStates[1], isOpenLoop);
     mSwerveModules[2].setDesiredState(swerveModuleStates[2], isOpenLoop);
     mSwerveModules[3].setDesiredState(swerveModuleStates[3], isOpenLoop);
+  }
+
+  public void xMode(){
+    mSwerveModules[0].setDesiredState(new SwerveModuleState(0, Rotation2d.fromDegrees(45)), true);
+    mSwerveModules[1].setDesiredState(new SwerveModuleState(0, Rotation2d.fromDegrees(-45)), true);
+    mSwerveModules[2].setDesiredState(new SwerveModuleState(0, Rotation2d.fromDegrees(45)), true);
+    mSwerveModules[3].setDesiredState(new SwerveModuleState(0, Rotation2d.fromDegrees(-45)), true);
   }
 
   public static Rotation2d getgyro0to360(double offset){
