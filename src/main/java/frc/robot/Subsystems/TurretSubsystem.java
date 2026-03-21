@@ -39,6 +39,7 @@ public class TurretSubsystem extends SubsystemBase {
 
   public static boolean canShoot = false;
   public static boolean canElevate = true;
+  public static boolean isShooting = false;
 
   private static double lastTime = 0;
   private static Pose2d lastTurretPos = SwerveSubsystem.turretToField();

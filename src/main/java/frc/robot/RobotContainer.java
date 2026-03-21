@@ -75,6 +75,8 @@ public class RobotContainer {
     NamedCommands.registerCommand("Test", new ResetGyro(mSwerve));
     NamedCommands.registerCommand("Aim and Shoot For 3", new PointTurretAndShootForTime(TurretSubsystem.activeAimPoint.aimPoint, 3, mTurretSubsystem, mSwerve, mUptakeSubsystem, mSpindexerSubsystem, mShooterSubsystem));
     NamedCommands.registerCommand("Aim and Shoot For 5", new PointTurretAndShootForTime(TurretSubsystem.activeAimPoint.aimPoint, 5, mTurretSubsystem, mSwerve, mUptakeSubsystem, mSpindexerSubsystem, mShooterSubsystem));
+    NamedCommands.registerCommand("Beach for 3 Right", new PointTurretAndShootForTime(FieldInfo.fieldPoints.EvilPassRight, 3, mTurretSubsystem, mSwerve, mUptakeSubsystem, mSpindexerSubsystem, mShooterSubsystem));
+    NamedCommands.registerCommand("Beach for 3 Left", new PointTurretAndShootForTime(FieldInfo.fieldPoints.EvilPassLeft, 3, mTurretSubsystem, mSwerve, mUptakeSubsystem, mSpindexerSubsystem, mShooterSubsystem));
     NamedCommands.registerCommand("Deploy Intake", new DeployIntake(Rotation2d.fromDegrees(-67).getRotations(), 80, mIntakeSubsystem, mSwerve));
     NamedCommands.registerCommand("Aim and Shoot", new PointTurretAndShootForTime(TurretSubsystem.activeAimPoint.aimPoint, 20, mTurretSubsystem, mSwerve, mUptakeSubsystem, mSpindexerSubsystem, mShooterSubsystem));
     NamedCommands.registerCommand("Deploy Hintake", new DeployIntake(Rotation2d.fromDegrees(-40).getRotations(), 80, mIntakeSubsystem, mSwerve));

@@ -13,6 +13,7 @@ import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
 import frc.robot.Constants.SwerveConstants;
+import frc.robot.Subsystems.FieldInfo;
 import frc.robot.Subsystems.LEDSubsystem;
 import frc.robot.Subsystems.ShooterSubsystem;
 import frc.robot.Subsystems.SwerveSubsystem;
@@ -43,11 +44,11 @@ public class TeleopSwerve extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    double xVal = Math.abs(xSup.getAsDouble()) < 0.05 ? 0 : xSup.getAsDouble();
-    double yVal = Math.abs(ySup.getAsDouble()) < 0.05 ? 0 : ySup.getAsDouble();
-    double rotVal = Math.abs(rotSup.getAsDouble()) < 0.05 ? 0 : rotSup.getAsDouble();
+    double xVal = Math.abs(xSup.getAsDouble()) < SwerveConstants.deadband ? 0 : xSup.getAsDouble();
+    double yVal = Math.abs(ySup.getAsDouble()) < SwerveConstants.deadband ? 0 : ySup.getAsDouble();
+    double rotVal = Math.abs(rotSup.getAsDouble()) < SwerveConstants.deadband ? 0 : rotSup.getAsDouble();
 
-    if(ShooterSubsystem.getVelocity() > 40 && LEDSubsystem.mLEDState == LEDState.Hub){
+    if(TurretSubsystem.isShooting && TurretSubsystem.activeAimPoint.aimPoint == FieldInfo.fieldPoints.HubPose){
       ActiveAimPose pose = TurretSubsystem.activeAimPoint;
       double xDistanceToTarget = pose.aimPoint.getX() - SwerveSubsystem.poseEstimator.getEstimatedPosition().getX();
       double yDistanceToTarget = pose.aimPoint.getY() - SwerveSubsystem.poseEstimator.getEstimatedPosition().getY();

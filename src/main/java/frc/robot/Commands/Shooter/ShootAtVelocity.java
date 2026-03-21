@@ -33,7 +33,9 @@ public class ShootAtVelocity extends Command {
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+    TurretSubsystem.isShooting = true;
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
@@ -59,6 +61,7 @@ public class ShootAtVelocity extends Command {
     ShooterSubsystem.shootWithVelocity(0);
     UptakeSubsystem.uptakeWithVelocity(0);
     SpindexerSubsystem.spindexrWithVelocity(0);
+    TurretSubsystem.isShooting = false;
   }
 
   // Returns true when the command should end.

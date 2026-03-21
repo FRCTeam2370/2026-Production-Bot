@@ -26,7 +26,7 @@ public class FieldInfo extends SubsystemBase {
   public static Timer turretTimer = new Timer();
 
   public static class FieldPoints {
-    public Translation3d HubPose, PassPose1, PassPose2;
+    public Translation3d HubPose, PassPose1, PassPose2, EvilPassRight, EvilPassLeft;
     public Pose2d ClimbLeft, ClimbRight, LeftHubSweep, RightHubSweep;
     public FieldPoints(Translation3d HubPose, Translation3d PassPose1, Translation3d PassPose2, Pose2d ClimbLeft, Pose2d ClimbRight, Pose2d LeftHubSweep, Pose2d RightHubSweep){
       this.HubPose = HubPose;
@@ -53,6 +53,8 @@ public class FieldInfo extends SubsystemBase {
       fieldPoints.ClimbRight = Blue.ClimbRight;
       fieldPoints.LeftHubSweep = Blue.StartHubSweepLeft;
       fieldPoints.RightHubSweep = Blue.StartHubSweepRight;
+      fieldPoints.EvilPassLeft = Blue.EvilPassLeft;
+      fieldPoints.EvilPassRight = Blue.EvilPassRight;
     }else{
       fieldPoints.HubPose = Red.HubFieldPoseRed;
       fieldPoints.PassPose1 = Red.PassPose1;
@@ -61,6 +63,8 @@ public class FieldInfo extends SubsystemBase {
       fieldPoints.ClimbRight = Red.ClimbRight;
       fieldPoints.LeftHubSweep = Red.StartHubSweepLeft;
       fieldPoints.RightHubSweep = Red.StartHubSweepRight;
+      fieldPoints.EvilPassLeft = Red.EvilPassLeft;
+      fieldPoints.EvilPassRight = Red.EvilPassRight;
     }
   }
 
