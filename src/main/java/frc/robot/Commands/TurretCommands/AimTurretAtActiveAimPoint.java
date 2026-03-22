@@ -55,7 +55,7 @@ public class AimTurretAtActiveAimPoint extends Command {
         LEDSubsystem.mLEDState = lastState;
       }
     }else{
-      TurretSubsystem.aimTurretAtDegree(540);
+      TurretSubsystem.aimTurretAtDegree(360);
       TurretSubsystem.setElevation(TurretConstants.ElevationMaxAngle.getDegrees());
     }
   }
@@ -63,7 +63,7 @@ public class AimTurretAtActiveAimPoint extends Command {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    TurretSubsystem.aimTurretAtDegree(540);
+    TurretSubsystem.aimTurretAtDegree(360);
     TurretSubsystem.setElevation(TurretConstants.ElevationMaxAngle.getDegrees());
     LEDSubsystem.mLEDState = LEDState.Off;
   }

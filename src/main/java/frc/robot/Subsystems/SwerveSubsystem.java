@@ -268,10 +268,10 @@ public class SwerveSubsystem extends SubsystemBase {
   }
 
   public void xMode(){
-    mSwerveModules[0].setDesiredState(new SwerveModuleState(0, Rotation2d.fromDegrees(45)), true);
-    mSwerveModules[1].setDesiredState(new SwerveModuleState(0, Rotation2d.fromDegrees(-45)), true);
-    mSwerveModules[2].setDesiredState(new SwerveModuleState(0, Rotation2d.fromDegrees(45)), true);
-    mSwerveModules[3].setDesiredState(new SwerveModuleState(0, Rotation2d.fromDegrees(-45)), true);
+    mSwerveModules[0].setDesiredState(new SwerveModuleState(0.5, Rotation2d.fromDegrees(45)), false);
+    mSwerveModules[1].setDesiredState(new SwerveModuleState(0.5, Rotation2d.fromDegrees(-45)), false);
+    mSwerveModules[2].setDesiredState(new SwerveModuleState(0.5, Rotation2d.fromDegrees(45)), false);
+    mSwerveModules[3].setDesiredState(new SwerveModuleState(0.5, Rotation2d.fromDegrees(-45)), false);
   }
 
   public static Rotation2d getgyro0to360(double offset){

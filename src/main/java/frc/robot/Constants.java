@@ -89,7 +89,7 @@ public class Constants {
         public static final Transform2d RobotToTurret = new Transform2d(-0.161925, 0.0889508, Rotation2d.fromDegrees(0));
         public static final double turretDistanceFromCenter = Math.sqrt(Math.pow(RobotToTurret.getX(), 2) + Math.pow(RobotToTurret.getY(), 2));
 
-        public static final Rotation2d TurretStartOffset = Rotation2d.fromDegrees(50);//relative to the cable chain (counterclockwise positive)
+        public static final Rotation2d TurretStartOffset = Rotation2d.fromDegrees(230);//relative to the cable chain (counterclockwise positive)
         public static final Rotation2d TurretCableChainPoint = Rotation2d.fromDegrees(590);//Relative to the front of the robot (clockwise positive)
         public static final Rotation2d TurretMin = Rotation2d.fromDegrees(90);
         public static final Rotation2d TurretMax = Rotation2d.fromDegrees(540);

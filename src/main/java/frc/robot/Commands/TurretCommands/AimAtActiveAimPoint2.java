@@ -44,7 +44,7 @@ public class AimAtActiveAimPoint2 extends Command {
         TurretSubsystem.setElevation(TurretConstants.ElevationMaxAngle.getDegrees());
       }
     }else{
-      TurretSubsystem.aimTurretAtDegree(540);
+      TurretSubsystem.aimTurretAtDegree(360);
       TurretSubsystem.setElevation(TurretConstants.ElevationMaxAngle.getDegrees());
     }
   }
@@ -52,7 +52,7 @@ public class AimAtActiveAimPoint2 extends Command {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    TurretSubsystem.aimTurretAtDegree(540);
+    TurretSubsystem.aimTurretAtDegree(360);
     TurretSubsystem.setElevation(TurretConstants.ElevationMaxAngle.getDegrees());
   }
 

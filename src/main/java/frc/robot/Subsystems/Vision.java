@@ -12,7 +12,7 @@ import frc.robot.Constants.VisionConstants;
 import frc.robot.LimelightHelpers;
 
 public class Vision extends SubsystemBase {
-  public static String[] limelightNames = {"limelight-left", "limelight-right"};
+  public static String[] limelightNames = {"limelight-left", "limelight-right", "limelight-top"};
   /** Creates a new Vision. */
   public Vision() {
     //Iterates through each limelight and sets the pipeline index to april tag index

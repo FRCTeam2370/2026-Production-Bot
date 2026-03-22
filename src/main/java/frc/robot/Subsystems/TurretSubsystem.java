@@ -182,23 +182,23 @@ public class TurretSubsystem extends SubsystemBase {
   }
 
   private static void configTurretCANCoder(){
-    turretCANCoderConfig.MagnetSensor.AbsoluteSensorDiscontinuityPoint = 1;
-    turretCANCoderConfig.MagnetSensor.MagnetOffset = 0.5654296875 - 0.051513671875;
+    turretCANCoderConfig.MagnetSensor.AbsoluteSensorDiscontinuityPoint = 0.5;
+    turretCANCoderConfig.MagnetSensor.MagnetOffset = 0.051;
 
     turretCANcoder.getConfigurator().apply(turretCANCoderConfig);
   }
 
   private static void configTurret(){
     turretRotationMotor.setNeutralMode(NeutralModeValue.Coast);
-    turretRotationMotor.setPosition(turretRotationsToKraken(TurretConstants.TurretCableChainPoint.getRotations() - TurretConstants.TurretStartOffset.getRotations()) + ((turretCANcoder.getAbsolutePosition().getValueAsDouble() - TurretConstants.CANcoderOffset.getRotations()) * TurretConstants.encoderRatio));
+    turretRotationMotor.setPosition(turretRotationsToKraken(TurretConstants.TurretCableChainPoint.getRotations() - TurretConstants.TurretStartOffset.getRotations()) + ((turretCANcoder.getAbsolutePosition().getValueAsDouble() /*- TurretConstants.CANcoderOffset.getRotations()*/) * TurretConstants.encoderRatio));
     //turretRotationMotor.setPosition(turretRotationsToKraken(TurretConstants.TurretCableChainPoint.getRotations() - TurretConstants.TurretStartOffset.getRotations()));
 
     turretRotConfig.Slot0.kP = 0.23;
     turretRotConfig.Slot0.kI = 0.007;
     turretRotConfig.Slot0.kD = 0.005;
 
-    turretRotConfig.MotionMagic.MotionMagicAcceleration = 150;
-    turretRotConfig.MotionMagic.MotionMagicCruiseVelocity = 110;
+    turretRotConfig.MotionMagic.MotionMagicAcceleration = 80;
+    turretRotConfig.MotionMagic.MotionMagicCruiseVelocity = 40;
 
     turretRotConfig.CurrentLimits.StatorCurrentLimit = 40;
 
