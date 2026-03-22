@@ -148,6 +148,12 @@ public class SwerveModule {
         lastAngle = angle;
     }
 
+    public void setAnglePublic(SwerveModuleState desiredState){
+        Rotation2d angle = desiredState.angle;
+        turnMotor.setControl(angleDutyCyle.withPosition(angle.getRotations()));
+        lastAngle = angle;
+    }
+
     public SwerveModuleState getState() {
         return new SwerveModuleState(krakenToMPS(driveMotor.getVelocity().getValueAsDouble()), getAngle());
     }

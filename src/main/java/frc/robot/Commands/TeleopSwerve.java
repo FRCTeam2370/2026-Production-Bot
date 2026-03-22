@@ -48,29 +48,33 @@ public class TeleopSwerve extends Command {
     double yVal = Math.abs(ySup.getAsDouble()) < SwerveConstants.deadband ? 0 : ySup.getAsDouble();
     double rotVal = Math.abs(rotSup.getAsDouble()) < SwerveConstants.deadband ? 0 : rotSup.getAsDouble();
 
-    if(TurretSubsystem.isShooting && TurretSubsystem.activeAimPoint.aimPoint == FieldInfo.fieldPoints.HubPose){
-      ActiveAimPose pose = TurretSubsystem.activeAimPoint;
-      double xDistanceToTarget = pose.aimPoint.getX() - SwerveSubsystem.poseEstimator.getEstimatedPosition().getX();
-      double yDistanceToTarget = pose.aimPoint.getY() - SwerveSubsystem.poseEstimator.getEstimatedPosition().getY();
-      double totalDistanceToTarget = Math.sqrt(Math.pow(xDistanceToTarget, 2) + Math.pow(yDistanceToTarget, 2));
-      double xVelocity = yVal * Constants.SwerveConstants.maxSpeed;
-      double yVelocity = xVal * Constants.SwerveConstants.maxSpeed;
+    if(xVal == 0 && yVal == 0 && rotVal == 0){
+      mSwerve.xMode();
+    }else{
+      if(TurretSubsystem.isShooting && TurretSubsystem.activeAimPoint.aimPoint == FieldInfo.fieldPoints.HubPose){
+        ActiveAimPose pose = TurretSubsystem.activeAimPoint;
+        double xDistanceToTarget = pose.aimPoint.getX() - SwerveSubsystem.poseEstimator.getEstimatedPosition().getX();
+        double yDistanceToTarget = pose.aimPoint.getY() - SwerveSubsystem.poseEstimator.getEstimatedPosition().getY();
+        double totalDistanceToTarget = Math.sqrt(Math.pow(xDistanceToTarget, 2) + Math.pow(yDistanceToTarget, 2));
+        double xVelocity = yVal * Constants.SwerveConstants.maxSpeed;
+        double yVelocity = xVal * Constants.SwerveConstants.maxSpeed;
 
-      if((xVelocity * xDistanceToTarget) > 0){
-        yVal /= Math.abs(totalDistanceToTarget/yDistanceToTarget);
+        if((xVelocity * xDistanceToTarget) > 0){
+          yVal /= Math.abs(totalDistanceToTarget/yDistanceToTarget);
+        }
+        if((yVelocity * yDistanceToTarget) < 0){
+          xVal /= Math.abs(totalDistanceToTarget/xDistanceToTarget);
+        }
       }
-      if((yVelocity * yDistanceToTarget) < 0){
-        xVal /= Math.abs(totalDistanceToTarget/xDistanceToTarget);
+
+      xVal *= SwerveSubsystem.color.isPresent() && SwerveSubsystem.color.get() == Alliance.Blue ? -1 : 1;
+      yVal *= SwerveSubsystem.color.isPresent() && SwerveSubsystem.color.get() == Alliance.Blue ? -1 : 1;
+
+      if(SwerveSubsystem.shouldAutoTrench){
+        xVal = SwerveSubsystem.Clamp(xVal - SwerveSubsystem.getTrenchOffsetY(), -1, 1);
       }
+
+      mSwerve.drive(new Translation2d(xLimiter.calculate(xVal), yLimiter.calculate(yVal)).times(SwerveConstants.maxSpeed), rotLimiter.calculate(rotVal * 0.4), !robotCentricSup.getAsBoolean(), true);
     }
-
-    xVal *= SwerveSubsystem.color.isPresent() && SwerveSubsystem.color.get() == Alliance.Blue ? -1 : 1;
-    yVal *= SwerveSubsystem.color.isPresent() && SwerveSubsystem.color.get() == Alliance.Blue ? -1 : 1;
-
-    if(SwerveSubsystem.shouldAutoTrench){
-      xVal = SwerveSubsystem.Clamp(xVal - SwerveSubsystem.getTrenchOffsetY(), -1, 1);
-    }
-
-    mSwerve.drive(new Translation2d(xLimiter.calculate(xVal), yLimiter.calculate(yVal)).times(SwerveConstants.maxSpeed), rotLimiter.calculate(rotVal * 0.4), !robotCentricSup.getAsBoolean(), true);
   }
 }
