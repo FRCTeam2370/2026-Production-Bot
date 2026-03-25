@@ -18,9 +18,9 @@ import frc.robot.Subsystems.UptakeSubsystem;
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
 public class PointTurretAndShootForTime extends ParallelCommandGroup {
   /** Creates a new PointTurretAndShoot. */
-  public PointTurretAndShootForTime(Translation3d pose, double seconds, TurretSubsystem mTurretSubsystem, SwerveSubsystem mSwerve, UptakeSubsystem mUptakeSubsystem, SpindexerSubsystem mSpindexerSubsystem, ShooterSubsystem mShooterSubsystem) {
+  public PointTurretAndShootForTime(double seconds, TurretSubsystem mTurretSubsystem, SwerveSubsystem mSwerve, UptakeSubsystem mUptakeSubsystem, SpindexerSubsystem mSpindexerSubsystem, ShooterSubsystem mShooterSubsystem) {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
-    addCommands(new PointTurretAtPointForTime(pose, seconds, mTurretSubsystem, mSwerve), new ShootAtVelocityForTime(mShooterSubsystem, mUptakeSubsystem, mSpindexerSubsystem, mSwerve, seconds));
+    addCommands(new PointTurretAtPointForTime(seconds, mTurretSubsystem, mSwerve), new ShootAtVelocityForTime(mShooterSubsystem, mUptakeSubsystem, mSpindexerSubsystem, mSwerve, seconds));
   }
 }

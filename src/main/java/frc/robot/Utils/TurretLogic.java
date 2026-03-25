@@ -152,9 +152,9 @@ public class TurretLogic {
         double turretRelativeYVel = mSwerve.getRobotRelativeSpeeds().vyMetersPerSecond + tangentialVelocityY;
 
         //lastly, we get the field relative velocities using the angle of the gyro and calculate the speed of the turret using those values
-        double turretFieldXVel = turretRelativeXVel * Math.cos(SwerveSubsystem.getgyro0to360(270).getRadians()) - turretRelativeYVel * Math.sin(SwerveSubsystem.getgyro0to360(270).getRadians());
-        double turretFieldYVel = turretRelativeXVel * Math.sin(SwerveSubsystem.getgyro0to360(270).getRadians()) + turretRelativeYVel * Math.cos(SwerveSubsystem.getgyro0to360(270).getRadians());
-        double turretSpeed = Math.sqrt(Math.pow(turretFieldXVel, 2) + Math.pow(turretFieldYVel, 2));//mps
+        //double turretFieldXVel = turretRelativeXVel * Math.cos(SwerveSubsystem.getgyro0to360(270).getRadians()) - turretRelativeYVel * Math.sin(SwerveSubsystem.getgyro0to360(270).getRadians());
+        //double turretFieldYVel = turretRelativeXVel * Math.sin(SwerveSubsystem.getgyro0to360(270).getRadians()) + turretRelativeYVel * Math.cos(SwerveSubsystem.getgyro0to360(270).getRadians());
+        //double turretSpeed = Math.sqrt(Math.pow(turretFieldXVel, 2) + Math.pow(turretFieldYVel, 2));//mps
 
         double targetPoseXRelativeToTurret = targetPose.getX() - turretFieldPose.getX();
         double targetPoseYRelativeToTurret = targetPose.getY() - turretFieldPose.getY();
@@ -162,18 +162,18 @@ public class TurretLogic {
         double targetPoseRelativeToTurretVelX = targetPoseXRelativeToTurret - turretRelativeXVel;
         double targetPoseRelativeToTurretVelY = targetPoseYRelativeToTurret - turretRelativeYVel;
 
-        double angleRelativeToAjustedTarget = Math.atan2(targetPoseRelativeToTurretVelY, targetPoseRelativeToTurretVelX);
+        //double angleRelativeToAjustedTarget = Math.atan2(targetPoseRelativeToTurretVelY, targetPoseRelativeToTurretVelX);
         double distanceToAdjustedTarget = Math.sqrt(Math.pow(targetPoseRelativeToTurretVelX, 2) + Math.pow(targetPoseRelativeToTurretVelY, 2));
 
         double shooterVel = 3.25*distanceToAdjustedTarget + 49.8;//5*distanceToAdjustedTarget + 50;//distance to target in meters + 50 just because (idk I'll make a better function later)
         double launchSpeed = 0.0754888 * Math.PI * 0.5 * shooterVel * 20/18;//Launch speed of the ball 
 
-        double flattenedX = Math.sqrt(Math.pow(targetPoseRelativeToTurretVelX, 2) + Math.pow(targetPoseRelativeToTurretVelY, 2));
+        //double flattenedX = Math.sqrt(Math.pow(targetPoseRelativeToTurretVelX, 2) + Math.pow(targetPoseRelativeToTurretVelY, 2));
         double flattenedY = targetPose.getZ() - TurretConstants.TurretVerticalOffset;
 
-        SmartDashboard.putBoolean("valid lauch speed", Math.pow(launchSpeed, 4) > (-9.81 * (-9.81*(Math.pow(flattenedX, 2) + 2*flattenedY*Math.pow(launchSpeed, 4)))));
+        //SmartDashboard.putBoolean("valid lauch speed", Math.pow(launchSpeed, 4) > (-9.81 * (-9.81*(Math.pow(flattenedX, 2) + 2*flattenedY*Math.pow(launchSpeed, 4)))));
 
-        double g = -9.81;
+        double g = 9.81;
         double a = (g*Math.pow(distanceToAdjustedTarget, 2)) / 2*Math.pow(launchSpeed, 2);
         double b = -distanceToAdjustedTarget;
         double c = flattenedY + a;

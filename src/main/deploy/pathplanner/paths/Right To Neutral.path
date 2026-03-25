@@ -80,11 +80,11 @@
     },
     {
       "anchor": {
-        "x": 4.19432239657632,
+        "x": 4.026,
         "y": 0.6774179743223976
       },
       "prevControl": {
-        "x": 4.91888730385164,
+        "x": 4.7505649072753195,
         "y": 0.6386019971469341
       },
       "nextControl": null,
@@ -115,7 +115,7 @@
   "eventMarkers": [
     {
       "name": "Deploy Intake",
-      "waypointRelativePos": 0.40513166779202087,
+      "waypointRelativePos": 0.22957461174882626,
       "endWaypointRelativePos": null,
       "command": {
         "type": "named",

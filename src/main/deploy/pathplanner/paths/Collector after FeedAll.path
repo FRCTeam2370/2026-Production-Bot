@@ -24,7 +24,7 @@
         "y": 7.586661911554922
       },
       "nextControl": {
-        "x": 0.3887037820768622,
+        "x": 0.3887037820768619,
         "y": 7.512490595320131
       },
       "isLocked": false,
@@ -32,12 +32,12 @@
     },
     {
       "anchor": {
-        "x": 1.7359771754636228,
-        "y": 6.719771754636234
+        "x": 2.3570328102710407,
+        "y": 6.228102710413695
       },
       "prevControl": {
-        "x": 1.5548359486447931,
-        "y": 7.677232524964337
+        "x": 1.8394864479315263,
+        "y": 7.133808844507846
       },
       "nextControl": null,
       "isLocked": false,
@@ -71,7 +71,12 @@
       "name": "Aim and Shoot",
       "waypointRelativePos": 0,
       "endWaypointRelativePos": null,
-      "command": null
+      "command": {
+        "type": "named",
+        "data": {
+          "name": "Aim and Shoot"
+        }
+      }
     }
   ],
   "globalConstraints": {

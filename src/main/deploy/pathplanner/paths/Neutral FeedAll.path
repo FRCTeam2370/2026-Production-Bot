@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 4.440156918687589,
-        "y": 7.41845934379458
+        "x": 4.49191155492154,
+        "y": 7.638416547788873
       },
       "prevControl": null,
       "nextControl": {
-        "x": 5.44015691868759,
-        "y": 7.41845934379458
+        "x": 5.491911554921541,
+        "y": 7.638416547788873
       },
       "isLocked": false,
       "linkedName": null
@@ -84,12 +84,12 @@
         "y": 7.41845934379458
       },
       "prevControl": {
-        "x": 7.4548644793152645,
-        "y": 6.875035663338089
+        "x": 7.843024251069899,
+        "y": 7.327888730385164
       },
       "nextControl": {
-        "x": 5.73305518641533,
-        "y": 7.55726198693995
+        "x": 5.707056747192539,
+        "y": 7.437828234261206
       },
       "isLocked": false,
       "linkedName": null
@@ -140,8 +140,8 @@
       "minWaypointRelativePos": 1.3612424037812496,
       "maxWaypointRelativePos": 3.7596218771100576,
       "constraints": {
-        "maxVelocity": 2.0,
-        "maxAcceleration": 2.0,
+        "maxVelocity": 0.75,
+        "maxAcceleration": 0.75,
         "maxAngularVelocity": 540.0,
         "maxAngularAcceleration": 720.0,
         "nominalVoltage": 12.0,
@@ -164,12 +164,12 @@
     },
     {
       "name": "Aim and Shoot For 3",
-      "waypointRelativePos": 1.4570719602977595,
+      "waypointRelativePos": 0.648210668467252,
       "endWaypointRelativePos": null,
       "command": {
         "type": "named",
         "data": {
-          "name": "Aim and Shoot For 3"
+          "name": "Aim and Shoot For 5"
         }
       }
     }
@@ -190,7 +190,7 @@
   "folder": "Left Paths",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 0.0
+    "rotation": -90.0
   },
   "useDefaultConstraints": false
 }

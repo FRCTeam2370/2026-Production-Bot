@@ -66,7 +66,7 @@ public class Constants {
   }
 
     public static class VisionConstants{
-        public static final double stdCoefficient = 0.1;
+        public static final double stdCoefficient = 1;
 
         public static final Pose2d objectDetectionRobotToCamera = new Pose2d(0.3429, 0.50165, Rotation2d.fromDegrees(0));//12.5, 10, 180 degrees
 
@@ -124,10 +124,10 @@ public class Constants {
 
       public static class Blue{
         public static final Translation3d HubFieldPoseBlue = new Translation3d(4.625,4.025, 1.8288);  
-        public static final Translation3d PassPose1 = new Translation3d(1, 1.5, 0);
-        public static final Translation3d PassPose2 = new Translation3d(1, 6.5, 0);
+        public static final Translation3d PassPose1 = new Translation3d(2, 1.5, 0);
+        public static final Translation3d PassPose2 = new Translation3d(2, 6.5, 0);
 
-        public static final double neutralZoneEnterX = 4;
+        public static final double neutralZoneEnterX = 4.2;
 
         public static final Pose2d ClimbLeft = new Pose2d();
         public static final Pose2d ClimbRight = new Pose2d();

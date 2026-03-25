@@ -17,14 +17,12 @@ import frc.robot.Subsystems.LEDSubsystem.LEDState;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class PointTurretAtPointForTime extends Command {
-  private Translation3d pose;
   private SwerveSubsystem mSwerve;
   private double seconds;
   private Timer timer = new Timer();
   /** Creates a new PointTurretAtPoint. */
-  public PointTurretAtPointForTime(Translation3d pose, double seconds, TurretSubsystem mTurretSubsystem, SwerveSubsystem mSwerve) {
+  public PointTurretAtPointForTime(double seconds, TurretSubsystem mTurretSubsystem, SwerveSubsystem mSwerve) {
     // Use addRequirements() here to declare subsystem dependencies.
-    this.pose = pose;
     this.mSwerve = mSwerve;
     this.seconds = seconds;
     addRequirements(mTurretSubsystem);
@@ -41,14 +39,14 @@ public class PointTurretAtPointForTime extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    TurretSubsystem.aimTurretAtPoint(new Pose2d(mSwerve.getTurretPointTowardsPose(pose).aimPose.getX(), mSwerve.getTurretPointTowardsPose(pose).aimPose.getY(), new Rotation2d()));
-    TurretSubsystem.setElevation(mSwerve.getTurretPointTowardsPose(pose).elevationAngleDegrees + 5);
+    TurretSubsystem.aimTurretAtPoint(new Pose2d(mSwerve.getTurretPointTowardsPose(TurretSubsystem.activeAimPoint.aimPoint).aimPose.getX(), mSwerve.getTurretPointTowardsPose(TurretSubsystem.activeAimPoint.aimPoint).aimPose.getY(), new Rotation2d()));
+    TurretSubsystem.setElevation(mSwerve.getTurretPointTowardsPose(TurretSubsystem.activeAimPoint.aimPoint).elevationAngleDegrees + 5);
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    TurretSubsystem.aimTurretAtDegree(540);
+    TurretSubsystem.aimTurretAtDegree(360);
     TurretSubsystem.setElevation(TurretConstants.ElevationMaxAngle.getDegrees());
     LEDSubsystem.mLEDState = LEDState.Off;
   }
