@@ -169,8 +169,8 @@ public class TurretLogic {
         double distanceToAdjustedTarget = Math.sqrt(Math.pow(targetPoseRelativeToTurretVelX, 2) + Math.pow(targetPoseRelativeToTurretVelY, 2));
 
         double flattenedRobotVel = turretSpeed * Math.cos(angleRelativeToAjustedTarget);
-        double shooterVel = 1.15*Math.pow(distanceToAdjustedTarget, 1.04) +2*distanceToAdjustedTarget + 50;//5*distanceToAdjustedTarget + 50;//distance to target in meters + 50 just because (idk I'll make a better function later)
-        double launchSpeed = 0.0754888 * Math.PI * 0.5 * shooterVel * 20/18;//Launch speed of the ball 
+        double shooterVel = 0.5*Math.pow(distanceToAdjustedTarget, 1.985) + 51.5;//5*distanceToAdjustedTarget + 50;//distance to target in meters + 50 just because (idk I'll make a better function later)
+        double launchSpeed = 0.0754888 * Math.PI *0.5* shooterVel * 20/18;//Launch speed of the ball 
 
         //double flattenedX = Math.sqrt(Math.pow(targetPoseRelativeToTurretVelX, 2) + Math.pow(targetPoseRelativeToTurretVelY, 2));
         double flattenedY = targetPose.getZ() - TurretConstants.TurretVerticalOffset;
@@ -198,9 +198,9 @@ public class TurretLogic {
         SwerveSubsystem.field.getObject("Jacob's AimPose").setPose(new Pose2d(aimPoseFieldX, aimPoseFieldY, new Rotation2d()));
 
         TurretAimPose returnPose = new TurretAimPose();
-        returnPose.vel = shooterVel + 5;
+        returnPose.vel = shooterVel;
         returnPose.aimPose = new Translation3d(aimPoseFieldX, aimPoseFieldY, flattenedY);
-        if(useGreater && distanceToAdjustedTarget < 4){
+        if(useGreater && shooterVel < 90){
             returnPose.elevationAngleDegrees = Math.toDegrees(theta);
         }else{
             returnPose.elevationAngleDegrees = Math.toDegrees(theta2);
