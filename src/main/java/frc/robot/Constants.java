@@ -31,6 +31,8 @@ public class Constants {
     public static final int shooterSpeed = 60;
 
     public static final double velocityOffset = 2.5;
+
+    public static final double ratioAdjustment = 0.8;
   }
 
   public static class uptakeConstants{

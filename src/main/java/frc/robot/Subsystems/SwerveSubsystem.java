@@ -254,6 +254,28 @@ public class SwerveSubsystem extends SubsystemBase {
     return Rotation2d.fromRadians(returnTheta);
   }
 
+  public static Rotation2d FieldRelativeTurretRotationToPose450(Pose2d pose){
+    //double distanceToPose = Math.sqrt(Math.pow(pose.getX() - turretToField().getX(), 2) + Math.pow(pose.getY() - turretToField().getY(), 2));
+    double thetaWorldToTarget = Math.atan2((pose.getY()-turretToField().getY()), (pose.getX()-turretToField().getX()));//calculates the angle from the turret's point to the target point
+    double thetaTurretToTarget = thetaWorldToTarget - 0.5*Math.PI//uses the thetaWorldToTarget and subtracts the robot's rotation to get the rotation from the turret (adding pi here is an offset)
+     - getgyro0to360(180).getRadians() //subtracting the robot's rotation
+     - (Math.toRadians(gyro.getAngularVelocityZWorld().getValueAsDouble()) * 0.2);//adding angular velocity lookahead
+    thetaTurretToTarget = (((thetaTurretToTarget % (2*Math.PI)) + (2*Math.PI)) % (2*Math.PI));//Returns the thetaTurretToTarget value in the range of 0-360 degrees
+
+    double returnTheta;
+    if(thetaTurretToTarget + 2*Math.PI < TurretConstants.TurretMax.getRadians()){
+      if(Math.abs(lastTurretTheta - thetaTurretToTarget) < Math.abs(lastTurretTheta - thetaTurretToTarget - 2*Math.PI) && thetaTurretToTarget > TurretConstants.TurretMin.getRadians()){
+        returnTheta = thetaTurretToTarget;
+      }else{
+        returnTheta = thetaTurretToTarget + 2*Math.PI;
+      }
+    }else{
+      returnTheta = thetaTurretToTarget;
+    }
+    lastTurretTheta = returnTheta;
+    return Rotation2d.fromRadians(returnTheta);
+  }
+
   public void drive(Translation2d translation, double rotation, boolean fieldRelative, boolean isOpenLoop){
     SwerveModuleState[] swerveModuleStates = Constants.SwerveConstants.kinematics.toSwerveModuleStates(
       fieldRelative ? ChassisSpeeds.fromFieldRelativeSpeeds(translation.getX(), translation.getY(), rotationPID.calculate(rotation), readGyro()) :
@@ -381,7 +403,7 @@ public class SwerveSubsystem extends SubsystemBase {
               this::getRobotRelativeSpeeds, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
               (speeds, feedforwards) -> driveRobotRelative(speeds),//drive(new Translation2d(speeds.vxMetersPerSecond, speeds.vyMetersPerSecond), -speeds.omegaRadiansPerSecond / Constants.SwerveConstants.maxAngularVelocity, false, false),//drive(new Translation2d(speeds.vxMetersPerSecond, speeds.vyMetersPerSecond), speeds.omegaRadiansPerSecond / 3.1154127, false, true),//driveRobotRelative(speeds), // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds. Also optionally outputs individual module feedforwards
               new PPHolonomicDriveController( // PPHolonomicController is the built in path following controller for holonomic drive trains
-                      new PIDConstants(5, 0.0, 0.0), // Translation PID constants// 3.8 - p
+                      new PIDConstants(7, 0.0, 0.0), // Translation PID constants// 3.8 - p
                       new PIDConstants(5, 0.0, 0.0) // Rotation PID constants//kp 0.00755, ki 0.0001
               ),
               config, // The robot configuration

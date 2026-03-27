@@ -28,6 +28,7 @@ import frc.robot.Commands.Intake.DeployIntake;
 import frc.robot.Commands.Intake.IntakeControl;
 import frc.robot.Commands.Intake.SetIntakePosAndSpeed;
 import frc.robot.Commands.Shooter.ShootAtVelocity;
+import frc.robot.Commands.TurretCommands.AimAtActiveAimPoint2;
 import frc.robot.Commands.TurretCommands.AimTurretAtActiveAimPoint;
 import frc.robot.Commands.TurretCommands.EnableAirStrike;
 import frc.robot.Commands.TurretCommands.PointTurretAndShootForTime;
@@ -94,6 +95,8 @@ public class RobotContainer {
   private void configureBindings() {
     mSwerve.setDefaultCommand(new TeleopSwerve(mSwerve, ()-> -driver.getRawAxis(0), ()-> driver.getRawAxis(1), ()-> driver.getRawAxis(4), ()-> false));
     mTurretSubsystem.setDefaultCommand(new AimTurretAtActiveAimPoint(mSwerve, mTurretSubsystem, ()-> SwerveSubsystem.shouldAutoTurret));
+
+    driver.b().toggleOnTrue(new AimAtActiveAimPoint2(mTurretSubsystem, mSwerve, ()-> true));
 
     driver.povDown().toggleOnTrue(new XMode(mSwerve));
 

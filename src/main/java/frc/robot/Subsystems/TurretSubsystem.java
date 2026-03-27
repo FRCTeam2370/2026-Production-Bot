@@ -128,20 +128,36 @@ public class TurretSubsystem extends SubsystemBase {
     }
   }
 
-  public static void aimTurretAtPoint(Pose2d pose){
+  public static void aimTurretAtPoint(Pose2d pose, boolean useRelative){
     double targetRot;
-    if(RobotContainer.shouldDial){
-      targetRot = turretRotationsToKraken(SwerveSubsystem.turretRotationToPose450(pose).getRotations() + 0.25*RobotContainer.dial.getRawAxis(0));
-      turretRotationMotor.setControl(turretRotMagicCycle.withPosition(targetRot));
+    if(useRelative){
+      if(RobotContainer.shouldDial){
+        targetRot = turretRotationsToKraken(SwerveSubsystem.turretRotationToPose450(pose).getRotations() + 0.25*RobotContainer.dial.getRawAxis(0));
+        turretRotationMotor.setControl(turretRotMagicCycle.withPosition(targetRot));
+      }else{
+        targetRot = turretRotationsToKraken(SwerveSubsystem.turretRotationToPose450(pose).getRotations());
+        turretRotationMotor.setControl(turretRotMagicCycle.withPosition(targetRot));
+      }
+      if(turretRotationMotor.getPosition().getValueAsDouble() > targetRot * 0.9 && turretRotationMotor.getPosition().getValueAsDouble() < targetRot * 1.1){
+        canShoot = true;
+      }else{
+        canShoot = false;
+      } 
     }else{
-      targetRot = turretRotationsToKraken(SwerveSubsystem.turretRotationToPose450(pose).getRotations());
-      turretRotationMotor.setControl(turretRotMagicCycle.withPosition(targetRot));
+      if(RobotContainer.shouldDial){
+        targetRot = turretRotationsToKraken(SwerveSubsystem.FieldRelativeTurretRotationToPose450(pose).getRotations() + 0.25*RobotContainer.dial.getRawAxis(0));
+        turretRotationMotor.setControl(turretRotMagicCycle.withPosition(targetRot));
+      }else{
+        targetRot = turretRotationsToKraken(SwerveSubsystem.FieldRelativeTurretRotationToPose450(pose).getRotations());
+        turretRotationMotor.setControl(turretRotMagicCycle.withPosition(targetRot));
+      }
+      if(turretRotationMotor.getPosition().getValueAsDouble() > targetRot * 0.9 && turretRotationMotor.getPosition().getValueAsDouble() < targetRot * 1.1){
+        canShoot = true;
+      }else{
+        canShoot = false;
+      }
     }
-    if(turretRotationMotor.getPosition().getValueAsDouble() > targetRot * 0.9 && turretRotationMotor.getPosition().getValueAsDouble() < targetRot * 1.1){
-      canShoot = true;
-    }else{
-      canShoot = false;
-    }
+    
     SmartDashboard.putNumber("targetRot", targetRot);
   }
 

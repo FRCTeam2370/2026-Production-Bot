@@ -43,10 +43,10 @@ public class AimTurretAtActiveAimPoint extends Command {
   public void execute() {
     if(shouldTurret.getAsBoolean()){
       if(ShooterSubsystem.getVelocity() > 10 && TurretSubsystem.canElevate){
-        TurretSubsystem.aimTurretAtPoint(new Pose2d(mSwerve.getTurretPointTowardsPose(TurretSubsystem.activeAimPoint.aimPoint).aimPose.getX(), mSwerve.getTurretPointTowardsPose(TurretSubsystem.activeAimPoint.aimPoint).aimPose.getY(), new Rotation2d()));
+        TurretSubsystem.aimTurretAtPoint(new Pose2d(mSwerve.getTurretPointTowardsPose(TurretSubsystem.activeAimPoint.aimPoint).aimPose.getX(), mSwerve.getTurretPointTowardsPose(TurretSubsystem.activeAimPoint.aimPoint).aimPose.getY(), new Rotation2d()), true);
         TurretSubsystem.setElevation(mSwerve.getTurretPointTowardsPose(TurretSubsystem.activeAimPoint.aimPoint).elevationAngleDegrees + 5);
       }else{
-        TurretSubsystem.aimTurretAtPoint(new Pose2d(TurretSubsystem.activeAimPoint.aimPoint.getX(), TurretSubsystem.activeAimPoint.aimPoint.getY(), new Rotation2d()));
+        TurretSubsystem.aimTurretAtPoint(new Pose2d(TurretSubsystem.activeAimPoint.aimPoint.getX(), TurretSubsystem.activeAimPoint.aimPoint.getY(), new Rotation2d()), false);
         TurretSubsystem.setElevation(TurretConstants.ElevationMaxAngle.getDegrees());
       }
 

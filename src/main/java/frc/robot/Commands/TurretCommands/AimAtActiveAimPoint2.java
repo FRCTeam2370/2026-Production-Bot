@@ -35,18 +35,22 @@ public class AimAtActiveAimPoint2 extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if(shouldTurret.getAsBoolean()){
-      if(ShooterSubsystem.getVelocity() > 10 && TurretSubsystem.canElevate){
-        TurretSubsystem.aimTurretAtPoint(new Pose2d(mSwerve.getTurretPointTowardsPoseJacobMethod(TurretSubsystem.activeAimPoint.aimPoint).aimPose.getX(), mSwerve.getTurretPointTowardsPoseJacobMethod(TurretSubsystem.activeAimPoint.aimPoint).aimPose.getY(), new Rotation2d()));
-        TurretSubsystem.setElevation(mSwerve.getTurretPointTowardsPoseJacobMethod(TurretSubsystem.activeAimPoint.aimPoint).elevationAngleDegrees + 5);
-      }else{
-        TurretSubsystem.aimTurretAtPoint(new Pose2d(TurretSubsystem.activeAimPoint.aimPoint.getX(), TurretSubsystem.activeAimPoint.aimPoint.getY(), new Rotation2d()));
-        TurretSubsystem.setElevation(TurretConstants.ElevationMaxAngle.getDegrees());
-      }
-    }else{
-      TurretSubsystem.aimTurretAtDegree(360);
-      TurretSubsystem.setElevation(TurretConstants.ElevationMaxAngle.getDegrees());
-    }
+    // if(shouldTurret.getAsBoolean()){
+    //   if(ShooterSubsystem.getVelocity() > 10 && TurretSubsystem.canElevate){
+    //     TurretSubsystem.aimTurretAtPoint(new Pose2d(mSwerve.getTurretPointTowardsPoseJacobMethod(TurretSubsystem.activeAimPoint.aimPoint).aimPose.getX(), mSwerve.getTurretPointTowardsPoseJacobMethod(TurretSubsystem.activeAimPoint.aimPoint).aimPose.getY(), new Rotation2d()));
+    //     TurretSubsystem.setElevation(mSwerve.getTurretPointTowardsPoseJacobMethod(TurretSubsystem.activeAimPoint.aimPoint).elevationAngleDegrees + 5);
+    //   }else{
+    //     TurretSubsystem.aimTurretAtPoint(new Pose2d(TurretSubsystem.activeAimPoint.aimPoint.getX(), TurretSubsystem.activeAimPoint.aimPoint.getY(), new Rotation2d()));
+    //     TurretSubsystem.setElevation(TurretConstants.ElevationMaxAngle.getDegrees());
+    //   }
+    // }else{
+    //   TurretSubsystem.aimTurretAtDegree(360);
+    //   TurretSubsystem.setElevation(TurretConstants.ElevationMaxAngle.getDegrees());
+    // }
+
+      TurretSubsystem.aimTurretAtPoint(new Pose2d(mSwerve.getTurretPointTowardsPoseJacobMethod(TurretSubsystem.activeAimPoint.aimPoint).aimPose.getX(), mSwerve.getTurretPointTowardsPoseJacobMethod(TurretSubsystem.activeAimPoint.aimPoint).aimPose.getY(), new Rotation2d()), false);
+      TurretSubsystem.setElevation(mSwerve.getTurretPointTowardsPoseJacobMethod(TurretSubsystem.activeAimPoint.aimPoint).elevationAngleDegrees + 5);
+      
   }
 
   // Called once the command ends or is interrupted.

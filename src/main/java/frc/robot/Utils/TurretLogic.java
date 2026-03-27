@@ -151,21 +151,25 @@ public class TurretLogic {
         double turretRelativeXVel = mSwerve.getRobotRelativeSpeeds().vxMetersPerSecond + tangentialVelocityX;
         double turretRelativeYVel = mSwerve.getRobotRelativeSpeeds().vyMetersPerSecond + tangentialVelocityY;
 
+        double fieldRelTurXVel = turretRelativeXVel*Math.cos(SwerveSubsystem.getgyro0to360(270).getRadians()) - turretRelativeYVel*Math.sin(SwerveSubsystem.getgyro0to360(270).getRadians());
+        double fieldRelTurYVel = turretRelativeXVel*Math.sin(SwerveSubsystem.getgyro0to360(270).getRadians()) + turretRelativeYVel*Math.cos(SwerveSubsystem.getgyro0to360(270).getRadians());
+
         //lastly, we get the field relative velocities using the angle of the gyro and calculate the speed of the turret using those values
         //double turretFieldXVel = turretRelativeXVel * Math.cos(SwerveSubsystem.getgyro0to360(270).getRadians()) - turretRelativeYVel * Math.sin(SwerveSubsystem.getgyro0to360(270).getRadians());
         //double turretFieldYVel = turretRelativeXVel * Math.sin(SwerveSubsystem.getgyro0to360(270).getRadians()) + turretRelativeYVel * Math.cos(SwerveSubsystem.getgyro0to360(270).getRadians());
-        //double turretSpeed = Math.sqrt(Math.pow(turretFieldXVel, 2) + Math.pow(turretFieldYVel, 2));//mps
+        double turretSpeed = Math.sqrt(Math.pow(fieldRelTurXVel, 2) + Math.pow(fieldRelTurYVel, 2));//mps
 
         double targetPoseXRelativeToTurret = targetPose.getX() - turretFieldPose.getX();
         double targetPoseYRelativeToTurret = targetPose.getY() - turretFieldPose.getY();
 
-        double targetPoseRelativeToTurretVelX = targetPoseXRelativeToTurret - turretRelativeXVel;
-        double targetPoseRelativeToTurretVelY = targetPoseYRelativeToTurret - turretRelativeYVel;
+        double targetPoseRelativeToTurretVelX = targetPoseXRelativeToTurret - fieldRelTurXVel;
+        double targetPoseRelativeToTurretVelY = targetPoseYRelativeToTurret - fieldRelTurYVel;
 
-        //double angleRelativeToAjustedTarget = Math.atan2(targetPoseRelativeToTurretVelY, targetPoseRelativeToTurretVelX);
+        double angleRelativeToAjustedTarget = Math.atan2(targetPoseRelativeToTurretVelY, targetPoseRelativeToTurretVelX);
         double distanceToAdjustedTarget = Math.sqrt(Math.pow(targetPoseRelativeToTurretVelX, 2) + Math.pow(targetPoseRelativeToTurretVelY, 2));
 
-        double shooterVel = 3.25*distanceToAdjustedTarget + 49.8;//5*distanceToAdjustedTarget + 50;//distance to target in meters + 50 just because (idk I'll make a better function later)
+        double flattenedRobotVel = turretSpeed * Math.cos(angleRelativeToAjustedTarget);
+        double shooterVel = 1.15*Math.pow(distanceToAdjustedTarget, 1.04) +2*distanceToAdjustedTarget + 50;//5*distanceToAdjustedTarget + 50;//distance to target in meters + 50 just because (idk I'll make a better function later)
         double launchSpeed = 0.0754888 * Math.PI * 0.5 * shooterVel * 20/18;//Launch speed of the ball 
 
         //double flattenedX = Math.sqrt(Math.pow(targetPoseRelativeToTurretVelX, 2) + Math.pow(targetPoseRelativeToTurretVelY, 2));
@@ -174,29 +178,29 @@ public class TurretLogic {
         //SmartDashboard.putBoolean("valid lauch speed", Math.pow(launchSpeed, 4) > (-9.81 * (-9.81*(Math.pow(flattenedX, 2) + 2*flattenedY*Math.pow(launchSpeed, 4)))));
 
         double g = 9.81;
-        double a = (g*Math.pow(distanceToAdjustedTarget, 2)) / 2*Math.pow(launchSpeed, 2);
+        double a = (g*Math.pow(distanceToAdjustedTarget, 2)) / (2*Math.pow(launchSpeed, 2));
         double b = -distanceToAdjustedTarget;
         double c = flattenedY + a;
 
-        double theta = Math.atan2(-b + Math.sqrt(Math.pow(b, 2) - 4*a*c),  2*a);
+        double theta = Math.atan2(-b + Math.sqrt(Math.pow(b, 2) - 4*a*c), 2*a);
         double theta2 = Math.atan2(-b - Math.sqrt(Math.pow(b, 2) - 4*a*c),  2*a);
 
         // double aimTheta1 = Math.atan2(Math.pow(launchSpeed, 2) + Math.sqrt(Math.pow(launchSpeed, 4) - (-9.81 * (-9.81*(Math.pow(flattenedX, 2) + 2*flattenedY*Math.pow(launchSpeed, 4))))), -9.81 * flattenedX);
         // double aimTheta2 = Math.atan2(Math.pow(launchSpeed, 2) - Math.sqrt(Math.pow(launchSpeed, 4) - (-9.81 * (-9.81*(Math.pow(flattenedX, 2) + 2*flattenedY*Math.pow(launchSpeed, 4))))), -9.81 * flattenedX);
 
-        // double aimPoseFieldX = targetPoseRelativeToTurretVelX * Math.cos(SwerveSubsystem.getgyro0to360(270).getRadians()) - targetPoseRelativeToTurretVelX * Math.sin(SwerveSubsystem.getgyro0to360(270).getRadians());
-        // double aimPoseFieldY = targetPoseRelativeToTurretVelX * Math.sin(SwerveSubsystem.getgyro0to360(270).getRadians()) + targetPoseRelativeToTurretVelY * Math.cos(SwerveSubsystem.getgyro0to360(270).getRadians());
-        double aimPoseFieldX = targetPoseRelativeToTurretVelX + turretFieldPose.getX();
-        double aimPoseFieldY = targetPoseRelativeToTurretVelX + turretFieldPose.getY();
+        //double aimPoseFieldX = targetPoseRelativeToTurretVelX * Math.cos(SwerveSubsystem.getgyro0to360(270).getRadians()) - targetPoseRelativeToTurretVelX * Math.sin(SwerveSubsystem.getgyro0to360(270).getRadians());
+        //double aimPoseFieldY = targetPoseRelativeToTurretVelX * Math.sin(SwerveSubsystem.getgyro0to360(270).getRadians()) + targetPoseRelativeToTurretVelY * Math.cos(SwerveSubsystem.getgyro0to360(270).getRadians());
+        double aimPoseFieldX = turretFieldPose.getX() + targetPoseRelativeToTurretVelX;
+        double aimPoseFieldY = turretFieldPose.getY() + targetPoseRelativeToTurretVelY;
 
         SmartDashboard.putNumber("aimTheta1", theta);
         SmartDashboard.putNumber("aimTheta2", theta2);
         SwerveSubsystem.field.getObject("Jacob's AimPose").setPose(new Pose2d(aimPoseFieldX, aimPoseFieldY, new Rotation2d()));
 
         TurretAimPose returnPose = new TurretAimPose();
-        returnPose.vel = shooterVel;
+        returnPose.vel = shooterVel + 5;
         returnPose.aimPose = new Translation3d(aimPoseFieldX, aimPoseFieldY, flattenedY);
-        if(useGreater || !(theta > TurretConstants.ElevationMaxAngle.getRadians())){
+        if(useGreater && distanceToAdjustedTarget < 4){
             returnPose.elevationAngleDegrees = Math.toDegrees(theta);
         }else{
             returnPose.elevationAngleDegrees = Math.toDegrees(theta2);

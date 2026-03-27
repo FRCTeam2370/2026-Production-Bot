@@ -7,6 +7,7 @@ package frc.robot.Commands.Shooter;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.Constants.shooterConstants;
 import frc.robot.Constants.spindexerConstants;
 import frc.robot.Constants.uptakeConstants;
 import frc.robot.Subsystems.ShooterSubsystem;
@@ -44,7 +45,7 @@ public class ShootAtVelocityForTime extends Command {
     vel = aimpose.vel;
     usingLower = aimpose.usingLower;
     ShooterSubsystem.shootWithVelocity(vel);
-    if(ShooterSubsystem.getVelocity() > vel * 0.9 && TurretSubsystem.canShoot){
+    if(ShooterSubsystem.getVelocity() > vel * shooterConstants.ratioAdjustment * 0.9 && TurretSubsystem.canShoot){
       UptakeSubsystem.uptakeWithVelocity(uptakeConstants.uptakeSpeed);
       SpindexerSubsystem.spindexrWithVelocity(spindexerConstants.spindexerSpeed);
     }else{

@@ -39,7 +39,7 @@ public class PointTurretAtPointForTime extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    TurretSubsystem.aimTurretAtPoint(new Pose2d(mSwerve.getTurretPointTowardsPose(TurretSubsystem.activeAimPoint.aimPoint).aimPose.getX(), mSwerve.getTurretPointTowardsPose(TurretSubsystem.activeAimPoint.aimPoint).aimPose.getY(), new Rotation2d()));
+    TurretSubsystem.aimTurretAtPoint(new Pose2d(mSwerve.getTurretPointTowardsPose(TurretSubsystem.activeAimPoint.aimPoint).aimPose.getX(), mSwerve.getTurretPointTowardsPose(TurretSubsystem.activeAimPoint.aimPoint).aimPose.getY(), new Rotation2d()), true);
     TurretSubsystem.setElevation(mSwerve.getTurretPointTowardsPose(TurretSubsystem.activeAimPoint.aimPoint).elevationAngleDegrees + 5);
   }
 
