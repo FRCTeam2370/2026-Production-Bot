@@ -98,7 +98,7 @@ public class Constants {
 
         public static final double TurretVerticalOffset = 0.425;//meters
         public static final Rotation2d ElevationMaxAngle = Rotation2d.fromDegrees(75);//from horizontal, old: 65
-        public static final Rotation2d ElevationMinAngle = Rotation2d.fromDegrees(45);//from horizontal, old: 40
+        public static final Rotation2d ElevationMinAngle = Rotation2d.fromDegrees(50);//from horizontal, old: 40
         public static final Rotation2d TurretStartElevation = Rotation2d.fromDegrees(75);
     }
 
