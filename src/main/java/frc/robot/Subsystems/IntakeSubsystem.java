@@ -87,7 +87,7 @@ public class IntakeSubsystem extends SubsystemBase {
     intakeMotorConfig.Slot0.kP = 0.01;
     intakeMotorConfig.Slot0.kV = 0.01;
 
-    intakeMotorConfig.CurrentLimits.StatorCurrentLimit = 30;
+    intakeMotorConfig.CurrentLimits.StatorCurrentLimit = 40;
 
     intakeMotorConfig.ClosedLoopRamps.VoltageClosedLoopRampPeriod = 1;
     intakeMotorConfig.OpenLoopRamps.DutyCycleOpenLoopRampPeriod = 1;

@@ -7,6 +7,7 @@ package frc.robot;
 
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
+import com.pathplanner.lib.path.PathPlannerPath;
 
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.DataLogManager;
@@ -32,6 +33,7 @@ import frc.robot.Commands.TurretCommands.AimAtActiveAimPoint2;
 import frc.robot.Commands.TurretCommands.AimTurretAtActiveAimPoint;
 import frc.robot.Commands.TurretCommands.EnableAirStrike;
 import frc.robot.Commands.TurretCommands.PointTurretAndShootForTime;
+import frc.robot.Commands.TurretCommands.PointTurretAndShootForTime2;
 import frc.robot.Subsystems.ClimberSubsystem;
 import frc.robot.Subsystems.FieldInfo;
 import frc.robot.Subsystems.IntakeSubsystem;
@@ -77,10 +79,14 @@ public class RobotContainer {
     NamedCommands.registerCommand("Aim and Shoot For 3", new PointTurretAndShootForTime( 3, mTurretSubsystem, mSwerve, mUptakeSubsystem, mSpindexerSubsystem, mShooterSubsystem));
     NamedCommands.registerCommand("Aim and Shoot For 5", new PointTurretAndShootForTime( 5, mTurretSubsystem, mSwerve, mUptakeSubsystem, mSpindexerSubsystem, mShooterSubsystem));
     NamedCommands.registerCommand("Aim and Shoot For 9", new PointTurretAndShootForTime( 9, mTurretSubsystem, mSwerve, mUptakeSubsystem, mSpindexerSubsystem, mShooterSubsystem));
+    NamedCommands.registerCommand("2 Aim and Shoot For 3", new PointTurretAndShootForTime2( 3, mTurretSubsystem, mSwerve, mUptakeSubsystem, mSpindexerSubsystem, mShooterSubsystem));
+    NamedCommands.registerCommand("2 Aim and Shoot For 5", new PointTurretAndShootForTime2( 5, mTurretSubsystem, mSwerve, mUptakeSubsystem, mSpindexerSubsystem, mShooterSubsystem));
+    NamedCommands.registerCommand("2 Aim and Shoot For 9", new PointTurretAndShootForTime2( 9, mTurretSubsystem, mSwerve, mUptakeSubsystem, mSpindexerSubsystem, mShooterSubsystem));
     NamedCommands.registerCommand("Beach for 3 Right", new PointTurretAndShootForTime( 3, mTurretSubsystem, mSwerve, mUptakeSubsystem, mSpindexerSubsystem, mShooterSubsystem));
     NamedCommands.registerCommand("Beach for 3 Left", new PointTurretAndShootForTime( 3, mTurretSubsystem, mSwerve, mUptakeSubsystem, mSpindexerSubsystem, mShooterSubsystem));
     NamedCommands.registerCommand("Deploy Intake", new DeployIntake(Rotation2d.fromDegrees(-67).getRotations(), 80, mIntakeSubsystem, mSwerve));
     NamedCommands.registerCommand("Aim and Shoot", new PointTurretAndShootForTime( 20, mTurretSubsystem, mSwerve, mUptakeSubsystem, mSpindexerSubsystem, mShooterSubsystem));
+    NamedCommands.registerCommand("2 Aim and Shoot", new PointTurretAndShootForTime2( 20, mTurretSubsystem, mSwerve, mUptakeSubsystem, mSpindexerSubsystem, mShooterSubsystem));
     NamedCommands.registerCommand("Deploy Hintake", new DeployIntake(Rotation2d.fromDegrees(-40).getRotations(), 80, mIntakeSubsystem, mSwerve));
     NamedCommands.registerCommand("Prop Intake", new DeployIntake(Rotation2d.fromDegrees(30).getRotations(), 30, mIntakeSubsystem, mSwerve));
     NamedCommands.registerCommand("Feed Right", new PointTurretAndShootForTime( 2.5, mTurretSubsystem, mSwerve, mUptakeSubsystem, mSpindexerSubsystem, mShooterSubsystem));
@@ -95,14 +101,19 @@ public class RobotContainer {
   //JK you must test you sill goober code for shooting!
   private void configureBindings() {
     mSwerve.setDefaultCommand(new TeleopSwerve(mSwerve, ()-> -driver.getRawAxis(0), ()-> driver.getRawAxis(1), ()-> driver.getRawAxis(4), ()-> false));
-    mTurretSubsystem.setDefaultCommand(new AimTurretAtActiveAimPoint(mSwerve, mTurretSubsystem, ()-> SwerveSubsystem.shouldAutoTurret));
+    mTurretSubsystem.setDefaultCommand(new AimAtActiveAimPoint2(mTurretSubsystem, mSwerve, ()-> SwerveSubsystem.shouldAutoTurret));
 
-    driver.b().toggleOnTrue(new AimAtActiveAimPoint2(mTurretSubsystem, mSwerve, ()-> true));
+    driver.b().toggleOnFalse(new ToggleTurretFeatures());
 
     driver.povDown().toggleOnTrue(new XMode(mSwerve));
 
     driver.back().onTrue(new ResetGyro(mSwerve));
 
+    try{
+      driver.leftStick().toggleOnTrue(mSwerve.followPath(PathPlannerPath.fromPathFile("Tele Sweep Clockwise")));
+    }catch(Exception e){
+
+    }
     driver.rightTrigger().toggleOnTrue(new ShootAtVelocity(mShooterSubsystem, mUptakeSubsystem, mSpindexerSubsystem, mSwerve, mFieldInfo));
     driver.leftBumper().toggleOnTrue(new SetIntakePosAndSpeed(Rotation2d.fromDegrees(-67).getRotations(), 60, mIntakeSubsystem, mSwerve));
     driver.povRight().toggleOnTrue(new SetIntakePosAndSpeed(Rotation2d.fromDegrees(-40).getRotations(), 60, mIntakeSubsystem, mSwerve));
@@ -111,7 +122,7 @@ public class RobotContainer {
     //driver.leftTrigger().whileTrue(mSwerve.driveThroughBalls());
     driver.povUp().whileTrue(mSwerve.driveToClosestBall(()-> mSwerve.getClosestBall()));
     driver.povLeft().whileTrue(mSwerve.PathfindToPose(()-> FieldInfo.fieldPoints.ClimbLeft));
-    driver.leftTrigger().whileTrue(new IntakeControl(mIntakeSubsystem, -30));
+    //driver.leftTrigger().whileTrue(new IntakeControl(mIntakeSubsystem, -30));
 
     // operator.rightBumper().whileTrue(new ClimbForPercent(30, mClimberSubsystem));
     // operator.leftBumper().whileTrue(new ClimbForPercent(-30, mClimberSubsystem));

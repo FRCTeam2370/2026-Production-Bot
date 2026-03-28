@@ -4,8 +4,11 @@
 
 package frc.robot.Commands.Intake;
 
+import com.pathplanner.lib.config.RobotConfig;
+
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.RobotContainer;
 import frc.robot.Constants.SwerveConstants;
 import frc.robot.Subsystems.IntakeSubsystem;
 import frc.robot.Subsystems.SwerveSubsystem;
@@ -30,9 +33,14 @@ public class SetIntakePosAndSpeed extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    velocityOffset = Math.abs(mSwerve.getRobotRelativeSpeeds().vxMetersPerSecond / SwerveConstants.maxSpeed) * (100 - initialTargetSpeed);
+    velocityOffset = mSwerve.getRobotRelativeSpeeds().vxMetersPerSecond / SwerveConstants.maxSpeed * (100 - initialTargetSpeed);
     IntakeSubsystem.setIntakePos(pos);
-    IntakeSubsystem.intakeWithVelocity(initialTargetSpeed + velocityOffset);
+    if(RobotContainer.driver.leftTrigger().getAsBoolean()){
+      IntakeSubsystem.intakeWithVelocity(-initialTargetSpeed);
+    }else{
+      IntakeSubsystem.intakeWithVelocity(initialTargetSpeed + velocityOffset);
+    }
+    
   }
 
   // Called once the command ends or is interrupted.

@@ -26,6 +26,7 @@ public class TeleopSwerve extends Command {
   private SwerveSubsystem mSwerve;
   private DoubleSupplier xSup, ySup, rotSup;
   private BooleanSupplier robotCentricSup;
+  private double shootLimiter = 1;
   private SlewRateLimiter xLimiter = new SlewRateLimiter(3);
   private SlewRateLimiter yLimiter = new SlewRateLimiter(3);
   private SlewRateLimiter rotLimiter = new SlewRateLimiter(3);
@@ -58,13 +59,15 @@ public class TeleopSwerve extends Command {
         double totalDistanceToTarget = Math.sqrt(Math.pow(xDistanceToTarget, 2) + Math.pow(yDistanceToTarget, 2));
         double xVelocity = yVal * Constants.SwerveConstants.maxSpeed;
         double yVelocity = xVal * Constants.SwerveConstants.maxSpeed;
-
-        if((xVelocity * xDistanceToTarget) > 0){
-          yVal /= Math.abs(totalDistanceToTarget/yDistanceToTarget);
-        }
-        if((yVelocity * yDistanceToTarget) < 0){
-          xVal /= Math.abs(totalDistanceToTarget/xDistanceToTarget);
-        }
+        shootLimiter = 0.7;
+        // if((xVelocity * xDistanceToTarget) > 0){
+        //   yVal /= Math.abs(totalDistanceToTarget/yDistanceToTarget);
+        // }
+        // if((yVelocity * yDistanceToTarget) < 0){
+        //   xVal /= Math.abs(totalDistanceToTarget/xDistanceToTarget);
+        // }
+      }else{
+        shootLimiter = 1;
       }
 
       xVal *= SwerveSubsystem.color.isPresent() && SwerveSubsystem.color.get() == Alliance.Blue ? -1 : 1;
@@ -74,7 +77,7 @@ public class TeleopSwerve extends Command {
         xVal = SwerveSubsystem.Clamp(xVal - SwerveSubsystem.getTrenchOffsetY(), -1, 1);
       }
 
-      mSwerve.drive(new Translation2d(xLimiter.calculate(xVal), yLimiter.calculate(yVal)).times(SwerveConstants.maxSpeed), rotLimiter.calculate(rotVal * 0.4), !robotCentricSup.getAsBoolean(), true);
+      mSwerve.drive(new Translation2d(xLimiter.calculate(xVal), yLimiter.calculate(yVal)).times(SwerveConstants.maxSpeed * shootLimiter), rotLimiter.calculate(rotVal * 0.4 * shootLimiter), !robotCentricSup.getAsBoolean(), true);
     }
   }
 }

@@ -35,11 +35,12 @@ public class Robot extends TimedRobot {
 
   @Override
   public void disabledPeriodic() {
-    if(ObjectDetection.coralConnected){
-      LEDSubsystem.mLEDState = LEDState.Coral;
-    }else{
-      LEDSubsystem.mLEDState = LEDState.Idle;  
-    }
+    // if(ObjectDetection.coralConnected){
+    //   LEDSubsystem.mLEDState = LEDState.Coral;
+    // }else{
+    //   LEDSubsystem.mLEDState = LEDState.Idle;  
+    // }
+    LEDSubsystem.mLEDState = LEDState.Idle;
   }
 
   @Override

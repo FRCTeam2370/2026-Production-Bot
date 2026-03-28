@@ -69,6 +69,7 @@ public class SwerveModule {
         turnMotorConfig.Slot0.kD = Constants.SwerveConstants.TurnkD;
 
         driveMotorConfig.CurrentLimits.StatorCurrentLimit = SwerveConstants.CurrentLimit;
+        turnMotorConfig.CurrentLimits.StatorCurrentLimit = 40;
 
         turnMotorConfig.Feedback.SensorToMechanismRatio = (Constants.SwerveConstants.RTurnRatio);//turn motor to rotor raio
 

@@ -5,8 +5,9 @@
   "pathFolders": [
     "Left Paths",
     "Middle Paths",
-    "Tests",
-    "Right Paths"
+    "TelePaths",
+    "Right Paths",
+    "Tests"
   ],
   "autoFolders": [
     "Left Autos",

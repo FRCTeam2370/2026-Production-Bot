@@ -44,7 +44,7 @@ public class Constants {
   public static class spindexerConstants{
     public static final int spindexerMotorID = 5;
 
-    public static final double spindexerSpeed = 90;
+    public static final double spindexerSpeed = 85;
   }
 
   public static class intakeConstants{
@@ -98,7 +98,7 @@ public class Constants {
 
         public static final double TurretVerticalOffset = 0.425;//meters
         public static final Rotation2d ElevationMaxAngle = Rotation2d.fromDegrees(75);//from horizontal, old: 65
-        public static final Rotation2d ElevationMinAngle = Rotation2d.fromDegrees(50);//from horizontal, old: 40
+        public static final Rotation2d ElevationMinAngle = Rotation2d.fromDegrees(52);//Should be 50 but it screams to I changed it a little //from horizontal, old: 40
         public static final Rotation2d TurretStartElevation = Rotation2d.fromDegrees(75);
     }
 

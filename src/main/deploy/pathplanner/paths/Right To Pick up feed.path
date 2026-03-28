@@ -40,7 +40,7 @@
         "y": 2.005621236723269
       },
       "nextControl": {
-        "x": 0.8123029344878728,
+        "x": 0.8123029344878729,
         "y": 2.4986592960209193
       },
       "isLocked": false,
@@ -96,13 +96,13 @@
   "pointTowardsZones": [],
   "eventMarkers": [
     {
-      "name": "Aim and Shoot",
+      "name": "2 Aim and Shoot",
       "waypointRelativePos": 0,
       "endWaypointRelativePos": null,
       "command": {
         "type": "named",
         "data": {
-          "name": "Aim and Shoot"
+          "name": "2 Aim and Shoot"
         }
       }
     }

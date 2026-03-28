@@ -207,7 +207,7 @@ public class TurretLogic {
         TurretAimPose returnPose = new TurretAimPose();
         returnPose.vel = shooterVel;
         returnPose.aimPose = new Translation3d(aimPoseFieldX, aimPoseFieldY, flattenedY);
-        if(useGreater && shooterVel < 90 && distanceToAdjustedTarget <= 5.1){
+        if(useGreater && shooterVel < 90){
             returnPose.elevationAngleDegrees = Math.toDegrees(theta);
         }else{
             returnPose.elevationAngleDegrees = Math.toDegrees(theta2);

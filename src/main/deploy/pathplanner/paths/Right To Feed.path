@@ -175,13 +175,13 @@
       }
     },
     {
-      "name": "Aim and Shoot For 9",
+      "name": "2 Aim and Shoot For 9",
       "waypointRelativePos": 1.2856178257933764,
       "endWaypointRelativePos": null,
       "command": {
         "type": "named",
         "data": {
-          "name": "Aim and Shoot For 9"
+          "name": "2 Aim and Shoot For 9"
         }
       }
     }

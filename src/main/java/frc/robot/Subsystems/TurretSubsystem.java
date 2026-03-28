@@ -238,7 +238,7 @@ public class TurretSubsystem extends SubsystemBase {
     turretElevationMotorConfig.MotionMagic.MotionMagicAcceleration = 300;
     turretElevationMotorConfig.MotionMagic.MotionMagicCruiseVelocity = 240;
 
-    turretElevationMotorConfig.CurrentLimits.StatorCurrentLimit = 40;
+    turretElevationMotorConfig.CurrentLimits.StatorCurrentLimit = 30;
 
     elevationMotor.getConfigurator().apply(turretElevationMotorConfig);
   }
