@@ -32,7 +32,7 @@ public class Constants {
 
     public static final double velocityOffset = 2.5;
 
-    public static final double ratioAdjustment = 0.7;
+    public static final double ratioAdjustment = 0.8;
   }
 
   public static class uptakeConstants{
@@ -44,7 +44,7 @@ public class Constants {
   public static class spindexerConstants{
     public static final int spindexerMotorID = 5;
 
-    public static final double spindexerSpeed = 100;
+    public static final double spindexerSpeed = 90;
   }
 
   public static class intakeConstants{

@@ -80,16 +80,16 @@
     },
     {
       "anchor": {
-        "x": 6.80793152639087,
-        "y": 0.6774179743223976
+        "x": 6.794992867332382,
+        "y": 0.8068045649072757
       },
       "prevControl": {
-        "x": 7.291803240285199,
-        "y": 0.7336821271008079
+        "x": 7.228561384928439,
+        "y": 1.0288762446515973
       },
       "nextControl": {
-        "x": 6.251569186875892,
-        "y": 0.612724679029958
+        "x": 6.264507845934379,
+        "y": 0.5350927246790309
       },
       "isLocked": false,
       "linkedName": null
@@ -135,14 +135,14 @@
     },
     {
       "waypointRelativePos": 3.134328358208946,
-      "rotationDegrees": -162.8018981943953
+      "rotationDegrees": -98.36708958927535
     },
     {
       "waypointRelativePos": 3.7164179104478556,
       "rotationDegrees": -108.46961397171785
     },
     {
-      "waypointRelativePos": 5.194029850746198,
+      "waypointRelativePos": 4.820895522388081,
       "rotationDegrees": 180.0
     }
   ],
@@ -152,8 +152,8 @@
       "minWaypointRelativePos": 1.2667116812964216,
       "maxWaypointRelativePos": 3.76232275489535,
       "constraints": {
-        "maxVelocity": 1.0,
-        "maxAcceleration": 1.0,
+        "maxVelocity": 0.5,
+        "maxAcceleration": 0.5,
         "maxAngularVelocity": 540.0,
         "maxAngularAcceleration": 720.0,
         "nominalVoltage": 12.0,
@@ -175,13 +175,13 @@
       }
     },
     {
-      "name": "Aim and Shoot For 5",
+      "name": "Aim and Shoot For 9",
       "waypointRelativePos": 1.2856178257933764,
       "endWaypointRelativePos": null,
       "command": {
         "type": "named",
         "data": {
-          "name": "Aim and Shoot For 5"
+          "name": "Aim and Shoot For 9"
         }
       }
     }

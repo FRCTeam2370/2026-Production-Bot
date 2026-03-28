@@ -32,7 +32,7 @@ public class ShooterSubsystem extends SubsystemBase {
 
   public static void shootWithVelocity(double speed) {
     if (speed != 0) {
-      shooterMotorOne.setControl(shooterVelocityDutyCycle.withVelocity(speed * shooterConstants.ratioAdjustment));
+      shooterMotorOne.setControl(shooterVelocityDutyCycle.withVelocity(speed /* shooterConstants.ratioAdjustment*/));
     } else {
       shooterMotorOne.set(speed);
     }
