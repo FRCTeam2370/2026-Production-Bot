@@ -66,8 +66,8 @@ public class ShooterSubsystem extends SubsystemBase {
     shooterMotorOneConfig.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
     shooterMotorTwoConfig.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
 
-    shooterMotorOneConfig.Slot0.kV = 0.035;
-    shooterMotorTwoConfig.Slot0.kV = 0.035;
+    shooterMotorOneConfig.Slot0.kV = 0.01;//0.035;
+    shooterMotorTwoConfig.Slot0.kV = 0.01;//0.035;
 
     shooterMotorOneConfig.Slot0.kP = 0.0975;
     shooterMotorTwoConfig.Slot0.kP = 0.0975;
