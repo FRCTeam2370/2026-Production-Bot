@@ -91,8 +91,8 @@ public class TurretLogic {
         double flattenedRobotVel = /*robotSpeed*/turretSpeed * Math.cos(angleRobotVelocityToTarget);
         double shooterVel = (5.769 * distanceToTarget + (/*robotSpeed*/ turretSpeed*0.5)) + 35.92 + (9.06 * -flattenedRobotVel) + (0.964 * Math.pow(flattenedRobotVel,2)) + (TurretSubsystem.activeAimPoint.aimPoint == FieldInfo.fieldPoints.PassPose1 || TurretSubsystem.activeAimPoint.aimPoint == FieldInfo.fieldPoints.PassPose2 ? 0 : 3) /*constant*/;//robot speed added
         //double shooterVel = (23.66 + 6.13*distanceToTarget - 0.151*Math.pow(distanceToTarget, 2) - 8*flattenedRobotVel + 0.634*Math.pow(flattenedRobotVel, 2));
-        //double launchSpeed = 0.0754888 * Math.PI * 0.5 * shooterVel * 20/18;
-        double launchSpeed = 0.08255 * Math.PI * 0.5 * shooterVel * 20/18;
+        double launchSpeed = 0.0754888 * Math.PI * 0.5 * shooterVel * 20/18;
+        //double launchSpeed = 0.08255 * Math.PI * 0.5 * shooterVel * 20/18;
         double flattenedInitialVel = Math.sqrt(Math.pow(launchSpeed, 2) - Math.pow(/*robotSpeed*/turretSpeed * Math.sin(angleRobotVelocityToTarget), 2));
         
         
@@ -172,7 +172,7 @@ public class TurretLogic {
 
         double flattenedRobotVel = turretSpeed * Math.cos(angleRelativeToAjustedTarget);
         double shooterVel;
-        
+
         shooterVel = 0.5*Math.pow(distanceToAdjustedTarget, 1.8) + 47.5;//- 2*Math.abs(Math.cos(Math.PI*distanceToAdjustedTarget/15));//5*distanceToAdjustedTarget + 50;//distance to target in meters + 50 just because (idk I'll make a better function later)
          
         //double launchSpeed = 0.0754888 * Math.PI *0.5* shooterVel * 20/18;//Launch speed of the ball 
