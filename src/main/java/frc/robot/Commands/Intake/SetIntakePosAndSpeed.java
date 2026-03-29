@@ -7,6 +7,7 @@ package frc.robot.Commands.Intake;
 import com.pathplanner.lib.config.RobotConfig;
 
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.RobotContainer;
 import frc.robot.Constants.SwerveConstants;
@@ -28,7 +29,8 @@ public class SetIntakePosAndSpeed extends Command {
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
@@ -40,7 +42,6 @@ public class SetIntakePosAndSpeed extends Command {
     }else{
       IntakeSubsystem.intakeWithVelocity(initialTargetSpeed + velocityOffset);
     }
-    
   }
 
   // Called once the command ends or is interrupted.

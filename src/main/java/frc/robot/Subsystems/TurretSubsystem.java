@@ -89,7 +89,7 @@ public class TurretSubsystem extends SubsystemBase {
   }
 
   private void HandleElevationLimits(Pose2d turretPose){
-    if(turretPose.getX() < Red.neutralZoneEnterX + 0.2 && turretPose.getX() > Red.neutralZoneEnterX - 0.2){
+    if(turretPose.getX() < Red.neutralZoneEnterX + 0.9 && turretPose.getX() > Red.neutralZoneEnterX - 0.2 || turretPose.getX() < Blue.neutralZoneEnterX + 0.9 && turretPose.getX() > Blue.neutralZoneEnterX - 0.2){
       canElevate = false;
     }else{
       canElevate = true;

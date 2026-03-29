@@ -13,6 +13,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.GenericHID;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -109,11 +110,8 @@ public class RobotContainer {
 
     driver.back().onTrue(new ResetGyro(mSwerve));
 
-    try{
-      driver.leftStick().toggleOnTrue(mSwerve.followPath(PathPlannerPath.fromPathFile("Tele Sweep Clockwise")));
-    }catch(Exception e){
-
-    }
+    driver.leftStick().toggleOnTrue(mSwerve.SweepAllianceWall());
+    
     driver.rightTrigger().toggleOnTrue(new ShootAtVelocity(mShooterSubsystem, mUptakeSubsystem, mSpindexerSubsystem, mSwerve, mFieldInfo));
     driver.leftBumper().toggleOnTrue(new SetIntakePosAndSpeed(Rotation2d.fromDegrees(-67).getRotations(), 60, mIntakeSubsystem, mSwerve));
     driver.povRight().toggleOnTrue(new SetIntakePosAndSpeed(Rotation2d.fromDegrees(-40).getRotations(), 60, mIntakeSubsystem, mSwerve));

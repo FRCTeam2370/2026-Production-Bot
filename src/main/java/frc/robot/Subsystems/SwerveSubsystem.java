@@ -6,11 +6,15 @@ package frc.robot.Subsystems;
 
 import static edu.wpi.first.units.Units.Rotation;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.function.Supplier;
+
+import org.json.simple.parser.ParseException;
+import org.photonvision.PhotonPoseEstimator.PoseStrategy;
 
 // import org.json.simple.parser.ParseException;
 
@@ -22,10 +26,14 @@ import com.pathplanner.lib.config.PIDConstants;
 import com.pathplanner.lib.config.RobotConfig;
 import com.pathplanner.lib.controllers.PPHolonomicDriveController;
 import com.pathplanner.lib.path.GoalEndState;
+import com.pathplanner.lib.path.PathConstraints;
 import com.pathplanner.lib.path.PathPlannerPath;
+import com.pathplanner.lib.path.PathPoint;
 import com.pathplanner.lib.path.PointTowardsZone;
 import com.pathplanner.lib.path.RotationTarget;
 import com.pathplanner.lib.path.Waypoint;
+import com.pathplanner.lib.trajectory.PathPlannerTrajectory;
+import com.pathplanner.lib.util.FileVersionException;
 import com.pathplanner.lib.util.PathPlannerLogging;
 //import com.revrobotics.spark.SparkLowLevel.MotorType;
 
@@ -55,6 +63,7 @@ import frc.robot.Constants;
 import frc.robot.RobotContainer;
 import frc.robot.Constants.FieldConstants;
 import frc.robot.Constants.FieldConstants.Red;
+import frc.robot.Subsystems.TurretSubsystem.ActiveAimPose;
 import frc.robot.Constants.SwerveConstants;
 import frc.robot.Constants.TurretConstants;
 import frc.robot.Constants.VisionConstants;
@@ -133,6 +142,8 @@ public class SwerveSubsystem extends SubsystemBase {
     SmartDashboard.putNumber("Robot Rotational Velocity", gyro.getAngularVelocityZWorld().getValueAsDouble());
     SmartDashboard.putBoolean("Auto Drive Features", shouldAutoTrench);
     SmartDashboard.putBoolean("Auto Turret Aiming", shouldAutoTurret);
+
+    SmartDashboard.putString("Path", getWallSweep().name);
     // This method will be called once per scheduler run
     // SmartDashboard.putNumber("Mod 0 CAN Pose", Rotation2d.fromDegrees(mSwerveModules[0].getCANcoder().getDegrees()).getDegrees());
     // SmartDashboard.putNumber("Mod 1 CAN Pose", Rotation2d.fromDegrees(mSwerveModules[1].getCANcoder().getDegrees()).getDegrees());
@@ -370,6 +381,33 @@ public class SwerveSubsystem extends SubsystemBase {
     );
   }
 
+  public static PathPlannerPath getWallSweep(){
+    try{
+      PathPlannerPath path;
+      if(poseEstimator.getEstimatedPosition().getX() < 7.5){
+        if(poseEstimator.getEstimatedPosition().getY() > 4){
+          path = PathPlannerPath.fromPathFile("Tele Sweep Counter Clockwise");
+        }else{
+          path = PathPlannerPath.fromPathFile("Tele Sweep Clockwise");
+        }
+      }else{
+        if(poseEstimator.getEstimatedPosition().getY() > 4){
+          path = PathPlannerPath.fromPathFile("Tele Sweep Clockwise");
+        }else{
+          path = PathPlannerPath.fromPathFile("Tele Sweep Counter Clockwise");
+        }
+      }
+      return path;
+    }catch(Exception e){
+      return null;
+    }
+    
+  }
+
+  public Command SweepAllianceWall(){
+    return new DeferredCommand(()-> AutoBuilder.pathfindThenFollowPath(getWallSweep(), SwerveConstants.telePathConstraints), Set.of(this));
+  }
+
   public Command PathfindToPose(Supplier<Pose2d> poseSupplier){
     return new DeferredCommand(()-> AutoBuilder.pathfindToPose(poseSupplier.get(), Constants.SwerveConstants.telePathConstraints), Set.of(this));
   }
@@ -557,6 +595,10 @@ public class SwerveSubsystem extends SubsystemBase {
 
   public TurretAimPose getTurretPointTowardsPoseJacobMethod(Translation3d targetPose){
     TurretAimPose turretAimPose = turretLogic.jacobsStupidOne(targetPose, true);
+
+    if(TurretSubsystem.activeAimPoint.aimPoint != FieldInfo.fieldPoints.HubPose){
+      turretAimPose = turretLogic.jacobsStupidOne(targetPose, false);
+    }
     
     SmartDashboard.putNumber("Raw Calculated Elevation Angle", turretAimPose.elevationAngleDegrees);
     SmartDashboard.putNumber("Calculated Velocity", turretAimPose.vel);

@@ -4,8 +4,10 @@
 
 package frc.robot.Commands.Shooter;
 
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.Constants.FieldConstants.Red;
 import frc.robot.Constants.shooterConstants;
 import frc.robot.Constants.spindexerConstants;
@@ -24,6 +26,7 @@ public class ShootAtVelocity extends Command {
   boolean usingLower;
   SwerveSubsystem mSwerve;
   FieldInfo mFieldInfo;
+  boolean isJamed = false;
   /** Creates a new ShootAtVeolcity. */
   public ShootAtVelocity(ShooterSubsystem mShooterSubsystem, UptakeSubsystem mUptakeSubsystem, SpindexerSubsystem mSpindexerSubsystem, SwerveSubsystem mSwerve, FieldInfo mFieldInfo) {
     // Use addRequirements() here to declare subsystem dependencies.
@@ -46,8 +49,8 @@ public class ShootAtVelocity extends Command {
     usingLower = aimpose.usingLower;
     ShooterSubsystem.shootWithVelocity(vel);
     if((ShooterSubsystem.getVelocity() > (vel*shooterConstants.ratioAdjustment * 0.9) || ShooterSubsystem.getVelocity() > 90) && TurretSubsystem.canShoot){
-      UptakeSubsystem.uptakeWithVelocity(uptakeConstants.uptakeSpeed);
-      SpindexerSubsystem.spindexrWithVelocity(spindexerConstants.spindexerSpeed);
+        SpindexerSubsystem.spindexrWithVelocity(spindexerConstants.spindexerSpeed);
+        UptakeSubsystem.uptakeWithVelocity(uptakeConstants.uptakeSpeed);
     }else{
       UptakeSubsystem.uptakeWithVelocity(-20);
       SpindexerSubsystem.spindexrWithVelocity(0);

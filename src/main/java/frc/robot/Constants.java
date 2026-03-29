@@ -98,7 +98,7 @@ public class Constants {
 
         public static final double TurretVerticalOffset = 0.425;//meters
         public static final Rotation2d ElevationMaxAngle = Rotation2d.fromDegrees(75);//from horizontal, old: 65
-        public static final Rotation2d ElevationMinAngle = Rotation2d.fromDegrees(52);//Should be 50 but it screams to I changed it a little //from horizontal, old: 40
+        public static final Rotation2d ElevationMinAngle = Rotation2d.fromDegrees(51.5);//Should be 50 but it screams to I changed it a little //from horizontal, old: 40
         public static final Rotation2d TurretStartElevation = Rotation2d.fromDegrees(75);
     }
 
@@ -111,8 +111,8 @@ public class Constants {
         public static final Translation3d HubFieldPoseRed = new Translation3d(11.925, 4.025, 1.8288);
         public static final double neutralZoneEnterX = 12;//Meters
 
-        public static final Translation3d PassPose1 = new Translation3d(14, 1.5, 0);//Left
-        public static final Translation3d PassPose2 = new Translation3d(14, 6.5, 0);//Right
+        public static final Translation3d PassPose1 = new Translation3d(14, 1.75, 0);//Left
+        public static final Translation3d PassPose2 = new Translation3d(14, 6.25, 0);//Right
 
         public static final Pose2d ClimbLeft = new Pose2d(15.29, 3.456, Rotation2d.fromDegrees(-90));
         public static final Pose2d ClimbRight = new Pose2d(15.419, 5.36, Rotation2d.fromDegrees(90));
@@ -126,8 +126,8 @@ public class Constants {
 
       public static class Blue{
         public static final Translation3d HubFieldPoseBlue = new Translation3d(4.625,4.025, 1.8288);  
-        public static final Translation3d PassPose1 = new Translation3d(2, 1.5, 0);
-        public static final Translation3d PassPose2 = new Translation3d(2, 6.5, 0);
+        public static final Translation3d PassPose1 = new Translation3d(2, 1.75, 0);
+        public static final Translation3d PassPose2 = new Translation3d(2, 6.25, 0);
 
         public static final double neutralZoneEnterX = 4.2;
 

@@ -159,13 +159,13 @@
       }
     },
     {
-      "name": "Aim and Shoot",
-      "waypointRelativePos": 3.4841323430114652,
+      "name": "2 Aim and Shoot",
+      "waypointRelativePos": 3.7110060769749955,
       "endWaypointRelativePos": null,
       "command": {
         "type": "named",
         "data": {
-          "name": "Aim and Shoot"
+          "name": "2 Aim and Shoot"
         }
       }
     }
