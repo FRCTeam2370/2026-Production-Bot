@@ -30,11 +30,13 @@ import frc.robot.Commands.Intake.DeployIntake;
 import frc.robot.Commands.Intake.IntakeControl;
 import frc.robot.Commands.Intake.SetIntakePosAndSpeed;
 import frc.robot.Commands.Shooter.ShootAtVelocity;
+import frc.robot.Commands.Shooter.SimpleShootAtVelocity;
 import frc.robot.Commands.TurretCommands.AimAtActiveAimPoint2;
 import frc.robot.Commands.TurretCommands.AimTurretAtActiveAimPoint;
 import frc.robot.Commands.TurretCommands.EnableAirStrike;
 import frc.robot.Commands.TurretCommands.PointTurretAndShootForTime;
 import frc.robot.Commands.TurretCommands.PointTurretAndShootForTime2;
+import frc.robot.Commands.TurretCommands.ZeroTurret;
 import frc.robot.Subsystems.ClimberSubsystem;
 import frc.robot.Subsystems.FieldInfo;
 import frc.robot.Subsystems.IntakeSubsystem;
@@ -106,11 +108,12 @@ public class RobotContainer {
 
     driver.b().toggleOnFalse(new ToggleTurretFeatures());
 
-    driver.povDown().toggleOnTrue(new XMode(mSwerve));
+    driver.x().toggleOnTrue(new XMode(mSwerve));
 
     driver.back().onTrue(new ResetGyro(mSwerve));
 
     driver.leftStick().toggleOnTrue(mSwerve.SweepAllianceWall());
+    driver.leftTrigger().whileTrue(new SimpleShootAtVelocity(mShooterSubsystem, -30));
     
     driver.rightTrigger().toggleOnTrue(new ShootAtVelocity(mShooterSubsystem, mUptakeSubsystem, mSpindexerSubsystem, mSwerve, mFieldInfo));
     driver.leftBumper().toggleOnTrue(new SetIntakePosAndSpeed(Rotation2d.fromDegrees(-67).getRotations(), 60, mIntakeSubsystem, mSwerve));
@@ -131,8 +134,9 @@ public class RobotContainer {
     // operator.y().onTrue(new EnableAirStrike(true));
     // operator.povDown().onTrue(new EnableAirStrike(false));
 
-    operator.a().toggleOnTrue(new ToggleDriveFeatures());
+    operator.y().toggleOnTrue(new ToggleDriveFeatures());
     operator.b().toggleOnFalse(new ToggleTurretFeatures());
+    operator.x().toggleOnTrue(new ZeroTurret());
   }
 
   public Command getAutonomousCommand() {

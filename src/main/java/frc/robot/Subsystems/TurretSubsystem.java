@@ -89,7 +89,7 @@ public class TurretSubsystem extends SubsystemBase {
   }
 
   private void HandleElevationLimits(Pose2d turretPose){
-    if(turretPose.getX() < Red.neutralZoneEnterX + 0.9 && turretPose.getX() > Red.neutralZoneEnterX - 0.2 || turretPose.getX() < Blue.neutralZoneEnterX + 0.9 && turretPose.getX() > Blue.neutralZoneEnterX - 0.2){
+    if(turretPose.getX() < Red.neutralZoneEnterX + 0.2 && turretPose.getX() > Red.neutralZoneEnterX - 0.2 || turretPose.getX() < Blue.neutralZoneEnterX + 0.2 && turretPose.getX() > Blue.neutralZoneEnterX - 0.2){
       canElevate = false;
     }else{
       canElevate = true;
@@ -199,11 +199,15 @@ public class TurretSubsystem extends SubsystemBase {
 
   private static void configTurretCANCoder(){
     turretCANCoderConfig.MagnetSensor.AbsoluteSensorDiscontinuityPoint = 0.5;
-    turretCANCoderConfig.MagnetSensor.MagnetOffset = -0.247802734375;
+    turretCANCoderConfig.MagnetSensor.MagnetOffset = -0.030029296875;
 
     turretCANcoder.getConfigurator().apply(turretCANCoderConfig);
   }
 
+  public static void resetTurret(){
+    turretRotationMotor.setPosition(turretRotationsToKraken(TurretConstants.TurretCableChainPoint.getRotations() - TurretConstants.TurretStartOffset.getRotations()) + ((turretCANcoder.getAbsolutePosition().getValueAsDouble() /*- TurretConstants.CANcoderOffset.getRotations()*/) * TurretConstants.encoderRatio));
+  }
+  
   private static void configTurret(){
     turretRotationMotor.setNeutralMode(NeutralModeValue.Coast);
     turretRotationMotor.setPosition(turretRotationsToKraken(TurretConstants.TurretCableChainPoint.getRotations() - TurretConstants.TurretStartOffset.getRotations()) + ((turretCANcoder.getAbsolutePosition().getValueAsDouble() /*- TurretConstants.CANcoderOffset.getRotations()*/) * TurretConstants.encoderRatio));

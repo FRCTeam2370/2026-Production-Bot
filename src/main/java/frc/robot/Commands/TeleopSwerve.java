@@ -27,9 +27,9 @@ public class TeleopSwerve extends Command {
   private DoubleSupplier xSup, ySup, rotSup;
   private BooleanSupplier robotCentricSup;
   private double shootLimiter = 1;
-  private SlewRateLimiter xLimiter = new SlewRateLimiter(3);
-  private SlewRateLimiter yLimiter = new SlewRateLimiter(3);
-  private SlewRateLimiter rotLimiter = new SlewRateLimiter(3);
+  private SlewRateLimiter xLimiter = new SlewRateLimiter(2.5);
+  private SlewRateLimiter yLimiter = new SlewRateLimiter(2.5);
+  private SlewRateLimiter rotLimiter = new SlewRateLimiter(2.5);
   /** Creates a new TeleopSwerve. */
   public TeleopSwerve(SwerveSubsystem mSwerve, DoubleSupplier xSup, DoubleSupplier ySup, DoubleSupplier rotSup, BooleanSupplier robotCentricSup) {
     // Use addRequirements() here to declare subsystem dependencies.
@@ -49,9 +49,9 @@ public class TeleopSwerve extends Command {
     double yVal = Math.abs(ySup.getAsDouble()) < SwerveConstants.deadband ? 0 : ySup.getAsDouble();
     double rotVal = Math.abs(rotSup.getAsDouble()) < SwerveConstants.deadband ? 0 : rotSup.getAsDouble();
 
-    if(xVal == 0 && yVal == 0 && rotVal == 0){
-      mSwerve.xMode();
-    }else{
+    // if(xVal == 0 && yVal == 0 && rotVal == 0){
+    //   //mSwerve.xMode();
+    // }else{
       if(TurretSubsystem.isShooting && TurretSubsystem.activeAimPoint.aimPoint == FieldInfo.fieldPoints.HubPose){
         ActiveAimPose pose = TurretSubsystem.activeAimPoint;
         double xDistanceToTarget = pose.aimPoint.getX() - SwerveSubsystem.poseEstimator.getEstimatedPosition().getX();
@@ -78,6 +78,6 @@ public class TeleopSwerve extends Command {
       }
 
       mSwerve.drive(new Translation2d(xLimiter.calculate(xVal), yLimiter.calculate(yVal)).times(SwerveConstants.maxSpeed * shootLimiter), rotLimiter.calculate(rotVal * 0.4 * shootLimiter), !robotCentricSup.getAsBoolean(), true);
-    }
+    // }
   }
 }
