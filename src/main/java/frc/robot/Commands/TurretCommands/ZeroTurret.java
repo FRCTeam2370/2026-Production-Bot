@@ -13,6 +13,7 @@ import frc.robot.Subsystems.TurretSubsystem;
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class ZeroTurret extends Command {
   Boolean isDone = false;
+  double startPose;
   /** Creates a new ZeroTurret. */
   public ZeroTurret() {
     // Use addRequirements() here to declare subsystem dependencies.
@@ -21,6 +22,7 @@ public class ZeroTurret extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    startPose = TurretSubsystem.getTurretRotation().getDegrees();
     isDone = false;
   }
 
@@ -28,10 +30,12 @@ public class ZeroTurret extends Command {
   @Override
   public void execute() {
     if(RobotContainer.operator.leftTrigger().getAsBoolean()){
-      TurretSubsystem.aimTurretAtDegree(TurretSubsystem.getTurretRotation().getDegrees() - 1);
+      startPose -= 1;
     }else if(RobotContainer.operator.rightTrigger().getAsBoolean()){
-      TurretSubsystem.aimTurretAtDegree(TurretSubsystem.getTurretRotation().getDegrees() + 1);
+      startPose += 1;
     }
+    
+    TurretSubsystem.aimTurretAtDegree(startPose);
 
     if(RobotContainer.operator.a().getAsBoolean()){
       TurretSubsystem.resetTurret();
