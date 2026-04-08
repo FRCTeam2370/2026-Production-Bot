@@ -60,15 +60,15 @@ public class RobotContainer {
   private final ObjectDetection mObjectDetection = new ObjectDetection();
   private final SwerveSubsystem mSwerve = new SwerveSubsystem(mObjectDetection);
   private final FieldInfo mFieldInfo = new FieldInfo();
-  private final TurretSubsystem mTurretSubsystem = new TurretSubsystem();
+  private final TurretSubsystem mTurretSubsystem = new TurretSubsystem(mSwerve);
   private final IntakeSubsystem mIntakeSubsystem = new IntakeSubsystem();
   private final SpindexerSubsystem mSpindexerSubsystem = new SpindexerSubsystem();
   private final UptakeSubsystem mUptakeSubsystem = new UptakeSubsystem();
   private final ShooterSubsystem mShooterSubsystem = new ShooterSubsystem();
   private final Vision mVision = new Vision();
-  private final LEDSubsystem mLedSubsystem = new LEDSubsystem();
+  private final LEDSubsystem mcLedSubsystem = new LEDSubsystem();
   private final ClimberSubsystem mClimberSubsystem = new ClimberSubsystem();
-  private final OperatorTargetingSubsystem mOperatorTargetingSubsystem = new OperatorTargetingSubsystem();
+  private final OperatorTargetingSubsystem mcOperatorTargetingSubsystem = new OperatorTargetingSubsystem();
 
   private final SendableChooser<Command> autoChooser;
   
@@ -100,8 +100,7 @@ public class RobotContainer {
     configureBindings();
   }
 
-  //TODO: You did good. there is nothing to fix
-  //JK you must test you sill goober code for shooting!
+  //TODO: Add acceleration limit while shooting at the hub | change rotational velocity handling during shooting
   private void configureBindings() {
     mSwerve.setDefaultCommand(new TeleopSwerve(mSwerve, ()-> -driver.getRawAxis(0), ()-> driver.getRawAxis(1), ()-> driver.getRawAxis(4), ()-> false));
     mTurretSubsystem.setDefaultCommand(new AimAtActiveAimPoint2(mTurretSubsystem, mSwerve, ()-> SwerveSubsystem.shouldAutoTurret));

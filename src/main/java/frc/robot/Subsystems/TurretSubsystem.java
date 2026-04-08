@@ -12,6 +12,8 @@ import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
+import edu.wpi.first.math.Nat;
+import edu.wpi.first.math.Vector;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation3d;
@@ -37,6 +39,8 @@ public class TurretSubsystem extends SubsystemBase {
   private static MotionMagicDutyCycle turretRotMagicCycle = new MotionMagicDutyCycle(0);
   public static MotionMagicDutyCycle elevationMagicCycle = new MotionMagicDutyCycle(0);
 
+  private SwerveSubsystem mSwerve;
+
   public static boolean canShoot = false;
   public static boolean canElevate = true;
   public static boolean isShooting = false;
@@ -56,7 +60,8 @@ public class TurretSubsystem extends SubsystemBase {
   public static ActiveAimPose activeAimPoint = new ActiveAimPose(SwerveSubsystem.color.isPresent() && SwerveSubsystem.color.get() == Alliance.Blue ? FieldConstants.Blue.HubFieldPoseBlue : Red.HubFieldPoseRed, LEDState.Hub);
 
   /** Creates a new TurretSubsystem. */
-  public TurretSubsystem() {
+  public TurretSubsystem(SwerveSubsystem mSwerve) {
+    this.mSwerve = mSwerve;
     configTurretCANCoder();
     configTurret();
     turretElevationConfiguration();
@@ -88,8 +93,27 @@ public class TurretSubsystem extends SubsystemBase {
     SwerveSubsystem.field.getObject("Active Aimpoint").setPose(new Pose2d(activeAimPoint.aimPoint.getX(), activeAimPoint.aimPoint.getY(), new Rotation2d()));
   }
 
+  public Double[] getTurretVelocity(){
+    //this block of code calculates the velocity and speed of the Turret relative to the field using the velocity of the robot and some math
+    //Because the turret isn't in the center of the robot, we need to calculate its velocity when we are turning
+    double tangentialVelocityX = -SwerveSubsystem.gyro.getAngularVelocityZWorld().getValueAsDouble() * (Math.PI/180) * TurretConstants.RobotToTurret.getY();
+    double tangentialVelocityY = SwerveSubsystem.gyro.getAngularVelocityZWorld().getValueAsDouble() * (Math.PI/180) * TurretConstants.RobotToTurret.getX();
+
+    //next, we calculated the turret's robot relative veolicty using the robots xy velocity and adding the tangetial velocities respectively
+    double turretRelativeXVel = mSwerve.getRobotRelativeSpeeds().vxMetersPerSecond + tangentialVelocityX;
+    double turretRelativeYVel = mSwerve.getRobotRelativeSpeeds().vyMetersPerSecond + tangentialVelocityY;
+
+    double fieldRelTurXVel = turretRelativeXVel*Math.cos(SwerveSubsystem.getgyro0to360(270).getRadians()) - turretRelativeYVel*Math.sin(SwerveSubsystem.getgyro0to360(270).getRadians());
+    double fieldRelTurYVel = turretRelativeXVel*Math.sin(SwerveSubsystem.getgyro0to360(270).getRadians()) + turretRelativeYVel*Math.cos(SwerveSubsystem.getgyro0to360(270).getRadians());
+
+    return new Double[]{fieldRelTurXVel, fieldRelTurYVel};
+  }
+
   private void HandleElevationLimits(Pose2d turretPose){
-    if(turretPose.getX() < Red.neutralZoneEnterX + 0.2 && turretPose.getX() > Red.neutralZoneEnterX - 1 || turretPose.getX() < Blue.neutralZoneEnterX + 1 && turretPose.getX() > Blue.neutralZoneEnterX - 0.2){
+
+    double buffer = 4*TurretConstants.elevationCloseTime + Math.abs(getTurretVelocity()[0])*TurretConstants.elevationCloseTime + 1;//+1 = a little bit more
+
+    if(turretPose.getX() < Red.neutralZoneEnterX + buffer && turretPose.getX() > Red.neutralZoneEnterX - buffer || turretPose.getX() < Blue.neutralZoneEnterX + buffer && turretPose.getX() > Blue.neutralZoneEnterX - buffer){
       canElevate = false;
     }else{
       canElevate = true;

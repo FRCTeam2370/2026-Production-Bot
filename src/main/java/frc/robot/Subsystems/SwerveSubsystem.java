@@ -111,7 +111,9 @@ public class SwerveSubsystem extends SubsystemBase {
     this.mObjectDetection = mObjectDetection;
     turretLogic = new TurretLogic(this);
     color = DriverStation.getAlliance();
-    SmartDashboard.putString("Alliace Color", color.toString());
+    if(color.isPresent()){
+      SmartDashboard.putString("Alliace Color", color.toString());
+    }
 
     rotationPID.enableContinuousInput(-Math.PI, Math.PI);
 
@@ -343,7 +345,7 @@ public class SwerveSubsystem extends SubsystemBase {
   public void resetOdometry(Pose2d pose){
     System.out.println(color.get().toString());
     System.out.println(pose.getRotation().getDegrees());
-    if(color.get() == Alliance.Blue){
+    if(color.isPresent() && color.get() == Alliance.Blue){
       startOrientation = Rotation2d.fromDegrees(pose.getRotation().getDegrees());
       resetGyro();
       
