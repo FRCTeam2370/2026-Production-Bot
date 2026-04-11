@@ -36,7 +36,9 @@ import frc.robot.Commands.TurretCommands.AimTurretAtActiveAimPoint;
 import frc.robot.Commands.TurretCommands.EnableAirStrike;
 import frc.robot.Commands.TurretCommands.PointTurretAndShootForTime;
 import frc.robot.Commands.TurretCommands.PointTurretAndShootForTime2;
+import frc.robot.Commands.TurretCommands.SetElevationPos;
 import frc.robot.Commands.TurretCommands.ZeroTurret;
+import frc.robot.Constants.TurretConstants;
 import frc.robot.Subsystems.ClimberSubsystem;
 import frc.robot.Subsystems.FieldInfo;
 import frc.robot.Subsystems.IntakeSubsystem;
@@ -110,6 +112,8 @@ public class RobotContainer {
     driver.x().toggleOnTrue(new XMode(mSwerve));
 
     driver.back().onTrue(new ResetGyro(mSwerve));
+
+    driver.y().toggleOnTrue(new SetElevationPos(TurretConstants.ElevationMinAngle.getDegrees(), mTurretSubsystem));
 
     driver.leftStick().toggleOnTrue(mSwerve.SweepAllianceWall());
     driver.leftTrigger().whileTrue(new SimpleShootAtVelocity(mShooterSubsystem, -30));

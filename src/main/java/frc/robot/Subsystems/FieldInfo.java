@@ -28,6 +28,7 @@ public class FieldInfo extends SubsystemBase {
   public static class FieldPoints {
     public Translation3d HubPose, PassPose1, PassPose2, EvilPassRight, EvilPassLeft;
     public Pose2d ClimbLeft, ClimbRight, LeftHubSweep, RightHubSweep;
+    public double neutralZoneEnterX;
     public FieldPoints(Translation3d HubPose, Translation3d PassPose1, Translation3d PassPose2, Pose2d ClimbLeft, Pose2d ClimbRight, Pose2d LeftHubSweep, Pose2d RightHubSweep){
       this.HubPose = HubPose;
       this.PassPose1 = PassPose1;
@@ -55,6 +56,7 @@ public class FieldInfo extends SubsystemBase {
       fieldPoints.RightHubSweep = Blue.StartHubSweepRight;
       fieldPoints.EvilPassLeft = Blue.EvilPassLeft;
       fieldPoints.EvilPassRight = Blue.EvilPassRight;
+      fieldPoints.neutralZoneEnterX = Blue.neutralZoneEnterX;
     }else{
       fieldPoints.HubPose = Red.HubFieldPoseRed;
       fieldPoints.PassPose1 = Red.PassPose1;
@@ -65,6 +67,7 @@ public class FieldInfo extends SubsystemBase {
       fieldPoints.RightHubSweep = Red.StartHubSweepRight;
       fieldPoints.EvilPassLeft = Red.EvilPassLeft;
       fieldPoints.EvilPassRight = Red.EvilPassRight;
+      fieldPoints.neutralZoneEnterX = Red.neutralZoneEnterX;
     }
   }
 

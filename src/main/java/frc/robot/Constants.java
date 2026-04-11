@@ -101,7 +101,7 @@ public class Constants {
         public static final Rotation2d ElevationMinAngle = Rotation2d.fromDegrees(51.5);//Should be 50 but it screams to I changed it a little //from horizontal, old: 40
         public static final Rotation2d TurretStartElevation = Rotation2d.fromDegrees(75);
 
-        public static final double elevationCloseTime = 0.5;
+        public static final double elevationCloseTime = 0.3;
     }
 
     public static class ClimberConstants{

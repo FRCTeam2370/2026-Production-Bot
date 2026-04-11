@@ -107,7 +107,7 @@ public class TurretSubsystem extends SubsystemBase {
 
   private void HandleElevationLimits(Pose2d turretPose){
 
-    double buffer = 4*TurretConstants.elevationCloseTime + Math.abs(getTurretVelocity()[0])*TurretConstants.elevationCloseTime + 1;//+1 = a little bit more
+    double buffer = 4*TurretConstants.elevationCloseTime + Math.abs(getTurretVelocity()[0])*TurretConstants.elevationCloseTime + 0.5;//+1 = a little bit more
 
     //double buffer2 = Math.abs(getTurretVelocity()[0]) + 0.5;
 

@@ -179,6 +179,11 @@ public class TurretLogic {
         
         double launchSpeed = 0.08255 * Math.PI *0.5* shooterVel * 20/18;
 
+        if(distanceToAdjustedTarget < 2){
+            launchSpeed = (0.08255 * Math.PI *0.5* shooterVel * 20/18) * 0.5;
+        }
+        
+
         //double flattenedX = Math.sqrt(Math.pow(targetPoseRelativeToTurretVelX, 2) + Math.pow(targetPoseRelativeToTurretVelY, 2));
         double flattenedY = targetPose.getZ() - TurretConstants.TurretVerticalOffset;
 
