@@ -15,6 +15,12 @@
           "data": {
             "pathName": "OP Second Fast Neutral Scoop Left"
           }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "OP Left Out to Mid"
+          }
         }
       ]
     }

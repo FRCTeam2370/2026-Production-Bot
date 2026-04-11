@@ -80,9 +80,12 @@ public class TeleopSwerve extends Command {
         xVal = SwerveSubsystem.Clamp(xVal - SwerveSubsystem.getTrenchOffsetY(), -1, 1);
       }
 
-      mSwerve.drive(new Translation2d(xLimiter.calculate(xVal), yLimiter.calculate(yVal)).times(SwerveConstants.maxSpeed * shootLimiter), rotLimiter.calculate(rotVal * 0.4 * shootLimiter), !robotCentricSup.getAsBoolean(), true);
+      if(TurretSubsystem.isShooting && TurretSubsystem.activeAimPoint.aimPoint == FieldInfo.fieldPoints.HubPose){
+        mSwerve.drive(new Translation2d(xShotLim.calculate(xVal), yShotLim.calculate(yVal)).times(SwerveConstants.maxSpeed * shootLimiter), rotShotLim.calculate(rotVal * 0.4 * shootLimiter), !robotCentricSup.getAsBoolean(), true);
+      }else{
+        mSwerve.drive(new Translation2d(xLimiter.calculate(xVal), yLimiter.calculate(yVal)).times(SwerveConstants.maxSpeed * shootLimiter), rotLimiter.calculate(rotVal * 0.4 * shootLimiter), !robotCentricSup.getAsBoolean(), true);
+      }
       
-      //TODO: Use while Shooting//mSwerve.drive(new Translation2d(xShotLim.calculate(xVal), yShotLim.calculate(yVal)).times(SwerveConstants.maxSpeed * shootLimiter), rotShotLim.calculate(rotVal * 0.4 * shootLimiter), !robotCentricSup.getAsBoolean(), true);
       // }
   }
 }

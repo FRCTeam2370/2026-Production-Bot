@@ -272,7 +272,7 @@ public class SwerveSubsystem extends SubsystemBase {
     double thetaWorldToTarget = Math.atan2((pose.getY()-turretToField().getY()), (pose.getX()-turretToField().getX()));//calculates the angle from the turret's point to the target point
     double thetaTurretToTarget = thetaWorldToTarget - 0.5*Math.PI//uses the thetaWorldToTarget and subtracts the robot's rotation to get the rotation from the turret (adding pi here is an offset)
      - getgyro0to360(180).getRadians() //subtracting the robot's rotation
-     - (Math.toRadians(gyro.getAngularVelocityZWorld().getValueAsDouble()) * 0.2);//adding angular velocity lookahead
+    - Math.toRadians(gyro.getAngularVelocityZWorld().getValueAsDouble()) * 0.125;//adding angular velocity lookahead
     thetaTurretToTarget = (((thetaTurretToTarget % (2*Math.PI)) + (2*Math.PI)) % (2*Math.PI));//Returns the thetaTurretToTarget value in the range of 0-360 degrees
 
     double returnTheta;
@@ -444,7 +444,7 @@ public class SwerveSubsystem extends SubsystemBase {
               (speeds, feedforwards) -> driveRobotRelative(speeds),//drive(new Translation2d(speeds.vxMetersPerSecond, speeds.vyMetersPerSecond), -speeds.omegaRadiansPerSecond / Constants.SwerveConstants.maxAngularVelocity, false, false),//drive(new Translation2d(speeds.vxMetersPerSecond, speeds.vyMetersPerSecond), speeds.omegaRadiansPerSecond / 3.1154127, false, true),//driveRobotRelative(speeds), // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds. Also optionally outputs individual module feedforwards
               new PPHolonomicDriveController( // PPHolonomicController is the built in path following controller for holonomic drive trains
                       new PIDConstants(7.5, 0.0, 0.0), // Translation PID constants// 3.8 - p
-                      new PIDConstants(5, 0.0, 0.0) // Rotation PID constants//kp 0.00755, ki 0.0001
+                      new PIDConstants(7.5, 0.0, 0.0) // Rotation PID constants//kp 0.00755, ki 0.0001
               ),
               config, // The robot configuration
               () -> {

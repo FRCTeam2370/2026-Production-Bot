@@ -44,7 +44,7 @@ public class Constants {
   public static class spindexerConstants{
     public static final int spindexerMotorID = 5;
 
-    public static final double spindexerSpeed = 85;
+    public static final double spindexerSpeed = 75;
   }
 
   public static class intakeConstants{
