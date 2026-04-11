@@ -82,13 +82,9 @@ public class TurretSubsystem extends SubsystemBase {
       RobotContainer.shouldDial = false;
     }
 
-    Pose2d robotPose = SwerveSubsystem.poseEstimator.getEstimatedPosition();
+    HandleActiveAimPoint(SwerveSubsystem.poseEstimator.getEstimatedPosition());
 
-    HandleActiveAimPoint(robotPose);
-
-    Pose2d turretPose = SwerveSubsystem.turretToField();
-
-    HandleElevationLimits(turretPose);
+    HandleElevationLimits(SwerveSubsystem.turretToField());
 
     SwerveSubsystem.field.getObject("Active Aimpoint").setPose(new Pose2d(activeAimPoint.aimPoint.getX(), activeAimPoint.aimPoint.getY(), new Rotation2d()));
   }
@@ -112,6 +108,8 @@ public class TurretSubsystem extends SubsystemBase {
   private void HandleElevationLimits(Pose2d turretPose){
 
     double buffer = 4*TurretConstants.elevationCloseTime + Math.abs(getTurretVelocity()[0])*TurretConstants.elevationCloseTime + 1;//+1 = a little bit more
+
+    //double buffer2 = Math.abs(getTurretVelocity()[0]) + 0.5;
 
     if(turretPose.getX() < Red.neutralZoneEnterX + buffer && turretPose.getX() > Red.neutralZoneEnterX - buffer || turretPose.getX() < Blue.neutralZoneEnterX + buffer && turretPose.getX() > Blue.neutralZoneEnterX - buffer){
       canElevate = false;
@@ -223,7 +221,7 @@ public class TurretSubsystem extends SubsystemBase {
 
   private static void configTurretCANCoder(){
     turretCANCoderConfig.MagnetSensor.AbsoluteSensorDiscontinuityPoint = 0.5;
-    turretCANCoderConfig.MagnetSensor.MagnetOffset = 0.179931640625;
+    turretCANCoderConfig.MagnetSensor.MagnetOffset = 0.468505859375;
 
     turretCANcoder.getConfigurator().apply(turretCANCoderConfig);
   }

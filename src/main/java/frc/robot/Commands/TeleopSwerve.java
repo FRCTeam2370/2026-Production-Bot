@@ -30,6 +30,9 @@ public class TeleopSwerve extends Command {
   private SlewRateLimiter xLimiter = new SlewRateLimiter(2.5);
   private SlewRateLimiter yLimiter = new SlewRateLimiter(2.5);
   private SlewRateLimiter rotLimiter = new SlewRateLimiter(2.5);
+  private SlewRateLimiter xShotLim = new SlewRateLimiter(1);
+  private SlewRateLimiter yShotLim = new SlewRateLimiter(1);
+  private SlewRateLimiter rotShotLim = new SlewRateLimiter(1);
   /** Creates a new TeleopSwerve. */
   public TeleopSwerve(SwerveSubsystem mSwerve, DoubleSupplier xSup, DoubleSupplier ySup, DoubleSupplier rotSup, BooleanSupplier robotCentricSup) {
     // Use addRequirements() here to declare subsystem dependencies.
@@ -78,6 +81,8 @@ public class TeleopSwerve extends Command {
       }
 
       mSwerve.drive(new Translation2d(xLimiter.calculate(xVal), yLimiter.calculate(yVal)).times(SwerveConstants.maxSpeed * shootLimiter), rotLimiter.calculate(rotVal * 0.4 * shootLimiter), !robotCentricSup.getAsBoolean(), true);
-    // }
+      
+      //TODO: Use while Shooting//mSwerve.drive(new Translation2d(xShotLim.calculate(xVal), yShotLim.calculate(yVal)).times(SwerveConstants.maxSpeed * shootLimiter), rotShotLim.calculate(rotVal * 0.4 * shootLimiter), !robotCentricSup.getAsBoolean(), true);
+      // }
   }
 }
