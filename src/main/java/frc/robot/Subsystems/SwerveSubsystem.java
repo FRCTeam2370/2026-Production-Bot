@@ -250,7 +250,7 @@ public class SwerveSubsystem extends SubsystemBase {
     double thetaWorldToTarget = Math.atan2((pose.getY()), (pose.getX()));//calculates the angle from the turret's point to the target point
     double thetaTurretToTarget = thetaWorldToTarget - 0.5*Math.PI//uses the thetaWorldToTarget and subtracts the robot's rotation to get the rotation from the turret (adding pi here is an offset)
      - getgyro0to360(0).getRadians() //subtracting the robot's rotation
-     - (Math.toRadians(gyro.getAngularVelocityZWorld().getValueAsDouble()) * 0.2);//adding angular velocity lookahead
+     - (Math.toRadians(gyro.getAngularVelocityZWorld().getValueAsDouble()) * 0.125);//adding angular velocity lookahead
     thetaTurretToTarget = (((thetaTurretToTarget % (2*Math.PI)) + (2*Math.PI)) % (2*Math.PI));//Returns the thetaTurretToTarget value in the range of 0-360 degrees
 
     double returnTheta;
