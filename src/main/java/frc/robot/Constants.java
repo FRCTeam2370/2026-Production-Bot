@@ -33,6 +33,8 @@ public class Constants {
     public static final double velocityOffset = 2.5;
 
     public static final double ratioAdjustment = 0.8;
+
+    public static final double ShooterRatio = 1.111111111111;
   }
 
   public static class uptakeConstants{
