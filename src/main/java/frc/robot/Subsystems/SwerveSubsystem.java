@@ -596,10 +596,10 @@ public class SwerveSubsystem extends SubsystemBase {
   }
 
   public TurretAimPose getTurretPointTowardsPoseJacobMethod(Translation3d targetPose){
-    TurretAimPose turretAimPose = turretLogic.jacobsStupidOne(targetPose, true);
+    TurretAimPose turretAimPose = turretLogic.jacobsStupidOne(targetPose, true);//one
 
     if(TurretSubsystem.activeAimPoint.aimPoint != FieldInfo.fieldPoints.HubPose){
-      turretAimPose = turretLogic.jacobsStupidOne(targetPose, false);
+      turretAimPose = turretLogic.jacobsStupidOne(targetPose, false);//one
     }
     
     SmartDashboard.putNumber("Raw Calculated Elevation Angle", turretAimPose.elevationAngleDegrees);
