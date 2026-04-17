@@ -107,7 +107,7 @@ public class IntakeSubsystem extends SubsystemBase {
     intakeRotationMotorConfig.Feedback.RotorToSensorRatio = intakeConstants.intakeRatio;
     CANcoderConfig.MagnetSensor.AbsoluteSensorDiscontinuityPoint = 0;
 
-    intakeRotationMotorConfig.Slot0.kP = 0.15;
+    intakeRotationMotorConfig.Slot0.kP = 0.2;
     intakeRotationMotorConfig.Slot0.kI = 0;
     intakeRotationMotorConfig.Slot0.kD = 0.0;
 

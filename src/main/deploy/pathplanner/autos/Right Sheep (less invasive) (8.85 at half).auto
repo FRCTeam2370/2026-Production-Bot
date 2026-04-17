@@ -5,39 +5,45 @@
     "data": {
       "commands": [
         {
-          "type": "path",
+          "type": "named",
           "data": {
-            "pathName": "190 Right To Neutral"
+            "name": "Deploy Intake"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "2 Aim and Shoot For 5"
+            "name": "2 Aim and Shoot For 3"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 1.0
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "Right To Neutral Second"
+            "pathName": "Sheep OP Right To Neutral Scoop Two Part 1"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 1.0
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Sheep OP Right To Neutral Scoop Two Part 2"
           }
         },
         {
           "type": "named",
           "data": {
             "name": "2 Aim and Shoot"
-          }
-        },
-        {
-          "type": "wait",
-          "data": {
-            "waitTime": 3.0
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Prop Intake"
           }
         }
       ]

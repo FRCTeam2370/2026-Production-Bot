@@ -48,7 +48,7 @@ public class ShootAtVelocity extends Command {
     vel = aimpose.vel;
     usingLower = aimpose.usingLower;
     ShooterSubsystem.shootWithVelocity(vel);
-    if((ShooterSubsystem.getVelocity() > (vel*shooterConstants.ratioAdjustment * 0.9) || ShooterSubsystem.getVelocity() > 90) && TurretSubsystem.canShoot){
+    if((ShooterSubsystem.getVelocity() > (vel * 0.9) || ShooterSubsystem.getVelocity() > 90) && TurretSubsystem.canShoot){
         SpindexerSubsystem.spindexrWithVelocity(spindexerConstants.spindexerSpeed);
         UptakeSubsystem.uptakeWithVelocity(uptakeConstants.uptakeSpeed);
     }else{

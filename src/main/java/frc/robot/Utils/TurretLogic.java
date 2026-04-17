@@ -137,7 +137,7 @@ public class TurretLogic {
             -vUnajustedY - lateralOffsetVelocityY,
             vUnajustedZ + TurretConstants.TurretVerticalOffset);
         
-        turretAimPose.vel = shooterVel;// + velocityOffset;
+        turretAimPose.vel = shooterVel + Math.max(12*(distanceToTarget - 3), -2);//+ velocityOffset;
         //This guy is just so we know if the brent solver calculated the angle for the lob shot or the direct shot
         turretAimPose.usingLower = usingLower;
 
@@ -230,86 +230,86 @@ public class TurretLogic {
         return returnPose;
     }
 
-    public TurretAimPose jacobsStupidTwo(Translation3d targetPose, boolean useGreater){
-        Pose2d turretFieldPose = SwerveSubsystem.turretToField();
-        //this block of code calculates the velocity and speed of the Turret relative to the field using the velocity of the robot and some math
-        //Because the turret isn't in the center of the robot, we need to calculate its velocity when we are turning
+    // public TurretAimPose jacobsStupidTwo(Translation3d targetPose, boolean useGreater){
+    //     Pose2d turretFieldPose = SwerveSubsystem.turretToField();
+    //     //this block of code calculates the velocity and speed of the Turret relative to the field using the velocity of the robot and some math
+    //     //Because the turret isn't in the center of the robot, we need to calculate its velocity when we are turning
 
-        double tangentialVelocityX = -SwerveSubsystem.gyro.getAngularVelocityZWorld().getValueAsDouble() * (Math.PI/180) * TurretConstants.RobotToTurret.getY();
-        double tangentialVelocityY = SwerveSubsystem.gyro.getAngularVelocityZWorld().getValueAsDouble() * (Math.PI/180) * TurretConstants.RobotToTurret.getX();
+    //     double tangentialVelocityX = -SwerveSubsystem.gyro.getAngularVelocityZWorld().getValueAsDouble() * (Math.PI/180) * TurretConstants.RobotToTurret.getY();
+    //     double tangentialVelocityY = SwerveSubsystem.gyro.getAngularVelocityZWorld().getValueAsDouble() * (Math.PI/180) * TurretConstants.RobotToTurret.getX();
 
-        //next, we calculated the turret's robot relative veolicty using the robots xy velocity and adding the tangetial velocities respectively
-        double turretRelativeXVel = mSwerve.getRobotRelativeSpeeds().vxMetersPerSecond + tangentialVelocityX;
-        double turretRelativeYVel = mSwerve.getRobotRelativeSpeeds().vyMetersPerSecond + tangentialVelocityY;
+    //     //next, we calculated the turret's robot relative veolicty using the robots xy velocity and adding the tangetial velocities respectively
+    //     double turretRelativeXVel = mSwerve.getRobotRelativeSpeeds().vxMetersPerSecond + tangentialVelocityX;
+    //     double turretRelativeYVel = mSwerve.getRobotRelativeSpeeds().vyMetersPerSecond + tangentialVelocityY;
 
-        double fieldRelTurXVel = turretRelativeXVel*Math.cos(SwerveSubsystem.getgyro0to360(270).getRadians()) - turretRelativeYVel*Math.sin(SwerveSubsystem.getgyro0to360(270).getRadians());
-        double fieldRelTurYVel = turretRelativeXVel*Math.sin(SwerveSubsystem.getgyro0to360(270).getRadians()) + turretRelativeYVel*Math.cos(SwerveSubsystem.getgyro0to360(270).getRadians());
+    //     double fieldRelTurXVel = turretRelativeXVel*Math.cos(SwerveSubsystem.getgyro0to360(270).getRadians()) - turretRelativeYVel*Math.sin(SwerveSubsystem.getgyro0to360(270).getRadians());
+    //     double fieldRelTurYVel = turretRelativeXVel*Math.sin(SwerveSubsystem.getgyro0to360(270).getRadians()) + turretRelativeYVel*Math.cos(SwerveSubsystem.getgyro0to360(270).getRadians());
 
-        //lastly, we get the field relative velocities using the angle of the gyro and calculate the speed of the turret using those values
-        //double turretFieldXVel = turretRelativeXVel * Math.cos(SwerveSubsystem.getgyro0to360(270).getRadians()) - turretRelativeYVel * Math.sin(SwerveSubsystem.getgyro0to360(270).getRadians());
-        //double turretFieldYVel = turretRelativeXVel * Math.sin(SwerveSubsystem.getgyro0to360(270).getRadians()) + turretRelativeYVel * Math.cos(SwerveSubsystem.getgyro0to360(270).getRadians());
-        double turretSpeed = Math.sqrt(Math.pow(fieldRelTurXVel, 2) + Math.pow(fieldRelTurYVel, 2));//mps
+    //     //lastly, we get the field relative velocities using the angle of the gyro and calculate the speed of the turret using those values
+    //     //double turretFieldXVel = turretRelativeXVel * Math.cos(SwerveSubsystem.getgyro0to360(270).getRadians()) - turretRelativeYVel * Math.sin(SwerveSubsystem.getgyro0to360(270).getRadians());
+    //     //double turretFieldYVel = turretRelativeXVel * Math.sin(SwerveSubsystem.getgyro0to360(270).getRadians()) + turretRelativeYVel * Math.cos(SwerveSubsystem.getgyro0to360(270).getRadians());
+    //     double turretSpeed = Math.sqrt(Math.pow(fieldRelTurXVel, 2) + Math.pow(fieldRelTurYVel, 2));//mps
 
-        double targetPoseXRelativeToTurret = targetPose.getX() - turretFieldPose.getX();
-        double targetPoseYRelativeToTurret = targetPose.getY() - turretFieldPose.getY();
+    //     double targetPoseXRelativeToTurret = targetPose.getX() - turretFieldPose.getX();
+    //     double targetPoseYRelativeToTurret = targetPose.getY() - turretFieldPose.getY();
         
-        double targetPoseRelativeToTurretVelX = targetPoseXRelativeToTurret - fieldRelTurXVel;
-        double targetPoseRelativeToTurretVelY = targetPoseYRelativeToTurret - fieldRelTurYVel;
+    //     double targetPoseRelativeToTurretVelX = targetPoseXRelativeToTurret - fieldRelTurXVel;
+    //     double targetPoseRelativeToTurretVelY = targetPoseYRelativeToTurret - fieldRelTurYVel;
 
-        double angleRelativeToAjustedTarget = Math.atan2(targetPoseRelativeToTurretVelY, targetPoseRelativeToTurretVelX);
-        double distanceToAdjustedTarget = Math.sqrt(Math.pow(targetPoseRelativeToTurretVelX, 2) + Math.pow(targetPoseRelativeToTurretVelY, 2));
+    //     double angleRelativeToAjustedTarget = Math.atan2(targetPoseRelativeToTurretVelY, targetPoseRelativeToTurretVelX);
+    //     double distanceToAdjustedTarget = Math.sqrt(Math.pow(targetPoseRelativeToTurretVelX, 2) + Math.pow(targetPoseRelativeToTurretVelY, 2));
 
-        double flattenedRobotVel = turretSpeed * Math.cos(angleRelativeToAjustedTarget);
-        double shooterVel;
+    //     double flattenedRobotVel = turretSpeed * Math.cos(angleRelativeToAjustedTarget);
+    //     double shooterVel;
 
-        shooterVel = 0.5*Math.pow(distanceToAdjustedTarget, 1.8) + 55;//- 2*Math.abs(Math.cos(Math.PI*distanceToAdjustedTarget/15));//5*distanceToAdjustedTarget + 50;//distance to target in meters + 50 just because (idk I'll make a better function later)
+    //     shooterVel = 0.5*Math.pow(distanceToAdjustedTarget, 1.8) + 55;//- 2*Math.abs(Math.cos(Math.PI*distanceToAdjustedTarget/15));//5*distanceToAdjustedTarget + 50;//distance to target in meters + 50 just because (idk I'll make a better function later)
          
-        //double launchSpeed = 0.0754888 * Math.PI *0.5* shooterVel * 20/18;//Launch speed of the ball 
+    //     //double launchSpeed = 0.0754888 * Math.PI *0.5* shooterVel * 20/18;//Launch speed of the ball 
         
-        double launchSpeed = 0.08255 * Math.PI *0.5* shooterVel * 20/18;
+    //     double launchSpeed = 0.08255 * Math.PI *0.5* shooterVel * 20/18;
 
-        // if(distanceToAdjustedTarget < 2){
-        //     launchSpeed = (0.08255 * Math.PI *0.5* shooterVel * 20/18) * 0.5;
-        // }
+    //     // if(distanceToAdjustedTarget < 2){
+    //     //     launchSpeed = (0.08255 * Math.PI *0.5* shooterVel * 20/18) * 0.5;
+    //     // }
         
-        double flattenedY = targetPose.getZ() - TurretConstants.TurretVerticalOffset;
+    //     double flattenedY = targetPose.getZ() - TurretConstants.TurretVerticalOffset;
 
-        double aimPoseFieldX = turretFieldPose.getX() + targetPoseRelativeToTurretVelX;
-        double aimPoseFieldY = turretFieldPose.getY() + targetPoseRelativeToTurretVelY;
+    //     double aimPoseFieldX = turretFieldPose.getX() + targetPoseRelativeToTurretVelX;
+    //     double aimPoseFieldY = turretFieldPose.getY() + targetPoseRelativeToTurretVelY;
 
-        double m = 2.09840858621;
-        double b = 0.2;
-        double g = 9.81;
+    //     double m = 2.09840858621;
+    //     double b = 0.2;
+    //     double g = 9.81;
 
-        try{
-            zotdotda = brentSolver.findRoot((double x)-> distanceToAdjustedTarget/Math.pow(Math.cos(x),2) + (distanceToAdjustedTarget*m*g*Math.tan(x))/(launchSpeed*b*Math.cos(x)) + (m*m*g)/(b*b)*(1/(1-(b*distanceToAdjustedTarget)/(m*launchSpeed*Math.cos(x))))*((-b*distanceToAdjustedTarget*Math.tan(x))/(m*launchSpeed*Math.cos(x))), TurretConstants.ElevationMinAngle.getRadians(), 1.5);
-        }catch(Exception e){
-            //System.out.println("Zero of the derivative failed" + e);
-        }
+    //     try{
+    //         zotdotda = brentSolver.findRoot((double x)-> distanceToAdjustedTarget/Math.pow(Math.cos(x),2) + (distanceToAdjustedTarget*m*g*Math.tan(x))/(launchSpeed*b*Math.cos(x)) + (m*m*g)/(b*b)*(1/(1-(b*distanceToAdjustedTarget)/(m*launchSpeed*Math.cos(x))))*((-b*distanceToAdjustedTarget*Math.tan(x))/(m*launchSpeed*Math.cos(x))), TurretConstants.ElevationMinAngle.getRadians(), 1.5);
+    //     }catch(Exception e){
+    //         //System.out.println("Zero of the derivative failed" + e);
+    //     }
 
-        try{
-            // if(useGreater){
-            //     trueAngle2 = brentSolver.findRoot((double x)-> distanceToAdjustedTarget*Math.tan(x) + (distanceToAdjustedTarget*m*g)/(launchSpeed*Math.cos(x)*b) + ((m*m*g)/b*b)*Math.exp(1-(b*distanceToAdjustedTarget)/(m*launchSpeed*Math.cos(x))) - flattenedY, zotdotda, 1.5);
-            //     SmartDashboard.putNumber("True angle", trueAngle);
-            // }else{
-            //     trueAngle2 = brentSolver.findRoot((double x)-> distanceToAdjustedTarget*Math.tan(x) + (distanceToAdjustedTarget*m*g)/(launchSpeed*Math.cos(x)*b) + ((m*m*g)/b*b)*Math.exp(1-(b*distanceToAdjustedTarget)/(m*launchSpeed*Math.cos(x))) - flattenedY, TurretConstants.ElevationMinAngle.getRadians(), zotdotda);
-            // }
-            trueAngle2 = brentSolver.findRoot((double x)-> distanceToAdjustedTarget*Math.tan(x) + (distanceToAdjustedTarget*m*g)/(launchSpeed*Math.cos(x)*b) + ((m*m*g)/(b*b))*Math.log(1-(b*distanceToAdjustedTarget)/(m*launchSpeed*Math.cos(x))) - flattenedY, zotdotda, 1.5);
-        }catch(Exception e){
-            // try{
-            //     trueAngle2 = brentSolver.findRoot((double x)-> distanceToAdjustedTarget*Math.tan(x) + (distanceToAdjustedTarget*m*g)/(launchSpeed*Math.cos(x)*b) + ((m*m*g)/b*b)*Math.exp(1-(b*distanceToAdjustedTarget)/(m*launchSpeed*Math.cos(x))) - flattenedY, TurretConstants.ElevationMinAngle.getRadians(), zotdotda);
-            // }catch(Exception E){
-            //     //System.out.println("Cry" + E);
-            // }
-        }
+    //     try{
+    //         // if(useGreater){
+    //         //     trueAngle2 = brentSolver.findRoot((double x)-> distanceToAdjustedTarget*Math.tan(x) + (distanceToAdjustedTarget*m*g)/(launchSpeed*Math.cos(x)*b) + ((m*m*g)/b*b)*Math.exp(1-(b*distanceToAdjustedTarget)/(m*launchSpeed*Math.cos(x))) - flattenedY, zotdotda, 1.5);
+    //         //     SmartDashboard.putNumber("True angle", trueAngle);
+    //         // }else{
+    //         //     trueAngle2 = brentSolver.findRoot((double x)-> distanceToAdjustedTarget*Math.tan(x) + (distanceToAdjustedTarget*m*g)/(launchSpeed*Math.cos(x)*b) + ((m*m*g)/b*b)*Math.exp(1-(b*distanceToAdjustedTarget)/(m*launchSpeed*Math.cos(x))) - flattenedY, TurretConstants.ElevationMinAngle.getRadians(), zotdotda);
+    //         // }
+    //         trueAngle2 = brentSolver.findRoot((double x)-> distanceToAdjustedTarget*Math.tan(x) + (distanceToAdjustedTarget*m*g)/(launchSpeed*Math.cos(x)*b) + ((m*m*g)/(b*b))*Math.log(1-(b*distanceToAdjustedTarget)/(m*launchSpeed*Math.cos(x))) - flattenedY, zotdotda, 1.5);
+    //     }catch(Exception e){
+    //         // try{
+    //         //     trueAngle2 = brentSolver.findRoot((double x)-> distanceToAdjustedTarget*Math.tan(x) + (distanceToAdjustedTarget*m*g)/(launchSpeed*Math.cos(x)*b) + ((m*m*g)/b*b)*Math.exp(1-(b*distanceToAdjustedTarget)/(m*launchSpeed*Math.cos(x))) - flattenedY, TurretConstants.ElevationMinAngle.getRadians(), zotdotda);
+    //         // }catch(Exception E){
+    //         //     //System.out.println("Cry" + E);
+    //         // }
+    //     }
 
-        SwerveSubsystem.field.getObject("Jacob's AimPose").setPose(new Pose2d(aimPoseFieldX, aimPoseFieldY, new Rotation2d()));
+    //     SwerveSubsystem.field.getObject("Jacob's AimPose").setPose(new Pose2d(aimPoseFieldX, aimPoseFieldY, new Rotation2d()));
 
-        TurretAimPose returnPose = new TurretAimPose();
-        returnPose.vel = shooterVel;
-        returnPose.aimPose = new Translation3d(aimPoseFieldX, aimPoseFieldY, flattenedY);
-        returnPose.elevationAngleDegrees = Math.toDegrees(trueAngle2);
+    //     TurretAimPose returnPose = new TurretAimPose();
+    //     returnPose.vel = shooterVel;
+    //     returnPose.aimPose = new Translation3d(aimPoseFieldX, aimPoseFieldY, flattenedY);
+    //     returnPose.elevationAngleDegrees = Math.toDegrees(trueAngle2);
 
-        return returnPose;
-    }
+    //     return returnPose;
+    // }
 }

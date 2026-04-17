@@ -29,7 +29,7 @@ public class Robot extends TimedRobot {
   @Override
   public void disabledInit() {
     for(String i : Vision.limelightNames){
-      LimelightHelpers.setLimelightNTDouble(i, "throttle_set", 5000);
+      LimelightHelpers.setLimelightNTDouble(i, "throttle_set", 000);
     }
   }
 

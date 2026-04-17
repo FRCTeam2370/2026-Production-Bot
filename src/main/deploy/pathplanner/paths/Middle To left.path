@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 3.63796005706134,
+        "x": 2.227646219686162,
         "y": 4.0
       },
       "prevControl": null,
       "nextControl": {
-        "x": 3.120413694721825,
-        "y": 4.00265335235378
+        "x": 2.1370756062767473,
+        "y": 4.688402282453637
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 2.227646219686162,
-        "y": 4.0
+        "x": 1.2054921540656205,
+        "y": 7.392582025677603
       },
       "prevControl": {
-        "x": 2.654621968616262,
-        "y": 3.9638373751783167
+        "x": 1.0890442225392292,
+        "y": 6.719771754636234
       },
       "nextControl": null,
       "isLocked": false,
@@ -31,19 +31,7 @@
   "rotationTargets": [],
   "constraintZones": [],
   "pointTowardsZones": [],
-  "eventMarkers": [
-    {
-      "name": "Deploy Intake",
-      "waypointRelativePos": 0,
-      "endWaypointRelativePos": null,
-      "command": {
-        "type": "named",
-        "data": {
-          "name": "Deploy Intake"
-        }
-      }
-    }
-  ],
+  "eventMarkers": [],
   "globalConstraints": {
     "maxVelocity": 2.0,
     "maxAcceleration": 2.0,
@@ -54,7 +42,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 180.0
+    "rotation": 5.552971033036865
   },
   "reversed": false,
   "folder": "Middle Paths",

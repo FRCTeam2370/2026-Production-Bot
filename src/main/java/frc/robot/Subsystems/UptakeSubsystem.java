@@ -54,8 +54,8 @@ public class UptakeSubsystem extends SubsystemBase {
 
     uptakeConfig.CurrentLimits.StatorCurrentLimit = 40;
 
-    uptakeConfig.Slot0.kV = 0.06;//0.05
-    uptakeConfig.Slot0.kP = 0.3;//0.25
+    uptakeConfig.Slot0.kV = 0.04;//0.05
+    uptakeConfig.Slot0.kP = 0.4;//0.25
     uptakeConfig.Slot0.kI = 0.0;
     uptakeConfig.Slot0.kD = 0.0;
 

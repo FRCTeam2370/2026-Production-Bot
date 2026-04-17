@@ -5,22 +5,21 @@
     "data": {
       "commands": [
         {
-          "type": "parallel",
+          "type": "path",
           "data": {
-            "commands": [
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "Middle Start"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "Aim and Shoot"
-                }
-              }
-            ]
+            "pathName": "Middle Start"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "2 Aim and Shoot For 9"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Middle To left"
           }
         }
       ]
