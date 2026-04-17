@@ -7,7 +7,19 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Right To Neutral"
+            "pathName": "Anti Cyber Right To Neutral"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 2.0
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Anti Cyber Right To Home"
           }
         },
         {
@@ -23,22 +35,9 @@
           }
         },
         {
-          "type": "parallel",
+          "type": "named",
           "data": {
-            "commands": [
-              {
-                "type": "named",
-                "data": {
-                  "name": "2 Aim and Shoot"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "Jiggle Intake"
-                }
-              }
-            ]
+            "name": "2 Aim and Shoot For 5"
           }
         }
       ]

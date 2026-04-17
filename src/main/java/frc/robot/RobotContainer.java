@@ -95,6 +95,7 @@ public class RobotContainer {
     NamedCommands.registerCommand("Deploy Hintake", new DeployIntake(Rotation2d.fromDegrees(-40).getRotations(), 80, mIntakeSubsystem, mSwerve));
     NamedCommands.registerCommand("Prop Intake", new DeployIntake(Rotation2d.fromDegrees(30).getRotations(), 30, mIntakeSubsystem, mSwerve));
     NamedCommands.registerCommand("Feed Right", new PointTurretAndShootForTime( 2.5, mTurretSubsystem, mSwerve, mUptakeSubsystem, mSpindexerSubsystem, mShooterSubsystem));
+    NamedCommands.registerCommand("Jiggle Intake", new SetIntakePosAndSpeed(Rotation2d.fromDegrees(-67).getRotations(), 60, mIntakeSubsystem, mSwerve));
 
     autoChooser = AutoBuilder.buildAutoChooser();
     SmartDashboard.putData("Auto Chooser", autoChooser);
@@ -106,6 +107,7 @@ public class RobotContainer {
   private void configureBindings() {
     mSwerve.setDefaultCommand(new TeleopSwerve(mSwerve, ()-> -driver.getRawAxis(0), ()-> driver.getRawAxis(1), ()-> driver.getRawAxis(4), ()-> false));
     mTurretSubsystem.setDefaultCommand(new AimAtActiveAimPoint2(mTurretSubsystem, mSwerve, ()-> SwerveSubsystem.shouldAutoTurret));
+    //mIntakeSubsystem.(new SetIntakePosAndSpeed(Rotation2d.fromDegrees(-67).getRotations(), 60, mIntakeSubsystem, mSwerve));
 
     driver.b().toggleOnFalse(new ToggleTurretFeatures());
 
@@ -116,7 +118,7 @@ public class RobotContainer {
     //driver.y().toggleOnTrue(new SetElevationPos(TurretConstants.ElevationMinAngle.getDegrees(), mTurretSubsystem));
 
     driver.leftStick().toggleOnTrue(mSwerve.SweepAllianceWall());
-    driver.leftTrigger().whileTrue(new SimpleShootAtVelocity(mShooterSubsystem, -30));
+    driver.povUp().whileTrue(new SimpleShootAtVelocity(mShooterSubsystem, -30));
     
     driver.rightTrigger().toggleOnTrue(new ShootAtVelocity(mShooterSubsystem, mUptakeSubsystem, mSpindexerSubsystem, mSwerve, mFieldInfo));
     driver.leftBumper().toggleOnTrue(new SetIntakePosAndSpeed(Rotation2d.fromDegrees(-67).getRotations(), 60, mIntakeSubsystem, mSwerve));
@@ -124,8 +126,8 @@ public class RobotContainer {
 
     driver.rightStick().toggleOnTrue(new DriveOnX(mSwerve, ()-> -driver.getRawAxis(0)));
     //driver.leftTrigger().whileTrue(mSwerve.driveThroughBalls());
-    driver.povUp().whileTrue(mSwerve.driveToClosestBall(()-> mSwerve.getClosestBall()));
-    driver.povLeft().whileTrue(mSwerve.PathfindToPose(()-> FieldInfo.fieldPoints.ClimbLeft));
+    //driver.povUp().whileTrue(mSwerve.driveToClosestBall(()-> mSwerve.getClosestBall()));
+    //driver.povLeft().whileTrue(mSwerve.PathfindToPose(()-> FieldInfo.fieldPoints.ClimbLeft));
     //driver.leftTrigger().whileTrue(new IntakeControl(mIntakeSubsystem, -30));
 
     // operator.rightBumper().whileTrue(new ClimbForPercent(30, mClimberSubsystem));

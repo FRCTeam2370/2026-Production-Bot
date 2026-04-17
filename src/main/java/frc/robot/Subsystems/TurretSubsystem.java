@@ -111,7 +111,7 @@ public class TurretSubsystem extends SubsystemBase {
 
     //double buffer2 = Math.abs(getTurretVelocity()[0]) + 0.5;
 
-    if(turretPose.getX() < Red.neutralZoneEnterX + buffer && turretPose.getX() > Red.neutralZoneEnterX - buffer || turretPose.getX() < Blue.neutralZoneEnterX + buffer && turretPose.getX() > Blue.neutralZoneEnterX - buffer){
+    if((turretPose.getX() < Red.neutralZoneEnterX + buffer && turretPose.getX() > Red.neutralZoneEnterX - buffer) || (turretPose.getX() < Blue.neutralZoneEnterX + buffer && turretPose.getX() > Blue.neutralZoneEnterX - buffer)){
       canElevate = false;
     }else{
       canElevate = true;
@@ -221,7 +221,7 @@ public class TurretSubsystem extends SubsystemBase {
 
   private static void configTurretCANCoder(){
     turretCANCoderConfig.MagnetSensor.AbsoluteSensorDiscontinuityPoint = 0.5;
-    turretCANCoderConfig.MagnetSensor.MagnetOffset = 0.4787598 - 0.0263671875;
+    turretCANCoderConfig.MagnetSensor.MagnetOffset = 0.4787598 - 0.0263671875;//+ 0.012939453125;
 
     turretCANcoder.getConfigurator().apply(turretCANCoderConfig);
   }

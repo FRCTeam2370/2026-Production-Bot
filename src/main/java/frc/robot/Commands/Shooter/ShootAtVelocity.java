@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.Constants.FieldConstants.Red;
+import frc.robot.Constants.TurretConstants;
 import frc.robot.Constants.shooterConstants;
 import frc.robot.Constants.spindexerConstants;
 import frc.robot.Constants.uptakeConstants;
@@ -48,16 +49,29 @@ public class ShootAtVelocity extends Command {
     vel = aimpose.vel;
     usingLower = aimpose.usingLower;
     ShooterSubsystem.shootWithVelocity(vel);
-    if((ShooterSubsystem.getVelocity() > (vel * 0.9) || ShooterSubsystem.getVelocity() > 90) && TurretSubsystem.canShoot){
-        SpindexerSubsystem.spindexrWithVelocity(spindexerConstants.spindexerSpeed);
-        UptakeSubsystem.uptakeWithVelocity(uptakeConstants.uptakeSpeed);
+    if(TurretSubsystem.canShoot){
+      if((ShooterSubsystem.getVelocity() > (vel * 0.9 * shooterConstants.ratioAdjustment) || ShooterSubsystem.getVelocity() > 90)){
+          SpindexerSubsystem.spindexrWithVelocity(spindexerConstants.spindexerSpeed);
+          UptakeSubsystem.uptakeWithVelocity(uptakeConstants.uptakeSpeed);
+      }else{
+        if(aimpose.aimPose == FieldInfo.fieldPoints.HubPose){
+          UptakeSubsystem.uptakeWithVelocity(-20);
+          SpindexerSubsystem.spindexrWithVelocity(0);
+        }else{
+          SpindexerSubsystem.spindexrWithVelocity(spindexerConstants.spindexerSpeed);
+          UptakeSubsystem.uptakeWithVelocity(uptakeConstants.uptakeSpeed);
+        }
+      }
     }else{
-      UptakeSubsystem.uptakeWithVelocity(-20);
-      SpindexerSubsystem.spindexrWithVelocity(0);
+          UptakeSubsystem.uptakeWithVelocity(-20);
+          SpindexerSubsystem.spindexrWithVelocity(0);
     }
+    
     SmartDashboard.putBoolean("using Lower", usingLower);
     SmartDashboard.putNumber("Expected Shooter vel", vel);
   }
+
+  //Hello Jacob :3
 
   // Called once the command ends or is interrupted.
   @Override

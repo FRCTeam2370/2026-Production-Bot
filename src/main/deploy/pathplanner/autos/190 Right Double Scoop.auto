@@ -23,21 +23,22 @@
           }
         },
         {
-          "type": "named",
+          "type": "parallel",
           "data": {
-            "name": "2 Aim and Shoot"
-          }
-        },
-        {
-          "type": "wait",
-          "data": {
-            "waitTime": 3.0
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Prop Intake"
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "2 Aim and Shoot"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Jiggle Intake"
+                }
+              }
+            ]
           }
         }
       ]

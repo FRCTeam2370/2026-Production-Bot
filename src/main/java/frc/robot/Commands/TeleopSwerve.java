@@ -27,9 +27,9 @@ public class TeleopSwerve extends Command {
   private DoubleSupplier xSup, ySup, rotSup;
   private BooleanSupplier robotCentricSup;
   private double shootLimiter = 1;
-  private SlewRateLimiter xLimiter = new SlewRateLimiter(2.5);
-  private SlewRateLimiter yLimiter = new SlewRateLimiter(2.5);
-  private SlewRateLimiter rotLimiter = new SlewRateLimiter(2.5);
+  private SlewRateLimiter xLimiter = new SlewRateLimiter(4);
+  private SlewRateLimiter yLimiter = new SlewRateLimiter(4);
+  private SlewRateLimiter rotLimiter = new SlewRateLimiter(4);
   private SlewRateLimiter xShotLim = new SlewRateLimiter(1);
   private SlewRateLimiter yShotLim = new SlewRateLimiter(1);
   private SlewRateLimiter rotShotLim = new SlewRateLimiter(1);

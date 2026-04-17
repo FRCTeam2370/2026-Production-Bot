@@ -7,7 +7,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Right To Neutral"
+            "pathName": "Right To Neutral Wide"
           }
         },
         {
@@ -23,22 +23,21 @@
           }
         },
         {
-          "type": "parallel",
+          "type": "named",
           "data": {
-            "commands": [
-              {
-                "type": "named",
-                "data": {
-                  "name": "2 Aim and Shoot"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "Jiggle Intake"
-                }
-              }
-            ]
+            "name": "2 Aim and Shoot"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 3.0
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Prop Intake"
           }
         }
       ]
