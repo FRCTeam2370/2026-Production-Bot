@@ -221,7 +221,7 @@ public class TurretSubsystem extends SubsystemBase {
 
   private static void configTurretCANCoder(){
     turretCANCoderConfig.MagnetSensor.AbsoluteSensorDiscontinuityPoint = 0.5;
-    turretCANCoderConfig.MagnetSensor.MagnetOffset = 0.4787598 - 0.0263671875;//+ 0.012939453125;
+    turretCANCoderConfig.MagnetSensor.MagnetOffset = 0.4787598 - 0.005;//- 0.0263671875 + 0.017578125;//+ 0.012939453125;
 
     turretCANcoder.getConfigurator().apply(turretCANCoderConfig);
   }
