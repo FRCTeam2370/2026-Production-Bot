@@ -4,11 +4,14 @@
 
 package frc.robot.Commands.Shooter;
 
+import com.pathplanner.lib.config.RobotConfig;
+
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.Constants.FieldConstants.Red;
+import frc.robot.RobotContainer;
 import frc.robot.Constants.TurretConstants;
 import frc.robot.Constants.shooterConstants;
 import frc.robot.Constants.spindexerConstants;
@@ -49,23 +52,29 @@ public class ShootAtVelocity extends Command {
     vel = aimpose.vel;
     usingLower = aimpose.usingLower;
     ShooterSubsystem.shootWithVelocity(vel);
-    if(TurretSubsystem.canShoot){
-      if((ShooterSubsystem.getVelocity() > (vel * 0.85) || ShooterSubsystem.getVelocity() > 90)){
-          SpindexerSubsystem.spindexrWithVelocity(spindexerConstants.spindexerSpeed);
-          UptakeSubsystem.uptakeWithVelocity(uptakeConstants.uptakeSpeed);
-      }else{
-        if(aimpose.aimPose == FieldInfo.fieldPoints.HubPose){
+    if(RobotContainer.driver.leftTrigger().getAsBoolean()){
           UptakeSubsystem.uptakeWithVelocity(-20);
-          SpindexerSubsystem.spindexrWithVelocity(0);
-        }else{
-          SpindexerSubsystem.spindexrWithVelocity(spindexerConstants.spindexerSpeed);
-          UptakeSubsystem.uptakeWithVelocity(uptakeConstants.uptakeSpeed);
-        }
-      }
+          SpindexerSubsystem.spindexrWithVelocity(-30);
     }else{
-          UptakeSubsystem.uptakeWithVelocity(-20);
-          SpindexerSubsystem.spindexrWithVelocity(0);
+      if(TurretSubsystem.canShoot){
+        if((ShooterSubsystem.getVelocity() > (vel * 0.85) || ShooterSubsystem.getVelocity() > 90)){
+            SpindexerSubsystem.spindexrWithVelocity(spindexerConstants.spindexerSpeed);
+            UptakeSubsystem.uptakeWithVelocity(uptakeConstants.uptakeSpeed);
+        }else{
+          if(aimpose.aimPose == FieldInfo.fieldPoints.HubPose){
+            UptakeSubsystem.uptakeWithVelocity(-20);
+            SpindexerSubsystem.spindexrWithVelocity(0);
+          }else{
+            SpindexerSubsystem.spindexrWithVelocity(spindexerConstants.spindexerSpeed);
+            UptakeSubsystem.uptakeWithVelocity(uptakeConstants.uptakeSpeed);
+          }
+        }
+      }else{
+            UptakeSubsystem.uptakeWithVelocity(-20);
+            SpindexerSubsystem.spindexrWithVelocity(0);
+      }
     }
+    
     
     SmartDashboard.putBoolean("using Lower", usingLower);
     SmartDashboard.putNumber("Expected Shooter vel", vel);

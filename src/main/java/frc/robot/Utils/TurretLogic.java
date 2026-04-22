@@ -182,8 +182,11 @@ public class TurretLogic {
         
         double launchSpeed = 0.08255 * Math.PI *0.5* shooterVel * 20/18;
 
-        if(distanceToAdjustedTarget < 2){
-            launchSpeed = (0.08255 * Math.PI *0.5* shooterVel * 20/18) * 0.5;
+        if(distanceToAdjustedTarget < 2.25){
+            //launchSpeed = (0.08255 * Math.PI *0.5* shooterVel * 20/18) * 0.5;
+            shooterVel -= 2*distanceToAdjustedTarget;
+        }else{
+            shooterVel += distanceToAdjustedTarget;
         }
         
 
@@ -217,7 +220,7 @@ public class TurretLogic {
         returnPose.aimPose = new Translation3d(aimPoseFieldX, aimPoseFieldY, flattenedY);
         if(useGreater && shooterVel < 90){
             if(distanceToAdjustedTarget > 2){
-                returnPose.elevationAngleDegrees = Math.toDegrees(theta) + 0.5*distanceToAdjustedTarget;//0.5
+                returnPose.elevationAngleDegrees = Math.toDegrees(theta);//+ 0.5*distanceToAdjustedTarget;//0.5
             }else{
                 returnPose.elevationAngleDegrees = TurretConstants.ElevationMaxAngle.getDegrees();
             }
