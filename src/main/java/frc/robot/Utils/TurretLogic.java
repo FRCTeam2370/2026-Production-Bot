@@ -137,7 +137,7 @@ public class TurretLogic {
             -vUnajustedY - lateralOffsetVelocityY,
             vUnajustedZ + TurretConstants.TurretVerticalOffset);
         
-        turretAimPose.vel = shooterVel ;//+ Math.max(12*(distanceToTarget - 3.5), -2);//+ velocityOffset; //12
+        turretAimPose.vel = shooterVel;//+ Math.max(12*(distanceToTarget - 3.5), -2);//+ velocityOffset; //12
         //This guy is just so we know if the brent solver calculated the angle for the lob shot or the direct shot
         turretAimPose.usingLower = usingLower;
 

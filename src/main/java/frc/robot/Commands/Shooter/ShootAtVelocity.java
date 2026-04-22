@@ -41,17 +41,16 @@ public class ShootAtVelocity extends Command {
   public void initialize() {
     TurretSubsystem.isShooting = true;
   }
-//Testing something
-//If I do a test Commit like I added something does it show up and save
+
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    TurretAimPose aimpose = mSwerve.getTurretPointTowardsPose(TurretSubsystem.activeAimPoint.aimPoint);
+    TurretAimPose aimpose = mSwerve.getTurretPointTowardsPoseJacobMethod(TurretSubsystem.activeAimPoint.aimPoint);
     vel = aimpose.vel;
     usingLower = aimpose.usingLower;
     ShooterSubsystem.shootWithVelocity(vel);
     if(TurretSubsystem.canShoot){
-      if((ShooterSubsystem.getVelocity() > (vel * 0.8) || ShooterSubsystem.getVelocity() > 90)){
+      if((ShooterSubsystem.getVelocity() > (vel * 0.85) || ShooterSubsystem.getVelocity() > 90)){
           SpindexerSubsystem.spindexrWithVelocity(spindexerConstants.spindexerSpeed);
           UptakeSubsystem.uptakeWithVelocity(uptakeConstants.uptakeSpeed);
       }else{
