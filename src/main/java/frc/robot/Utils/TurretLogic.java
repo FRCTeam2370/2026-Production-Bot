@@ -137,7 +137,7 @@ public class TurretLogic {
             -vUnajustedY - lateralOffsetVelocityY,
             vUnajustedZ + TurretConstants.TurretVerticalOffset);
         
-        turretAimPose.vel = shooterVel + Math.max(12*(distanceToTarget - 3.5), -2);//+ velocityOffset; //12
+        turretAimPose.vel = shooterVel ;//+ Math.max(12*(distanceToTarget - 3.5), -2);//+ velocityOffset; //12
         //This guy is just so we know if the brent solver calculated the angle for the lob shot or the direct shot
         turretAimPose.usingLower = usingLower;
 
@@ -213,7 +213,7 @@ public class TurretLogic {
         SwerveSubsystem.field.getObject("Jacob's AimPose").setPose(new Pose2d(aimPoseFieldX, aimPoseFieldY, new Rotation2d()));
 
         TurretAimPose returnPose = new TurretAimPose();
-        returnPose.vel = Math.max(shooterVel, shooterConstants.maxSpeed);
+        returnPose.vel = Math.min(shooterVel, shooterConstants.maxSpeed);
         returnPose.aimPose = new Translation3d(aimPoseFieldX, aimPoseFieldY, flattenedY);
         if(useGreater && shooterVel < 90){
             if(distanceToAdjustedTarget > 2){
