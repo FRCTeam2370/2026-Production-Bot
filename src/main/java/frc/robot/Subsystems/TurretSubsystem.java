@@ -239,8 +239,8 @@ public class TurretSubsystem extends SubsystemBase {
     turretRotConfig.Slot0.kI = 0.007;
     turretRotConfig.Slot0.kD = 0.005;
 
-    turretRotConfig.MotionMagic.MotionMagicAcceleration = 80;
-    turretRotConfig.MotionMagic.MotionMagicCruiseVelocity = 40;
+    turretRotConfig.MotionMagic.MotionMagicAcceleration = 120;
+    turretRotConfig.MotionMagic.MotionMagicCruiseVelocity = 60;
 
     turretRotConfig.CurrentLimits.StatorCurrentLimit = 40;
 
