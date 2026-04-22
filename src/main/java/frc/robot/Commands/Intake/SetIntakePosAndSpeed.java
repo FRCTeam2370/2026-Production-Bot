@@ -42,7 +42,7 @@ public class SetIntakePosAndSpeed extends Command {
     velocityOffset = mSwerve.getRobotRelativeSpeeds().vxMetersPerSecond / SwerveConstants.maxSpeed * (100 - initialTargetSpeed);
 
     if(TurretSubsystem.isShooting && mSwerve.getRobotRelativeSpeeds().vxMetersPerSecond == 0 && mSwerve.getRobotRelativeSpeeds().vyMetersPerSecond == 0 && jiggleTimer.get() % 1 < 0.5){
-      IntakeSubsystem.setIntakePos(pos + Rotation2d.fromDegrees(50).getRotations());
+      IntakeSubsystem.setIntakePos(pos + Rotation2d.fromDegrees(70).getRotations());
     }else{
       IntakeSubsystem.setIntakePos(pos);
     }

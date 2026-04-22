@@ -36,6 +36,7 @@ public class ShootAtVelocityForTime extends Command {
   public void initialize() {
     timer.reset();
     timer.start();
+    TurretSubsystem.isShooting = true;
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -61,6 +62,7 @@ public class ShootAtVelocityForTime extends Command {
     ShooterSubsystem.shootWithVelocity(0);
     UptakeSubsystem.uptakeWithVelocity(0);
     SpindexerSubsystem.spindexrWithVelocity(0);
+    TurretSubsystem.isShooting = false;
   }
 
   // Returns true when the command should end.

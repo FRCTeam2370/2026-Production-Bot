@@ -113,8 +113,8 @@ public class IntakeSubsystem extends SubsystemBase {
 
     intakeRotationMotorConfig.Slot0.kG = 0.04;
 
-    intakeRotationMotorConfig.MotionMagic.MotionMagicAcceleration = 100;
-    intakeRotationMotorConfig.MotionMagic.MotionMagicCruiseVelocity = 40;
+    intakeRotationMotorConfig.MotionMagic.MotionMagicAcceleration = 120;
+    intakeRotationMotorConfig.MotionMagic.MotionMagicCruiseVelocity = 60;
 
     intakeRotationMotorConfig.CurrentLimits.StatorCurrentLimit = 40;
 

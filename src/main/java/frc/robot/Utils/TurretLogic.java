@@ -213,7 +213,7 @@ public class TurretLogic {
         SwerveSubsystem.field.getObject("Jacob's AimPose").setPose(new Pose2d(aimPoseFieldX, aimPoseFieldY, new Rotation2d()));
 
         TurretAimPose returnPose = new TurretAimPose();
-        returnPose.vel = shooterVel;
+        returnPose.vel = Math.max(shooterVel, shooterConstants.maxSpeed);
         returnPose.aimPose = new Translation3d(aimPoseFieldX, aimPoseFieldY, flattenedY);
         if(useGreater && shooterVel < 90){
             if(distanceToAdjustedTarget > 2){

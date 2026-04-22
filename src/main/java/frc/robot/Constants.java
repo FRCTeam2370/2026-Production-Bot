@@ -34,19 +34,21 @@ public class Constants {
 
     public static final double ratioAdjustment = 0.8;
 
+    public static final double maxSpeed = 100;
+
     //public static final double ShooterRatio = 1.111111111111;
   }
 
   public static class uptakeConstants{
     public static final int uptakeMotorID = 4;
 
-    public static final int uptakeSpeed = 80;
+    public static final int uptakeSpeed = 100;
   }
 
   public static class spindexerConstants{
     public static final int spindexerMotorID = 5;
 
-    public static final double spindexerSpeed = 75;
+    public static final double spindexerSpeed = 110;//75
   }
 
   public static class intakeConstants{
