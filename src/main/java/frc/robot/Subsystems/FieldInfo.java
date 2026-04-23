@@ -143,7 +143,7 @@ public class FieldInfo extends SubsystemBase {
         case 'B' -> redInactiveFirst = false;
         default -> {
           // If we have invalid game data, assume hub is active.
-          redInactiveFirst = true;
+          redInactiveFirst = false;
         }
       }
     }else{//assume we won auto :)
@@ -174,7 +174,7 @@ public class FieldInfo extends SubsystemBase {
       prefireRed = false;
     }
 
-    if (matchTime > 120) {// could be -> (matchTime > 130)
+    if (matchTime > 130) {// could be -> (matchTime > 130)
       // Transition shift, hub is active.
       return true;
     } else if (matchTime > 105) {

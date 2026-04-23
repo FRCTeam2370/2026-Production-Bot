@@ -48,7 +48,7 @@ public class Constants {
   public static class spindexerConstants{
     public static final int spindexerMotorID = 5;
 
-    public static final double spindexerSpeed = 90;//75
+    public static final double spindexerSpeed = 85;//75, 90 works really well for throughput but is prone to jamming
   }
 
   public static class intakeConstants{

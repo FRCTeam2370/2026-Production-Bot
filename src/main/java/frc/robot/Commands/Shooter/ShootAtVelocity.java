@@ -63,7 +63,7 @@ public class ShootAtVelocity extends Command {
         }else{
           if(aimpose.aimPose == FieldInfo.fieldPoints.HubPose){
             UptakeSubsystem.uptakeWithVelocity(-20);
-            SpindexerSubsystem.spindexrWithVelocity(0);
+            SpindexerSubsystem.spindexrWithVelocity(-20);
           }else{
             SpindexerSubsystem.spindexrWithVelocity(spindexerConstants.spindexerSpeed);
             UptakeSubsystem.uptakeWithVelocity(uptakeConstants.uptakeSpeed);
@@ -71,7 +71,7 @@ public class ShootAtVelocity extends Command {
         }
       }else{
             UptakeSubsystem.uptakeWithVelocity(-20);
-            SpindexerSubsystem.spindexrWithVelocity(0);
+            SpindexerSubsystem.spindexrWithVelocity(-20);
       }
     }
     
