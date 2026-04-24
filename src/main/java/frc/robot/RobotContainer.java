@@ -40,6 +40,7 @@ import frc.robot.Commands.TurretCommands.PointTurretAndShootForTime2;
 import frc.robot.Commands.TurretCommands.SetElevationPos;
 import frc.robot.Commands.TurretCommands.ZeroTurret;
 import frc.robot.Constants.TurretConstants;
+import frc.robot.Constants.intakeConstants;
 import frc.robot.Subsystems.ClimberSubsystem;
 import frc.robot.Subsystems.FieldInfo;
 import frc.robot.Subsystems.IntakeSubsystem;
@@ -106,10 +107,9 @@ public class RobotContainer {
 
   //TODO: Add acceleration limit while shooting at the hub | change rotational velocity handling during shooting
   private void configureBindings() {
-    new SetIntakePosAndSpeed(Rotation2d.fromDegrees(-67).getRotations(), 60, mIntakeSubsystem, mSwerve);
     mSwerve.setDefaultCommand(new TeleopSwerve(mSwerve, ()-> -driver.getRawAxis(0), ()-> driver.getRawAxis(1), ()-> driver.getRawAxis(4), ()-> false));
     mTurretSubsystem.setDefaultCommand(new AimAtActiveAimPoint2(mTurretSubsystem, mSwerve, ()-> SwerveSubsystem.shouldAutoTurret));
-    //mIntakeSubsystem.(new SetIntakePosAndSpeed(Rotation2d.fromDegrees(-67).getRotations(), 60, mIntakeSubsystem, mSwerve));
+    mIntakeSubsystem.setDefaultCommand(new SetIntakePosAndSpeed(Rotation2d.fromDegrees(-67).getRotations(), 60, mIntakeSubsystem, mSwerve));
 
     driver.b().toggleOnFalse(new ToggleTurretFeatures());
 
@@ -123,7 +123,7 @@ public class RobotContainer {
     driver.povUp().whileTrue(new SimpleShootAtVelocity(mShooterSubsystem, -30));
     
     driver.rightTrigger().toggleOnTrue(new ShootAtVelocity(mShooterSubsystem, mUptakeSubsystem, mSpindexerSubsystem, mSwerve, mFieldInfo));
-    driver.leftBumper().toggleOnTrue(new SetIntakePosAndSpeed(Rotation2d.fromDegrees(-67).getRotations(), 60, mIntakeSubsystem, mSwerve));
+    driver.leftBumper().toggleOnTrue(new SetIntakePosAndSpeed(Rotation2d.fromDegrees(intakeConstants.intakeMax.getDegrees()).getRotations(), 0, mIntakeSubsystem, mSwerve));
     driver.povRight().toggleOnTrue(new SetIntakePosAndSpeed(Rotation2d.fromDegrees(-40).getRotations(), 60, mIntakeSubsystem, mSwerve));
 
     driver.rightStick().toggleOnTrue(new DriveOnX(mSwerve, ()-> -driver.getRawAxis(0)));

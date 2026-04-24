@@ -39,7 +39,7 @@ public class SetIntakePosAndSpeed extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    velocityOffset = mSwerve.getRobotRelativeSpeeds().vxMetersPerSecond / SwerveConstants.maxSpeed * (100 - initialTargetSpeed);
+    velocityOffset = initialTargetSpeed == 0 ? 0 : mSwerve.getRobotRelativeSpeeds().vxMetersPerSecond / SwerveConstants.maxSpeed * (100 - initialTargetSpeed);
 
     if(TurretSubsystem.isShooting && mSwerve.getRobotRelativeSpeeds().vxMetersPerSecond == 0 && mSwerve.getRobotRelativeSpeeds().vyMetersPerSecond == 0 && jiggleTimer.get() % 1 < 0.5){
       IntakeSubsystem.setIntakePos(pos + Rotation2d.fromDegrees(70).getRotations());

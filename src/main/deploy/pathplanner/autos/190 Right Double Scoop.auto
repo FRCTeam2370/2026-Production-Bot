@@ -11,9 +11,22 @@
           }
         },
         {
-          "type": "named",
+          "type": "deadline",
           "data": {
-            "name": "2 Aim and Shoot For 5"
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "2 Aim and Shoot For 5"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Jiggle Intake"
+                }
+              }
+            ]
           }
         },
         {
