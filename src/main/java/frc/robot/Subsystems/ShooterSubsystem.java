@@ -50,6 +50,8 @@ public class ShooterSubsystem extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+    SmartDashboard.putBoolean("CANivore loop", shooterMotorTwo.isConnected());
+
     SmartDashboard.putNumber("Motor One Velocity", shooterMotorOne.getVelocity().getValueAsDouble());
     SmartDashboard.putNumber("Motor Two Velocity", shooterMotorTwo.getVelocity().getValueAsDouble());
     SmartDashboard.putNumber("Motor One Current", shooterMotorOne.getStatorCurrent().getValueAsDouble());

@@ -95,6 +95,10 @@ public class SwerveModule {
         turnEncoder.getConfigurator().apply(encoderConfig);
     }
 
+    public boolean getDriveCANStatus(){
+        return driveMotor.isConnected();
+    }
+
     public void setDesiredState(SwerveModuleState state, boolean isOpenLoop){
         state.optimize(getState().angle);
         setAngle(state);

@@ -52,6 +52,7 @@ import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.networktables.StructPublisher;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.FieldObject2d;
@@ -140,6 +141,9 @@ public class SwerveSubsystem extends SubsystemBase {
 
   @Override
   public void periodic() {
+    SmartDashboard.putBoolean("Drive CAN", mSwerveModules[1].getDriveCANStatus());
+    SmartDashboard.putNumber("Battery Voltage", RobotController.getBatteryVoltage());
+    SmartDashboard.putBoolean("Is Browned Out", RobotController.isBrownedOut());
 
     SmartDashboard.putNumber("Robot Rotational Velocity", gyro.getAngularVelocityZWorld().getValueAsDouble());
     SmartDashboard.putBoolean("Auto Drive Features", shouldAutoTrench);
