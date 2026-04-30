@@ -2,40 +2,42 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-package frc.robot.Commands.ClimberCommands;
+package frc.robot.Commands;
+
+import com.ctre.phoenix6.signals.NeutralModeValue;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.Subsystems.ClimberSubsystem;
+import frc.robot.Subsystems.SwerveSubsystem;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
-public class ClimbForPercent extends Command {
-  double percent0to100;
-  /** Creates a new ClimbForPercent. */
-  public ClimbForPercent(double percent0to100, ClimberSubsystem mClimberSubsystem) {
+public class SetDriveNeutralMode extends Command {
+  SwerveSubsystem mSwerve;
+  NeutralModeValue val;
+  /** Creates a new SetDriveNeutralMode. */
+  public SetDriveNeutralMode(SwerveSubsystem mSwerve, NeutralModeValue val) {
     // Use addRequirements() here to declare subsystem dependencies.
-    this.percent0to100 = percent0to100;
-    addRequirements(mClimberSubsystem);
+    this.mSwerve = mSwerve;
+    this.val = val;
+    addRequirements(mSwerve);
   }
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+    mSwerve.setDriveCoast(val);
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
-  public void execute() {
-    ClimberSubsystem.runClimberAtSpeed(percent0to100);
-  }
+  public void execute() {}
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {
-    ClimberSubsystem.runClimberAtSpeed(0);
-  }
+  public void end(boolean interrupted) {}
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    return true;
   }
 }

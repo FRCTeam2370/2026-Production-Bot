@@ -95,6 +95,14 @@ public class SwerveModule {
         turnEncoder.getConfigurator().apply(encoderConfig);
     }
 
+    public void configNeutralMode(NeutralModeValue val){
+        driveMotor.setNeutralMode(val);
+    }
+
+    public void configBrake(){
+        driveMotor.setNeutralMode(NeutralModeValue.Brake);
+    }
+
     public boolean getDriveCANStatus(){
         return driveMotor.isConnected();
     }

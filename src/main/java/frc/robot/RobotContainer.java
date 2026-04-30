@@ -5,6 +5,8 @@
 package frc.robot;
 
 
+import com.ctre.phoenix6.signals.NeutralModeValue;
+import com.fasterxml.jackson.databind.util.Named;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.commands.PathPlannerAuto;
@@ -18,15 +20,15 @@ import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.DeferredCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Commands.DriveOnX;
 import frc.robot.Commands.ResetGyro;
+import frc.robot.Commands.SetDriveNeutralMode;
 import frc.robot.Commands.TeleopSwerve;
 import frc.robot.Commands.ToggleDriveFeatures;
 import frc.robot.Commands.ToggleTurretFeatures;
 import frc.robot.Commands.XMode;
-import frc.robot.Commands.ClimberCommands.ClimbForPercent;
-import frc.robot.Commands.ClimberCommands.SetClimberPos;
 import frc.robot.Commands.Intake.DeployIntake;
 import frc.robot.Commands.Intake.IntakeControl;
 import frc.robot.Commands.Intake.SetIntakePosAndSpeed;
@@ -41,7 +43,6 @@ import frc.robot.Commands.TurretCommands.SetElevationPos;
 import frc.robot.Commands.TurretCommands.ZeroTurret;
 import frc.robot.Constants.TurretConstants;
 import frc.robot.Constants.intakeConstants;
-import frc.robot.Subsystems.ClimberSubsystem;
 import frc.robot.Subsystems.FieldInfo;
 import frc.robot.Subsystems.IntakeSubsystem;
 import frc.robot.Subsystems.LEDSubsystem;
@@ -71,7 +72,6 @@ public class RobotContainer {
   private final ShooterSubsystem mShooterSubsystem = new ShooterSubsystem();
   private final Vision mVision = new Vision();
   private final LEDSubsystem mcLedSubsystem = new LEDSubsystem();
-  private final ClimberSubsystem mClimberSubsystem = new ClimberSubsystem();
   private final OperatorTargetingSubsystem mcOperatorTargetingSubsystem = new OperatorTargetingSubsystem();
 
   private final SendableChooser<Command> autoChooser;
@@ -98,6 +98,7 @@ public class RobotContainer {
     NamedCommands.registerCommand("Prop Intake", new DeployIntake(Rotation2d.fromDegrees(30).getRotations(), 30, mIntakeSubsystem, mSwerve));
     NamedCommands.registerCommand("Feed Right", new PointTurretAndShootForTime( 2.5, mTurretSubsystem, mSwerve, mUptakeSubsystem, mSpindexerSubsystem, mShooterSubsystem));
     NamedCommands.registerCommand("Jiggle Intake", new SetIntakePosAndSpeed(Rotation2d.fromDegrees(-67).getRotations(), 60, mIntakeSubsystem, mSwerve));
+    NamedCommands.registerCommand("Coast", new SetDriveNeutralMode(mSwerve, NeutralModeValue.Coast));
 
     autoChooser = AutoBuilder.buildAutoChooser();
     SmartDashboard.putData("Auto Chooser", autoChooser);    

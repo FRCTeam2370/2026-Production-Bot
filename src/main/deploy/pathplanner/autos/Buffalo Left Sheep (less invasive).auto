@@ -19,37 +19,50 @@
         {
           "type": "wait",
           "data": {
-            "waitTime": 0.0
+            "waitTime": 1.5
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "Sheep OP Right To Neutral Scoop Two Part 1"
+            "pathName": "Sheep OP Second Fast Neutral Scoop Left Part 1"
           }
         },
         {
           "type": "wait",
           "data": {
-            "waitTime": 2.0
+            "waitTime": 0.5
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "Sheep OP Right To Neutral Scoop Two Part 2 Out the way"
+            "pathName": "Sheep OP Second Fast Neutral Scoop Left Part 2"
           }
         },
         {
-          "type": "named",
+          "type": "parallel",
           "data": {
-            "name": "2 Aim and Shoot"
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "2 Aim and Shoot"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Jiggle Intake"
+                }
+              }
+            ]
           }
         }
       ]
     }
   },
   "resetOdom": true,
-  "folder": "Right Autos",
+  "folder": "Left Autos",
   "choreoAuto": false
 }

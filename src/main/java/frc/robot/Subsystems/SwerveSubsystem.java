@@ -20,6 +20,7 @@ import org.photonvision.PhotonPoseEstimator.PoseStrategy;
 
 import com.ctre.phoenix6.configs.Pigeon2Configuration;
 import com.ctre.phoenix6.hardware.Pigeon2;
+import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.config.ModuleConfig;
 import com.pathplanner.lib.config.PIDConstants;
@@ -314,6 +315,12 @@ public class SwerveSubsystem extends SubsystemBase {
     for(SwerveModule module : mSwerveModules){
       module.setDesiredState(new SwerveModuleState(0, Rotation2d.fromDegrees(0)), false);
     } 
+  }
+
+  public void setDriveCoast(NeutralModeValue val){
+    for(SwerveModule module : mSwerveModules){
+        module.configNeutralMode(val);
+      }
   }
 
   public static Rotation2d getgyro0to360(double offset){

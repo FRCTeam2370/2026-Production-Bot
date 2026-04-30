@@ -58,6 +58,8 @@ public class SpindexerSubsystem extends SubsystemBase {
     spindexerMotorConfig.Slot0.kI = 0;
     spindexerMotorConfig.Slot0.kD = 0;
 
+    spindexerMotorConfig.ClosedLoopRamps.DutyCycleClosedLoopRampPeriod = 0.5;
+
     spindexerMotor.getConfigurator().apply(spindexerMotorConfig);
   }
 }

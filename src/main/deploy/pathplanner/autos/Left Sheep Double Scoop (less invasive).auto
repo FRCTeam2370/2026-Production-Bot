@@ -19,37 +19,43 @@
         {
           "type": "wait",
           "data": {
-            "waitTime": 1.0
+            "waitTime": 1.5
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "Sheep OP Right To Neutral Scoop Two Part 1"
+            "pathName": "Sheep OP Second Fast Neutral Scoop Left Part 1"
           }
         },
         {
           "type": "wait",
           "data": {
-            "waitTime": 1.0
+            "waitTime": 0.5
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "Sheep OP Right To Neutral Scoop Two Part 2"
+            "pathName": "Sheep OP Second Fast Neutral Scoop Left Part to Neutral"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "2 Aim and Shoot"
+            "name": "Coast"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Neutral To Ready left"
           }
         }
       ]
     }
   },
   "resetOdom": true,
-  "folder": "Right Autos",
+  "folder": "Left Autos",
   "choreoAuto": false
 }

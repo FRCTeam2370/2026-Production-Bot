@@ -19,7 +19,7 @@
         {
           "type": "wait",
           "data": {
-            "waitTime": 0.0
+            "waitTime": 1.0
           }
         },
         {
@@ -31,19 +31,25 @@
         {
           "type": "wait",
           "data": {
-            "waitTime": 2.0
+            "waitTime": 1.0
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "Sheep OP Right To Neutral Scoop Two Part 2 Out the way"
+            "pathName": "Sheep OP Right To Neutral Scoop Two Part 2 to neutral"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "2 Aim and Shoot"
+            "name": "Coast"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Right To Neutral ready"
           }
         }
       ]

@@ -23,7 +23,7 @@ public class IntakeSubsystem extends SubsystemBase {
   
   public static TalonFX intakeMotor = new TalonFX(intakeConstants.intakeMotorID, "*");
   public static TalonFX intakeRotationMotor = new TalonFX(intakeConstants.intakeRotationMotorID, "*");
-  public static CANcoder intakeCANcoder = new CANcoder(intakeConstants.intakeCANcoderID);
+  //public static CANcoder intakeCANcoder = new CANcoder(intakeConstants.intakeCANcoderID);
 
   public static TalonFXConfiguration intakeMotorConfig = new TalonFXConfiguration();
   public static TalonFXConfiguration intakeRotationMotorConfig = new TalonFXConfiguration();
@@ -46,7 +46,7 @@ public class IntakeSubsystem extends SubsystemBase {
     SmartDashboard.putNumber("Intake Vel", intakeMotor.getVelocity().getValueAsDouble());
     SmartDashboard.putNumber("Intake Pos", intakeRotationMotor.getPosition().getValueAsDouble());
     SmartDashboard.putNumber("intake position current", intakeRotationMotor.getStatorCurrent().getValueAsDouble());
-    SmartDashboard.putNumber("Intake CANcoder val", intakeCANcoder.getAbsolutePosition().getValueAsDouble());
+    //SmartDashboard.putNumber("Intake CANcoder val", intakeCANcoder.getAbsolutePosition().getValueAsDouble());
     SmartDashboard.putNumber("Intake Degrees", Rotation2d.fromRotations(KrakenToIntake(intakeRotationMotor.getPosition().getValueAsDouble())).getDegrees());
     if(KrakenToIntake(intakeRotationMotor.getPosition().getValueAsDouble()) < intakeConstants.intakeMin.getRotations() * 0.95){
       ObjectDetection.intakeDown = true;
@@ -119,7 +119,7 @@ public class IntakeSubsystem extends SubsystemBase {
     intakeRotationMotorConfig.CurrentLimits.StatorCurrentLimit = 40;
 
     intakeRotationMotor.getConfigurator().apply(intakeRotationMotorConfig);
-    intakeCANcoder.getConfigurator().apply(CANcoderConfig);
+    //intakeCANcoder.getConfigurator().apply(CANcoderConfig);
   }
 
   private static double intakeToKraken(double rot){

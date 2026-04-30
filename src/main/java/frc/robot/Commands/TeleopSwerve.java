@@ -7,6 +7,8 @@ package frc.robot.Commands;
 import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
 
+import com.ctre.phoenix6.signals.NeutralModeValue;
+
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
@@ -43,6 +45,11 @@ public class TeleopSwerve extends Command {
     this.rotSup = rotSup;
     this.robotCentricSup = robotCentricSup;
     SwerveSubsystem.resetGyro();
+  }
+
+  @Override
+  public void initialize(){
+    mSwerve.setDriveCoast(NeutralModeValue.Brake);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
