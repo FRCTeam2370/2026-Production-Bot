@@ -13,31 +13,31 @@
         {
           "type": "named",
           "data": {
-            "name": "2 Aim and Shoot For 3"
+            "name": "2 Aim and Shoot For 2"
           }
         },
         {
           "type": "wait",
           "data": {
-            "waitTime": 1.0
+            "waitTime": 0.0
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "Sheep OP Right To Neutral Scoop Two Part 1"
+            "pathName": "Sheep Better follow Left Part 1"
           }
         },
         {
           "type": "wait",
           "data": {
-            "waitTime": 1.0
+            "waitTime": 0.0
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "Sheep OP Right To Neutral Scoop Two Part 2 to neutral"
+            "pathName": "Sheep OP Second Fast Neutral Scoop Left Part to Neutral"
           }
         },
         {
@@ -47,16 +47,22 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Right To Neutral ready"
+                  "pathName": "Neutral To Ready left"
                 }
               }
             ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "2 Aim and Shoot"
           }
         }
       ]
     }
   },
   "resetOdom": true,
-  "folder": "Right Autos",
+  "folder": "Left Autos",
   "choreoAuto": false
 }

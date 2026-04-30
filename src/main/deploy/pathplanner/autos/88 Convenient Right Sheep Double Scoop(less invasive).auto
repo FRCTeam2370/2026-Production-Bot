@@ -13,19 +13,19 @@
         {
           "type": "named",
           "data": {
-            "name": "2 Aim and Shoot For 3"
+            "name": "2 Aim and Shoot For 2"
           }
         },
         {
           "type": "wait",
           "data": {
-            "waitTime": 1.0
+            "waitTime": 0.0
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "Sheep OP Right To Neutral Scoop Two Part 1"
+            "pathName": "Conveneint Sheep Part 1"
           }
         },
         {
@@ -41,16 +41,15 @@
           }
         },
         {
-          "type": "parallel",
+          "type": "path",
           "data": {
-            "commands": [
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "Right To Neutral ready"
-                }
-              }
-            ]
+            "pathName": "Right To Neutral ready"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "2 Aim and Shoot"
           }
         }
       ]

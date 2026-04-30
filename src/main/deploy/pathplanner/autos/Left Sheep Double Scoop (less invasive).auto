@@ -19,7 +19,7 @@
         {
           "type": "wait",
           "data": {
-            "waitTime": 1.5
+            "waitTime": 0.0
           }
         },
         {
@@ -41,15 +41,16 @@
           }
         },
         {
-          "type": "named",
+          "type": "parallel",
           "data": {
-            "name": "Coast"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "Neutral To Ready left"
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Neutral To Ready left"
+                }
+              }
+            ]
           }
         }
       ]

@@ -24,6 +24,7 @@ import edu.wpi.first.wpilibj2.command.DeferredCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Commands.DriveOnX;
 import frc.robot.Commands.ResetGyro;
+import frc.robot.Commands.RunSystemsCheck;
 import frc.robot.Commands.SetDriveNeutralMode;
 import frc.robot.Commands.TeleopSwerve;
 import frc.robot.Commands.ToggleDriveFeatures;
@@ -40,6 +41,7 @@ import frc.robot.Commands.TurretCommands.EnableAirStrike;
 import frc.robot.Commands.TurretCommands.PointTurretAndShootForTime;
 import frc.robot.Commands.TurretCommands.PointTurretAndShootForTime2;
 import frc.robot.Commands.TurretCommands.SetElevationPos;
+import frc.robot.Commands.TurretCommands.SetTurretRotation;
 import frc.robot.Commands.TurretCommands.ZeroTurret;
 import frc.robot.Constants.TurretConstants;
 import frc.robot.Constants.intakeConstants;
@@ -86,6 +88,7 @@ public class RobotContainer {
     NamedCommands.registerCommand("Aim and Shoot For 3", new PointTurretAndShootForTime( 3, mTurretSubsystem, mSwerve, mUptakeSubsystem, mSpindexerSubsystem, mShooterSubsystem));
     NamedCommands.registerCommand("Aim and Shoot For 5", new PointTurretAndShootForTime( 5, mTurretSubsystem, mSwerve, mUptakeSubsystem, mSpindexerSubsystem, mShooterSubsystem));
     NamedCommands.registerCommand("Aim and Shoot For 9", new PointTurretAndShootForTime( 9, mTurretSubsystem, mSwerve, mUptakeSubsystem, mSpindexerSubsystem, mShooterSubsystem));
+    NamedCommands.registerCommand("2 Aim and Shoot For 2", new PointTurretAndShootForTime2( 2, mTurretSubsystem, mSwerve, mUptakeSubsystem, mSpindexerSubsystem, mShooterSubsystem));
     NamedCommands.registerCommand("2 Aim and Shoot For 3", new PointTurretAndShootForTime2( 3, mTurretSubsystem, mSwerve, mUptakeSubsystem, mSpindexerSubsystem, mShooterSubsystem));
     NamedCommands.registerCommand("2 Aim and Shoot For 5", new PointTurretAndShootForTime2( 5, mTurretSubsystem, mSwerve, mUptakeSubsystem, mSpindexerSubsystem, mShooterSubsystem));
     NamedCommands.registerCommand("2 Aim and Shoot For 9", new PointTurretAndShootForTime2( 9, mTurretSubsystem, mSwerve, mUptakeSubsystem, mSpindexerSubsystem, mShooterSubsystem));
@@ -145,6 +148,10 @@ public class RobotContainer {
     operator.y().toggleOnTrue(new ToggleDriveFeatures());
     operator.b().toggleOnFalse(new ToggleTurretFeatures());
     operator.x().toggleOnTrue(new ZeroTurret());
+    operator.leftBumper().onTrue(new SetDriveNeutralMode(mSwerve, NeutralModeValue.Brake));
+    operator.rightBumper().onTrue(new SetDriveNeutralMode(mSwerve, NeutralModeValue.Coast));
+
+    operator.povDown().toggleOnTrue(new RunSystemsCheck(mTurretSubsystem, mShooterSubsystem, mUptakeSubsystem, mSpindexerSubsystem));
   }
 
   public Command getAutonomousCommand() {

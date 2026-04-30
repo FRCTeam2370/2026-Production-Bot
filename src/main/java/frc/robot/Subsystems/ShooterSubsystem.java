@@ -54,8 +54,8 @@ public class ShooterSubsystem extends SubsystemBase {
 
     SmartDashboard.putNumber("Motor One Velocity", shooterMotorOne.getVelocity().getValueAsDouble());
     SmartDashboard.putNumber("Motor Two Velocity", shooterMotorTwo.getVelocity().getValueAsDouble());
-    SmartDashboard.putNumber("Motor One Current", shooterMotorOne.getStatorCurrent().getValueAsDouble());
-    SmartDashboard.putNumber("Motor Two Current", shooterMotorTwo.getStatorCurrent().getValueAsDouble());
+    //SmartDashboard.putNumber("Motor One Current", shooterMotorOne.getStatorCurrent().getValueAsDouble());
+    //SmartDashboard.putNumber("Motor Two Current", shooterMotorTwo.getStatorCurrent().getValueAsDouble());
   }
 
   public static void shooterMotorConfig() {

@@ -150,7 +150,7 @@ public class SwerveSubsystem extends SubsystemBase {
     SmartDashboard.putBoolean("Auto Drive Features", shouldAutoTrench);
     SmartDashboard.putBoolean("Auto Turret Aiming", shouldAutoTurret);
 
-    SmartDashboard.putString("Path", getWallSweep().name);
+    //SmartDashboard.putString("Path", getWallSweep().name);
     // This method will be called once per scheduler run
     // SmartDashboard.putNumber("Mod 0 CAN Pose", Rotation2d.fromDegrees(mSwerveModules[0].getCANcoder().getDegrees()).getDegrees());
     // SmartDashboard.putNumber("Mod 1 CAN Pose", Rotation2d.fromDegrees(mSwerveModules[1].getCANcoder().getDegrees()).getDegrees());
@@ -168,7 +168,7 @@ public class SwerveSubsystem extends SubsystemBase {
     // SmartDashboard.putNumber("Heading", getHeading());
     // SmartDashboard.putNumber("pose x", poseEstimator.getEstimatedPosition().getX());
     // SmartDashboard.putNumber("pose y", poseEstimator.getEstimatedPosition().getY());
-    SmartDashboard.putNumber("pose rot", poseEstimator.getEstimatedPosition().getRotation().getDegrees());
+    //SmartDashboard.putNumber("pose rot", poseEstimator.getEstimatedPosition().getRotation().getDegrees());
 
     nextClosestBall.setPose(getClosestBall());
 
@@ -181,7 +181,7 @@ public class SwerveSubsystem extends SubsystemBase {
     // SmartDashboard.putNumber("Odometry y", odometry.getPoseMeters().getY());
     //SmartDashboard.putNumber("Calculated Turret Angle", turretRotationToPose(new Pose2d(Red.HubFieldPoseRed.getX(), Red.HubFieldPoseRed.getY(), new Rotation2d())).getDegrees());
     SmartDashboard.putNumber("Calculated Turret Angle 0-450", turretRotationToPose450(new Pose2d(Red.HubFieldPoseRed.getX(), Red.HubFieldPoseRed.getY(), new Rotation2d())).getDegrees());
-    NetworkTableInstance.getDefault().getTable("fuelCV").getEntry("Camera Pose").setDoubleArray(new Double[]{detectionCamToField().getX(), detectionCamToField().getY(), poseEstimator.getEstimatedPosition().getRotation().getRadians()});
+    //NetworkTableInstance.getDefault().getTable("fuelCV").getEntry("Camera Pose").setDoubleArray(new Double[]{detectionCamToField().getX(), detectionCamToField().getY(), poseEstimator.getEstimatedPosition().getRotation().getRadians()});
 
     updateOdometry();
     //odometry.update(getRotation2d(), getModulePositions());//USE THIS WHEN TESTING AUTOS WITHOUT FIELD LOCALIZATION
@@ -190,7 +190,7 @@ public class SwerveSubsystem extends SubsystemBase {
     field.setRobotPose(poseEstimator.getEstimatedPosition());
     turret.setPose(new Pose2d(turretToField().getTranslation(), turretRotationToPose(HubPose)));
     //HubFieldPose.setPose(HubPose);
-    detectorCam.setPose(detectionCamToField());
+    //detectorCam.setPose(detectionCamToField());
 
     publisher.set(poseEstimator.getEstimatedPosition());
   }

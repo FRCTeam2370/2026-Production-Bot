@@ -7,6 +7,7 @@ package frc.robot;
 import com.ctre.phoenix6.StatusSignal;
 import com.ctre.phoenix6.configs.CANcoderConfiguration;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
+import com.ctre.phoenix6.controls.NeutralOut;
 import com.ctre.phoenix6.controls.PositionDutyCycle;
 import com.ctre.phoenix6.controls.VelocityDutyCycle;
 import com.ctre.phoenix6.hardware.CANcoder;
@@ -76,12 +77,13 @@ public class SwerveModule {
         turnMotorConfig.ClosedLoopGeneral.ContinuousWrap = true;
 
         driveMotorConfig.OpenLoopRamps.DutyCycleOpenLoopRampPeriod = Constants.SwerveConstants.driveRamp;
+        driveMotorConfig.MotorOutput.NeutralMode = NeutralModeValue.Brake;
 
         driveMotor.getConfigurator().apply(driveMotorConfig);
         turnMotor.getConfigurator().apply(turnMotorConfig);
 
         driveMotor.setPosition(0);
-        driveMotor.setNeutralMode(NeutralModeValue.Brake);// turn these back to brake after offsets
+        //driveMotor.setNeutralMode(NeutralModeValue.Brake);// turn these back to brake after offsets
         turnMotor.setNeutralMode(NeutralModeValue.Brake);
 
         resetToAbsolute();
@@ -96,11 +98,8 @@ public class SwerveModule {
     }
 
     public void configNeutralMode(NeutralModeValue val){
-        driveMotor.setNeutralMode(val);
-    }
-
-    public void configBrake(){
-        driveMotor.setNeutralMode(NeutralModeValue.Brake);
+        driveMotorConfig.MotorOutput.NeutralMode = val;
+        driveMotor.getConfigurator().apply(driveMotorConfig.MotorOutput);
     }
 
     public boolean getDriveCANStatus(){
