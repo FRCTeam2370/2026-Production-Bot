@@ -176,12 +176,18 @@ public class TurretLogic {
         double flattenedRobotVel = turretSpeed * Math.cos(angleRelativeToAjustedTarget);
         double shooterVel;
 
-        shooterVel = 0.5*Math.pow(distanceToAdjustedTarget, 1.8) + 52;//- 2*Math.abs(Math.cos(Math.PI*distanceToAdjustedTarget/15));//5*distanceToAdjustedTarget + 50;//distance to target in meters + 50 just because (idk I'll make a better function later)
+        shooterVel = 0.5*Math.pow(distanceToAdjustedTarget, 1.8) + 53;//- 2*Math.abs(Math.cos(Math.PI*distanceToAdjustedTarget/15));//5*distanceToAdjustedTarget + 50;//distance to target in meters + 50 just because (idk I'll make a better function later)
          
         //double launchSpeed = 0.0754888 * Math.PI *0.5* shooterVel * 20/18;//Launch speed of the ball 
         
         //double launchSpeed = 0.08255 * Math.PI *0.5* shooterVel * 20/18;
         double launchSpeed = 0.08255 * Math.PI *0.475* shooterVel * 20/18;
+
+        if(distanceToAdjustedTarget < 2){
+            shooterVel -= 10/distanceToAdjustedTarget;
+        }else if(distanceToAdjustedTarget > 3){
+            shooterVel += 2*distanceToAdjustedTarget;
+        }
 
         // if(distanceToAdjustedTarget < 2.25){
         //     //launchSpeed = (0.08255 * Math.PI *0.5* shooterVel * 20/18) * 0.5;
@@ -223,7 +229,7 @@ public class TurretLogic {
         returnPose.aimPose = new Translation3d(aimPoseFieldX, aimPoseFieldY, flattenedY);
         if(useGreater && shooterVel < 90){
             if(distanceToAdjustedTarget > 2){
-                returnPose.elevationAngleDegrees = Math.toDegrees(theta) ;//+ distanceToAdjustedTarget;//0.5
+                returnPose.elevationAngleDegrees = Math.toDegrees(theta);//+ distanceToAdjustedTarget;//0.5
             }else{
                 returnPose.elevationAngleDegrees = TurretConstants.ElevationMaxAngle.getDegrees();
             }

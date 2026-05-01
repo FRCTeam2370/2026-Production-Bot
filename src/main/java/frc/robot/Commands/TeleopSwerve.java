@@ -29,9 +29,9 @@ public class TeleopSwerve extends Command {
   private DoubleSupplier xSup, ySup, rotSup;
   private BooleanSupplier robotCentricSup;
   private double shootLimiter = 1;
-  private SlewRateLimiter xLimiter = new SlewRateLimiter(4.5);
-  private SlewRateLimiter yLimiter = new SlewRateLimiter(4.5);
-  private SlewRateLimiter rotLimiter = new SlewRateLimiter(4.5);
+  private SlewRateLimiter xLimiter = new SlewRateLimiter(SwerveConstants.maxSpeed);
+  private SlewRateLimiter yLimiter = new SlewRateLimiter(SwerveConstants.maxSpeed);
+  private SlewRateLimiter rotLimiter = new SlewRateLimiter(SwerveConstants.maxSpeed);
   private SlewRateLimiter xShotLim = new SlewRateLimiter(1);
   private SlewRateLimiter yShotLim = new SlewRateLimiter(1);
   private SlewRateLimiter rotShotLim = new SlewRateLimiter(1);
@@ -59,9 +59,9 @@ public class TeleopSwerve extends Command {
     double yVal = Math.abs(ySup.getAsDouble()) < SwerveConstants.deadband ? 0 : ySup.getAsDouble();
     double rotVal = Math.abs(rotSup.getAsDouble()) < SwerveConstants.deadband ? 0 : rotSup.getAsDouble();
 
-    // if(xVal == 0 && yVal == 0 && rotVal == 0){
-    //   //mSwerve.xMode();
-    // }else{
+    if(xVal == 0 && yVal == 0 && rotVal == 0 && mSwerve.getRobotRelativeSpeeds().vxMetersPerSecond == 0 && mSwerve.getRobotRelativeSpeeds().vyMetersPerSecond == 0 && mSwerve.getRobotRelativeSpeeds().omegaRadiansPerSecond == 0){
+      mSwerve.xMode();
+    }else{
       if(TurretSubsystem.isShooting && TurretSubsystem.activeAimPoint.aimPoint == FieldInfo.fieldPoints.HubPose){
         ActiveAimPose pose = TurretSubsystem.activeAimPoint;
         double xDistanceToTarget = pose.aimPoint.getX() - SwerveSubsystem.poseEstimator.getEstimatedPosition().getX();
@@ -93,6 +93,6 @@ public class TeleopSwerve extends Command {
         mSwerve.drive(new Translation2d(xLimiter.calculate(xVal), yLimiter.calculate(yVal)).times(SwerveConstants.maxSpeed * shootLimiter), rotLimiter.calculate(rotVal * 0.4 * shootLimiter), !robotCentricSup.getAsBoolean(), true);
       }
       
-      // }
+    }
   }
 }

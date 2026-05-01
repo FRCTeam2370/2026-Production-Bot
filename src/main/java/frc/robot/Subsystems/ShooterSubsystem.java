@@ -62,14 +62,14 @@ public class ShooterSubsystem extends SubsystemBase {
     shooterMotorOne.setNeutralMode(NeutralModeValue.Coast);
     shooterMotorTwo.setNeutralMode(NeutralModeValue.Coast);
 
-    shooterMotorOneConfig.CurrentLimits.StatorCurrentLimit = 40;
-    shooterMotorTwoConfig.CurrentLimits.StatorCurrentLimit = 40;
+    shooterMotorOneConfig.CurrentLimits.StatorCurrentLimit = 60;
+    shooterMotorTwoConfig.CurrentLimits.StatorCurrentLimit = 60;
 
     shooterMotorOneConfig.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
     shooterMotorTwoConfig.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
 
-    shooterMotorOneConfig.Slot0.kV = 0.015;//0.035;
-    shooterMotorTwoConfig.Slot0.kV = 0.015;//0.035;
+    shooterMotorOneConfig.Slot0.kV = 0.0105;//0.035;
+    shooterMotorTwoConfig.Slot0.kV = 0.0105;//0.035;
 
     shooterMotorOneConfig.Slot0.kP = 0.0975;
     shooterMotorTwoConfig.Slot0.kP = 0.0975;

@@ -89,6 +89,7 @@ public class RobotContainer {
     NamedCommands.registerCommand("Aim and Shoot For 5", new PointTurretAndShootForTime( 5, mTurretSubsystem, mSwerve, mUptakeSubsystem, mSpindexerSubsystem, mShooterSubsystem));
     NamedCommands.registerCommand("Aim and Shoot For 9", new PointTurretAndShootForTime( 9, mTurretSubsystem, mSwerve, mUptakeSubsystem, mSpindexerSubsystem, mShooterSubsystem));
     NamedCommands.registerCommand("2 Aim and Shoot For 2", new PointTurretAndShootForTime2( 2, mTurretSubsystem, mSwerve, mUptakeSubsystem, mSpindexerSubsystem, mShooterSubsystem));
+    NamedCommands.registerCommand("2 Aim and Shoot For 4", new PointTurretAndShootForTime2( 4, mTurretSubsystem, mSwerve, mUptakeSubsystem, mSpindexerSubsystem, mShooterSubsystem));
     NamedCommands.registerCommand("2 Aim and Shoot For 3", new PointTurretAndShootForTime2( 3, mTurretSubsystem, mSwerve, mUptakeSubsystem, mSpindexerSubsystem, mShooterSubsystem));
     NamedCommands.registerCommand("2 Aim and Shoot For 5", new PointTurretAndShootForTime2( 5, mTurretSubsystem, mSwerve, mUptakeSubsystem, mSpindexerSubsystem, mShooterSubsystem));
     NamedCommands.registerCommand("2 Aim and Shoot For 9", new PointTurretAndShootForTime2( 9, mTurretSubsystem, mSwerve, mUptakeSubsystem, mSpindexerSubsystem, mShooterSubsystem));
@@ -104,7 +105,7 @@ public class RobotContainer {
     NamedCommands.registerCommand("Coast", new SetDriveNeutralMode(mSwerve, NeutralModeValue.Coast));
 
     autoChooser = AutoBuilder.buildAutoChooser();
-    SmartDashboard.putData("Auto Chooser", autoChooser);    
+    SmartDashboard.putData("Auto Chooser", autoChooser);
     
     configureBindings();
   }
@@ -155,6 +156,7 @@ public class RobotContainer {
   }
 
   public Command getAutonomousCommand() {
+
     return autoChooser.getSelected();
   }
 }
