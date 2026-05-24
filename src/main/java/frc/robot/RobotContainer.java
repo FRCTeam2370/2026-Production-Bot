@@ -24,7 +24,6 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Constants.FieldConstants;
 import frc.robot.Constants.intakeConstants;
 import frc.robot.Commands.DriveOnX;
-import frc.robot.Commands.MakeAuto;
 import frc.robot.Commands.ResetGyro;
 import frc.robot.Commands.RunSystemsCheck;
 import frc.robot.Commands.SetDriveNeutralMode;
