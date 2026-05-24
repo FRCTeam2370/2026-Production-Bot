@@ -83,9 +83,9 @@ public class TeleopSwerve extends Command {
       xVal *= SwerveSubsystem.color.isPresent() && SwerveSubsystem.color.get() == Alliance.Blue ? -1 : 1;
       yVal *= SwerveSubsystem.color.isPresent() && SwerveSubsystem.color.get() == Alliance.Blue ? -1 : 1;
 
-      if(SwerveSubsystem.shouldAutoTrench){
-        xVal = SwerveSubsystem.Clamp(xVal - SwerveSubsystem.getTrenchOffsetY(), -1, 1);
-      }
+      // if(SwerveSubsystem.shouldAutoTrench){
+      //   xVal = SwerveSubsystem.Clamp(xVal - SwerveSubsystem.getTrenchOffsetY(), -1, 1);
+      // }
 
       if(TurretSubsystem.isShooting && TurretSubsystem.activeAimPoint.aimPoint == FieldInfo.fieldPoints.HubPose){
         mSwerve.drive(new Translation2d(xShotLim.calculate(xVal), yShotLim.calculate(yVal)).times(SwerveConstants.maxSpeed * shootLimiter), rotShotLim.calculate(rotVal * 0.4 * shootLimiter), !robotCentricSup.getAsBoolean(), true);

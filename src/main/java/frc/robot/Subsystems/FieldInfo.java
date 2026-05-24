@@ -22,6 +22,12 @@ import frc.robot.Constants.FieldConstants.Red;
 import frc.robot.Subsystems.LEDSubsystem.LEDState;
 
 public class FieldInfo extends SubsystemBase {
+  public static enum Dot {
+    LEFT_DOT,
+    MIDDLE_DOT,
+    RIGHT_DOT
+  }
+
   boolean prefireRed = false, prefireBlue = false, endgame = false;
   public static Timer turretTimer = new Timer();
 
@@ -29,18 +35,11 @@ public class FieldInfo extends SubsystemBase {
     public Translation3d HubPose, PassPose1, PassPose2, EvilPassRight, EvilPassLeft;
     public Pose2d ClimbLeft, ClimbRight, LeftHubSweep, RightHubSweep;
     public double neutralZoneEnterX;
-    public FieldPoints(Translation3d HubPose, Translation3d PassPose1, Translation3d PassPose2, Pose2d ClimbLeft, Pose2d ClimbRight, Pose2d LeftHubSweep, Pose2d RightHubSweep){
-      this.HubPose = HubPose;
-      this.PassPose1 = PassPose1;
-      this.PassPose2 = PassPose2;
-      this.ClimbLeft = ClimbLeft;
-      this.ClimbRight = ClimbRight;
-      this.LeftHubSweep = LeftHubSweep;
-      this.RightHubSweep = RightHubSweep;
+    public FieldPoints(){
     }
   }
 
-  public static FieldPoints fieldPoints = new FieldPoints(null, null, null, null, null, null, null);
+  public static FieldPoints fieldPoints = new FieldPoints();
 
   /** Creates a new FieldInfo. */
   public FieldInfo() {

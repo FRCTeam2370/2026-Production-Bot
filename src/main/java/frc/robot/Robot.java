@@ -7,6 +7,10 @@ package frc.robot;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
+import frc.robot.Constants.FieldConstants;
+import frc.robot.Subsystems.FieldInfo.Dot;
 import frc.robot.Subsystems.LEDSubsystem;
 import frc.robot.Subsystems.ObjectDetection;
 import frc.robot.Subsystems.Vision;
@@ -54,6 +58,7 @@ public class Robot extends TimedRobot {
     for(String i : Vision.limelightNames){
       LimelightHelpers.setLimelightNTDouble(i, "throttle_set", 0);
     }
+
     m_autonomousCommand = m_robotContainer.getAutonomousCommand();
 
     if (m_autonomousCommand != null) {

@@ -6,23 +6,25 @@ package frc.robot;
 
 
 import com.ctre.phoenix6.signals.NeutralModeValue;
-import com.fasterxml.jackson.databind.util.Named;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
-import com.pathplanner.lib.commands.PathPlannerAuto;
-import com.pathplanner.lib.path.PathPlannerPath;
 
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.GenericHID;
-import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.DeferredCommand;
+import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import frc.robot.Constants.FieldConstants;
+import frc.robot.Constants.intakeConstants;
 import frc.robot.Commands.DriveOnX;
+import frc.robot.Commands.MakeAuto;
 import frc.robot.Commands.ResetGyro;
 import frc.robot.Commands.RunSystemsCheck;
 import frc.robot.Commands.SetDriveNeutralMode;
@@ -31,21 +33,16 @@ import frc.robot.Commands.ToggleDriveFeatures;
 import frc.robot.Commands.ToggleTurretFeatures;
 import frc.robot.Commands.XMode;
 import frc.robot.Commands.Intake.DeployIntake;
-import frc.robot.Commands.Intake.IntakeControl;
 import frc.robot.Commands.Intake.SetIntakePosAndSpeed;
 import frc.robot.Commands.Shooter.ShootAtVelocity;
 import frc.robot.Commands.Shooter.SimpleShootAtVelocity;
 import frc.robot.Commands.TurretCommands.AimAtActiveAimPoint2;
-import frc.robot.Commands.TurretCommands.AimTurretAtActiveAimPoint;
-import frc.robot.Commands.TurretCommands.EnableAirStrike;
 import frc.robot.Commands.TurretCommands.PointTurretAndShootForTime;
 import frc.robot.Commands.TurretCommands.PointTurretAndShootForTime2;
-import frc.robot.Commands.TurretCommands.SetElevationPos;
-import frc.robot.Commands.TurretCommands.SetTurretRotation;
 import frc.robot.Commands.TurretCommands.ZeroTurret;
-import frc.robot.Constants.TurretConstants;
-import frc.robot.Constants.intakeConstants;
+import frc.robot.Subsystems.AutoHandler;
 import frc.robot.Subsystems.FieldInfo;
+import frc.robot.Subsystems.FieldInfo.Dot;
 import frc.robot.Subsystems.IntakeSubsystem;
 import frc.robot.Subsystems.LEDSubsystem;
 import frc.robot.Subsystems.ObjectDetection;
@@ -58,6 +55,7 @@ import frc.robot.Subsystems.UptakeSubsystem;
 import frc.robot.Subsystems.Vision;
 
 public class RobotContainer {
+  private Robot robot;
   public static final CommandXboxController driver = new CommandXboxController(0);
   public static final CommandXboxController operator = new CommandXboxController(1);
   public static final GenericHID dial = new GenericHID(2);
@@ -65,7 +63,7 @@ public class RobotContainer {
   public static boolean shouldDial = false;
   
   private final ObjectDetection mObjectDetection = new ObjectDetection();
-  private final SwerveSubsystem mSwerve = new SwerveSubsystem(mObjectDetection);
+  public final SwerveSubsystem mSwerve = new SwerveSubsystem(mObjectDetection);
   private final FieldInfo mFieldInfo = new FieldInfo();
   private final TurretSubsystem mTurretSubsystem = new TurretSubsystem(mSwerve);
   private final IntakeSubsystem mIntakeSubsystem = new IntakeSubsystem();
@@ -76,7 +74,12 @@ public class RobotContainer {
   private final LEDSubsystem mcLedSubsystem = new LEDSubsystem();
   private final OperatorTargetingSubsystem mcOperatorTargetingSubsystem = new OperatorTargetingSubsystem();
 
-  private final SendableChooser<Command> autoChooser;
+  public final SendableChooser<Command> autoChooser;
+  public final SendableChooser<Dot> dotChooser;
+
+  private final AutoHandler mAutoHandler;
+
+  
   
 
   public RobotContainer() {    
@@ -106,7 +109,16 @@ public class RobotContainer {
 
     autoChooser = AutoBuilder.buildAutoChooser();
     SmartDashboard.putData("Auto Chooser", autoChooser);
+
+    dotChooser = new SendableChooser<>();
+    dotChooser.addOption("Left Dot", Dot.LEFT_DOT);
+    dotChooser.addOption("Right Dot", Dot.RIGHT_DOT);
+    dotChooser.addOption("Middle Dot", Dot.MIDDLE_DOT);
+    dotChooser.setDefaultOption("No Dot? Are you scared or something?", null);
+    SmartDashboard.putData("Dot Chooser", dotChooser);
     
+    mAutoHandler = new AutoHandler(autoChooser, dotChooser, mSwerve);
+
     configureBindings();
   }
 
@@ -130,7 +142,7 @@ public class RobotContainer {
     driver.rightTrigger().toggleOnTrue(new ShootAtVelocity(mShooterSubsystem, mUptakeSubsystem, mSpindexerSubsystem, mSwerve, mFieldInfo));
     driver.leftBumper().toggleOnTrue(new SetIntakePosAndSpeed(Rotation2d.fromDegrees(intakeConstants.intakeMax.getDegrees()).getRotations(), 0, mIntakeSubsystem, mSwerve));
     driver.povRight().toggleOnTrue(new SetIntakePosAndSpeed(Rotation2d.fromDegrees(-40).getRotations(), 60, mIntakeSubsystem, mSwerve));
-
+    driver.povDown().whileTrue(mSwerve.PathfindToPose(()-> FieldConstants.dot1Pose));
     driver.rightStick().toggleOnTrue(new DriveOnX(mSwerve, ()-> -driver.getRawAxis(0)));
     //driver.leftTrigger().whileTrue(mSwerve.driveThroughBalls());
     //driver.povUp().whileTrue(mSwerve.driveToClosestBall(()-> mSwerve.getClosestBall()));
@@ -156,7 +168,10 @@ public class RobotContainer {
   }
 
   public Command getAutonomousCommand() {
-
-    return autoChooser.getSelected();
+    if(dotChooser.getSelected() != null){
+      return mAutoHandler.getAutonomousCommand();
+    }else{
+      return autoChooser.getSelected();
+    }
   }
 }

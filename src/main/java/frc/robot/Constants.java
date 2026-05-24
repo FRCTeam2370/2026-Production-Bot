@@ -163,6 +163,10 @@ public class Constants {
 
         public static final double fieldMaxX = 8.069326;
         public static final double fieldMaxY = 16.540988;
+
+        public static final Pose2d dot1Pose = new Pose2d(8.270494, 7.424674, new Rotation2d());//dot on the bottom if blue on the left
+        public static final Pose2d dot2Pose = new Pose2d(8.270494, 4.034536, new Rotation2d());//middle dot
+        public static final Pose2d dot3Pose = new Pose2d(8.270494, 0.644398, new Rotation2d());//dot on the top if blue on the left
         
     }
 
