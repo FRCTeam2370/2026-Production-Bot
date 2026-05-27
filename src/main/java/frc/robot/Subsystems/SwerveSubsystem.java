@@ -290,6 +290,7 @@ public class SwerveSubsystem extends SubsystemBase {
     }else{
       returnTheta = thetaTurretToTarget;
     }
+
     lastTurretTheta = returnTheta;
     return Rotation2d.fromRadians(returnTheta);
   }

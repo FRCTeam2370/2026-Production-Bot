@@ -36,7 +36,7 @@ public class AutoHandler extends SubsystemBase {
   }
 
   private void makeAuto(){
-    if(autoChooser.getSelected() != lastAuto && dotChooser.getSelected() != lastDot){
+    if(autoChooser.getSelected() != lastAuto || dotChooser.getSelected() != lastDot){
       auto = Commands.race(new WaitCommand(15), autoChooser.getSelected()).andThen(mSwerve.PathfindToPose(()-> dotChooser.getSelected() == Dot.LEFT_DOT ? FieldConstants.dot1Pose : dotChooser.getSelected() == Dot.MIDDLE_DOT ? FieldConstants.dot2Pose : FieldConstants.dot3Pose));
       lastAuto = autoChooser.getSelected();
       lastDot = dotChooser.getSelected();

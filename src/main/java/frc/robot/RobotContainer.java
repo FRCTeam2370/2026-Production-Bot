@@ -5,10 +5,14 @@
 package frc.robot;
 
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.DriverStation;
@@ -16,14 +20,12 @@ import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import edu.wpi.first.wpilibj2.command.Commands;
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Constants.FieldConstants;
 import frc.robot.Constants.intakeConstants;
 import frc.robot.Commands.DriveOnX;
+import frc.robot.Commands.FindADot;
+import frc.robot.Commands.PIDToPoint;
 import frc.robot.Commands.ResetGyro;
 import frc.robot.Commands.RunSystemsCheck;
 import frc.robot.Commands.SetDriveNeutralMode;
@@ -52,8 +54,10 @@ import frc.robot.Subsystems.SwerveSubsystem;
 import frc.robot.Subsystems.TurretSubsystem;
 import frc.robot.Subsystems.UptakeSubsystem;
 import frc.robot.Subsystems.Vision;
+import frc.robot.Utils.BallLogic;
 
 public class RobotContainer {
+  private ArrayList<Pose2d> dots = new ArrayList<Pose2d>(List.of(FieldConstants.dot1Pose, FieldConstants.dot2Pose, FieldConstants.dot3Pose));
   private Robot robot;
   public static final CommandXboxController driver = new CommandXboxController(0);
   public static final CommandXboxController operator = new CommandXboxController(1);
@@ -125,7 +129,7 @@ public class RobotContainer {
   private void configureBindings() {
     mSwerve.setDefaultCommand(new TeleopSwerve(mSwerve, ()-> -driver.getRawAxis(0), ()-> driver.getRawAxis(1), ()-> driver.getRawAxis(4), ()-> false));
     mTurretSubsystem.setDefaultCommand(new AimAtActiveAimPoint2(mTurretSubsystem, mSwerve, ()-> SwerveSubsystem.shouldAutoTurret));
-    mIntakeSubsystem.setDefaultCommand(new SetIntakePosAndSpeed(Rotation2d.fromDegrees(-67).getRotations(), 60, mIntakeSubsystem, mSwerve));
+    //mIntakeSubsystem.setDefaultCommand(new SetIntakePosAndSpeed(Rotation2d.fromDegrees(-67).getRotations(), 60, mIntakeSubsystem, mSwerve));
 
     driver.b().toggleOnFalse(new ToggleTurretFeatures());
 
@@ -143,6 +147,9 @@ public class RobotContainer {
     driver.povRight().toggleOnTrue(new SetIntakePosAndSpeed(Rotation2d.fromDegrees(-40).getRotations(), 60, mIntakeSubsystem, mSwerve));
     driver.povDown().whileTrue(mSwerve.PathfindToPose(()-> FieldConstants.dot1Pose));
     driver.rightStick().toggleOnTrue(new DriveOnX(mSwerve, ()-> -driver.getRawAxis(0)));
+
+    driver.povLeft().whileTrue(new PIDToPoint(FieldConstants.dot1Pose, mSwerve, false));
+    //driver.povLeft().whileTrue(new FindADot(mSwerve, ()->BallLogic.findClosestPoint(new ArrayList<Pose2d>(List.of(FieldConstants.dot1Pose, FieldConstants.dot2Pose, FieldConstants.dot3Pose)), SwerveSubsystem.poseEstimator.getEstimatedPosition()).getFirst(), false));
     //driver.leftTrigger().whileTrue(mSwerve.driveThroughBalls());
     //driver.povUp().whileTrue(mSwerve.driveToClosestBall(()-> mSwerve.getClosestBall()));
     //driver.povLeft().whileTrue(mSwerve.PathfindToPose(()-> FieldInfo.fieldPoints.ClimbLeft));

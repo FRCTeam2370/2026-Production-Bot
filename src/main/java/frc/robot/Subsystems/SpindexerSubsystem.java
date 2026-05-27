@@ -49,7 +49,7 @@ public class SpindexerSubsystem extends SubsystemBase {
   public static void spindexerConfiguration() {
     spindexerMotor.setNeutralMode(NeutralModeValue.Coast);
 
-    spindexerMotorConfig.CurrentLimits.StatorCurrentLimit = 40;
+    spindexerMotorConfig.CurrentLimits.StatorCurrentLimit = 40;//lower this if browning out
 
     spindexerMotorConfig.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive; 
     // spindexerMotorConfig.ClosedLoopRamps.VoltageClosedLoopRampPeriod = 0.2;
