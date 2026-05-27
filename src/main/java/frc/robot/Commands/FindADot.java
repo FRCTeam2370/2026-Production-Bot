@@ -6,6 +6,7 @@ package frc.robot.Commands;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.BooleanSupplier;
 import java.util.function.Supplier;
 
 import edu.wpi.first.math.geometry.Pose2d;
@@ -18,11 +19,10 @@ import frc.robot.Utils.BallLogic;
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
 public class FindADot extends SequentialCommandGroup {
-  Pose2d dot1;
   /** Creates a new FindADot. */
-  public FindADot(SwerveSubsystem mSwerve, Supplier<Pose2d> dot, boolean searchMore) {
+  public FindADot(SwerveSubsystem mSwerve, Supplier<Pose2d> dots, BooleanSupplier searchMore) {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
-    addCommands(mSwerve.PathfindToPose(dot).andThen(new PIDToPoint(FieldConstants.dot1Pose, mSwerve, searchMore)));
+    addCommands(mSwerve.PathfindToPose(dots).andThen(new PIDToPoint(dots, mSwerve, searchMore)), mSwerve.PathfindToPose(()-> FieldConstants.dot2Pose).andThen(new PIDToPoint(()-> FieldConstants.dot2Pose, mSwerve, searchMore)));
   }
 }

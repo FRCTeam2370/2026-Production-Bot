@@ -5,6 +5,8 @@
 package frc.robot.Commands;
 
 import java.lang.invoke.ConstantBootstraps;
+import java.util.function.BooleanSupplier;
+import java.util.function.Supplier;
 
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
@@ -21,10 +23,10 @@ public class PIDToPoint extends Command {
   PIDController dotPID = new PIDController(1, 0, 0.01);
   Timer timer = new Timer();
   SwerveSubsystem mSwerve;
-  Pose2d pointah;
-  boolean searchMore = false;
+  Supplier<Pose2d> pointah;
+  BooleanSupplier searchMore;
   /** Creates a new PIDToPoint. */
-  public PIDToPoint(Pose2d pointah, SwerveSubsystem mSwerve, boolean searchMore) {
+  public PIDToPoint(Supplier<Pose2d> pointah, SwerveSubsystem mSwerve, BooleanSupplier searchMore) {
     // Use addRequirements() here to declare subsystem dependencies.
     this.searchMore = searchMore;
     this.mSwerve = mSwerve;
@@ -42,9 +44,9 @@ public class PIDToPoint extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    mSwerve.drive(new Translation2d(-Math.max(-1, Math.min(SwerveSubsystem.poseEstimator.getEstimatedPosition().getX() - pointah.getX(), 1)),
-          Math.max(-1, Math.min(SwerveSubsystem.poseEstimator.getEstimatedPosition().getY() - pointah.getY(), 1))).times(1/*SwerveConstants.maxSpeed*/), 
-          SwerveSubsystem.poseEstimator.getEstimatedPosition().getRotation().getRotations() - pointah.getRotation().getRotations(), 
+    mSwerve.drive(new Translation2d(Math.max(-1, Math.min(SwerveSubsystem.poseEstimator.getEstimatedPosition().getY() - pointah.get().getY(), 1)),
+          -Math.max(-1, Math.min(SwerveSubsystem.poseEstimator.getEstimatedPosition().getX() - pointah.get().getX(), 1))).times(1/*SwerveConstants.maxSpeed*/), 
+          SwerveSubsystem.poseEstimator.getEstimatedPosition().getRotation().getRotations() - pointah.get().getRotation().getRotations(), 
           true,
           false);
   }
@@ -58,7 +60,7 @@ public class PIDToPoint extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    if(searchMore && timer.get() > 1){
+    if(searchMore.getAsBoolean() && timer.get() > 0.5 && Math.abs(SwerveSubsystem.poseEstimator.getEstimatedPosition().getX() - pointah.get().getX()) > 0.05 && Math.abs(SwerveSubsystem.poseEstimator.getEstimatedPosition().getY() - pointah.get().getY()) > 0.05){
       return true;
     }else{
       return false;

@@ -23,9 +23,9 @@ import frc.robot.Subsystems.LEDSubsystem.LEDState;
 
 public class FieldInfo extends SubsystemBase {
   public static enum Dot {
-    LEFT_DOT,
-    MIDDLE_DOT,
-    RIGHT_DOT
+    NONE,
+    STAND_GROUND,
+    DOT_HOP
   }
 
   boolean prefireRed = false, prefireBlue = false, endgame = false;

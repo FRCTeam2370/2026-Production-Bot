@@ -12,6 +12,7 @@ import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 
+import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.DataLogManager;
@@ -20,6 +21,8 @@ import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Constants.FieldConstants;
 import frc.robot.Constants.intakeConstants;
@@ -41,7 +44,6 @@ import frc.robot.Commands.TurretCommands.AimAtActiveAimPoint2;
 import frc.robot.Commands.TurretCommands.PointTurretAndShootForTime;
 import frc.robot.Commands.TurretCommands.PointTurretAndShootForTime2;
 import frc.robot.Commands.TurretCommands.ZeroTurret;
-import frc.robot.Subsystems.AutoHandler;
 import frc.robot.Subsystems.FieldInfo;
 import frc.robot.Subsystems.FieldInfo.Dot;
 import frc.robot.Subsystems.IntakeSubsystem;
@@ -78,11 +80,7 @@ public class RobotContainer {
   private final OperatorTargetingSubsystem mcOperatorTargetingSubsystem = new OperatorTargetingSubsystem();
 
   public final SendableChooser<Command> autoChooser;
-  public final SendableChooser<Dot> dotChooser;
-
-  private final AutoHandler mAutoHandler;
-
-  
+  public final SendableChooser<Dot> dotChooser; 
   
 
   public RobotContainer() {    
@@ -114,13 +112,10 @@ public class RobotContainer {
     SmartDashboard.putData("Auto Chooser", autoChooser);
 
     dotChooser = new SendableChooser<>();
-    dotChooser.addOption("Left Dot", Dot.LEFT_DOT);
-    dotChooser.addOption("Right Dot", Dot.RIGHT_DOT);
-    dotChooser.addOption("Middle Dot", Dot.MIDDLE_DOT);
-    dotChooser.setDefaultOption("No Dot? Are you scared or something?", null);
+    dotChooser.setDefaultOption("NONE", Dot.NONE);
+    dotChooser.addOption("DOT_HOP", Dot.DOT_HOP);
+    dotChooser.addOption("STAND_GROUND", Dot.STAND_GROUND);
     SmartDashboard.putData("Dot Chooser", dotChooser);
-    
-    mAutoHandler = new AutoHandler(autoChooser, dotChooser, mSwerve);
 
     configureBindings();
   }
@@ -148,8 +143,8 @@ public class RobotContainer {
     driver.povDown().whileTrue(mSwerve.PathfindToPose(()-> FieldConstants.dot1Pose));
     driver.rightStick().toggleOnTrue(new DriveOnX(mSwerve, ()-> -driver.getRawAxis(0)));
 
-    driver.povLeft().whileTrue(new PIDToPoint(FieldConstants.dot1Pose, mSwerve, false));
-    //driver.povLeft().whileTrue(new FindADot(mSwerve, ()->BallLogic.findClosestPoint(new ArrayList<Pose2d>(List.of(FieldConstants.dot1Pose, FieldConstants.dot2Pose, FieldConstants.dot3Pose)), SwerveSubsystem.poseEstimator.getEstimatedPosition()).getFirst(), false));
+    //driver.povLeft().whileTrue(new PIDToPoint(FieldConstants.dot2Pose, mSwerve, false));
+    driver.povLeft().whileTrue(new FindADot(mSwerve, ()-> (SwerveSubsystem.poseEstimator.getEstimatedPosition().getY() > FieldConstants.dot1to2Y ? FieldConstants.dot1Pose : SwerveSubsystem.poseEstimator.getEstimatedPosition().getY() > FieldConstants.dot2to3Y ? FieldConstants.dot2Pose : FieldConstants.dot3Pose), ()-> true));
     //driver.leftTrigger().whileTrue(mSwerve.driveThroughBalls());
     //driver.povUp().whileTrue(mSwerve.driveToClosestBall(()-> mSwerve.getClosestBall()));
     //driver.povLeft().whileTrue(mSwerve.PathfindToPose(()-> FieldInfo.fieldPoints.ClimbLeft));
@@ -174,8 +169,8 @@ public class RobotContainer {
   }
 
   public Command getAutonomousCommand() {
-    if(dotChooser.getSelected() != null){
-      return mAutoHandler.getAutonomousCommand();
+    if(dotChooser.getSelected() != null && dotChooser.getSelected() != Dot.NONE){
+      return Commands.race(new WaitCommand(15), autoChooser.getSelected()).andThen(new FindADot(mSwerve, ()-> (SwerveSubsystem.poseEstimator.getEstimatedPosition().getY() > FieldConstants.dot1to2Y ? FieldConstants.dot1Pose : SwerveSubsystem.poseEstimator.getEstimatedPosition().getY() > FieldConstants.dot2to3Y ? FieldConstants.dot2Pose : FieldConstants.dot3Pose), ()-> (dotChooser.getSelected() == Dot.STAND_GROUND ? false : true)));
     }else{
       return autoChooser.getSelected();
     }

@@ -164,9 +164,11 @@ public class Constants {
         public static final double fieldMaxX = 8.069326;
         public static final double fieldMaxY = 16.540988;
 
-        public static final Pose2d dot1Pose = new Pose2d(8.270494, 7.424674, new Rotation2d());//dot on the bottom if blue on the left
-        public static final Pose2d dot2Pose = new Pose2d(8.270494, 4.034536, new Rotation2d());//middle dot
-        public static final Pose2d dot3Pose = new Pose2d(8.270494, 0.644398, new Rotation2d());//dot on the top if blue on the left
+        public static final Pose2d dot1Pose = new Pose2d(8.270494, 7.424674, Rotation2d.fromDegrees(-90));//dot on the bottom if blue on the left
+        public static final Pose2d dot2Pose = new Pose2d(8.270494, 4.034536, Rotation2d.fromDegrees(90));//middle dot
+        public static final Pose2d dot3Pose = new Pose2d(8.270494, 0.644398, Rotation2d.fromDegrees(90));//dot on the top if blue on the left
+        public static final double dot2to3Y = 2.339467;
+        public static final double dot1to2Y = 5.729605;
         
     }
 
@@ -183,7 +185,6 @@ public class Constants {
         public static final double mk4iDriveL2 = 6.75;
         public static final double mk4iRotate = 150/7;
 
-        public static final PathConstraints telePathConstraints = new PathConstraints(1, 1, 2 * Math.PI, 4 * Math.PI);
         public static final double DrivekP = 0.02;
         public static final double DrivekI = 0.0;//0.1
         public static final double DrivekD = 0.00;
@@ -201,6 +202,7 @@ public class Constants {
         public static final double maxSpeed = 5.12064;//meters per second
         public static final double maxAngularVelocity = 3.1154127;//radians per second
         public static final double maxApproachPercent = 0.2;// percent that the robot's max velocity should be limited to when moving towards the hub (this allows the math to work correctly at all times since we can't move very fast towards the goal or else it shoots too low)
+        public static final PathConstraints telePathConstraints = new PathConstraints(maxSpeed, 6, 4 * Math.PI, 6 * Math.PI);
 
         public static final double HeadingOffset = 0;//degrees from forward
         public static final double gyroOffset = 90;
