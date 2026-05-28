@@ -15,6 +15,7 @@ import com.pathplanner.lib.auto.NamedCommands;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.GenericHID;
@@ -124,7 +125,7 @@ public class RobotContainer {
   private void configureBindings() {
     mSwerve.setDefaultCommand(new TeleopSwerve(mSwerve, ()-> -driver.getRawAxis(0), ()-> driver.getRawAxis(1), ()-> driver.getRawAxis(4), ()-> false));
     mTurretSubsystem.setDefaultCommand(new AimAtActiveAimPoint2(mTurretSubsystem, mSwerve, ()-> SwerveSubsystem.shouldAutoTurret));
-    //mIntakeSubsystem.setDefaultCommand(new SetIntakePosAndSpeed(Rotation2d.fromDegrees(-67).getRotations(), 60, mIntakeSubsystem, mSwerve));
+    mIntakeSubsystem.setDefaultCommand(new SetIntakePosAndSpeed(Rotation2d.fromDegrees(-67).getRotations(), 60, mIntakeSubsystem, mSwerve));
 
     driver.b().toggleOnFalse(new ToggleTurretFeatures());
 
@@ -170,7 +171,7 @@ public class RobotContainer {
 
   public Command getAutonomousCommand() {
     if(dotChooser.getSelected() != null && dotChooser.getSelected() != Dot.NONE){
-      return Commands.race(new WaitCommand(15), autoChooser.getSelected()).andThen(new FindADot(mSwerve, ()-> (SwerveSubsystem.poseEstimator.getEstimatedPosition().getY() > FieldConstants.dot1to2Y ? FieldConstants.dot1Pose : SwerveSubsystem.poseEstimator.getEstimatedPosition().getY() > FieldConstants.dot2to3Y ? FieldConstants.dot2Pose : FieldConstants.dot3Pose), ()-> (dotChooser.getSelected() == Dot.STAND_GROUND ? false : true)));
+      return Commands.race(new WaitCommand(15), autoChooser.getSelected()).andThen(Commands.runOnce(()-> mSwerve.drive(new Translation2d(0,0), 0, true, false), mSwerve)).andThen(new FindADot(mSwerve, ()-> (SwerveSubsystem.poseEstimator.getEstimatedPosition().getY() > FieldConstants.dot1to2Y ? FieldConstants.dot1Pose : SwerveSubsystem.poseEstimator.getEstimatedPosition().getY() > FieldConstants.dot2to3Y ? FieldConstants.dot2Pose : FieldConstants.dot3Pose), ()-> (dotChooser.getSelected() == Dot.STAND_GROUND ? false : true)));
     }else{
       return autoChooser.getSelected();
     }
