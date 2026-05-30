@@ -86,6 +86,9 @@ public class TurretSubsystem extends SubsystemBase {
 
     HandleElevationLimits(SwerveSubsystem.turretToField());
 
+    SmartDashboard.putBoolean("canElevate", canElevate);
+    SmartDashboard.putBoolean("isShooting", isShooting);
+
     SwerveSubsystem.field.getObject("Active Aimpoint").setPose(new Pose2d(activeAimPoint.aimPoint.getX(), activeAimPoint.aimPoint.getY(), new Rotation2d()));
   }
 
@@ -221,7 +224,7 @@ public class TurretSubsystem extends SubsystemBase {
 
   private static void configTurretCANCoder(){
     turretCANCoderConfig.MagnetSensor.AbsoluteSensorDiscontinuityPoint = 0.8;
-    turretCANCoderConfig.MagnetSensor.MagnetOffset = -0.110595703125;
+    turretCANCoderConfig.MagnetSensor.MagnetOffset = -(0.338134765625-0.012939453125);//-0.110595703125;
 
     turretCANcoder.getConfigurator().apply(turretCANCoderConfig);
   }

@@ -4,15 +4,10 @@
 
 package frc.robot.Utils;
 
-import java.security.Timestamp;
-
-import edu.wpi.first.math.Vector;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation3d;
-import edu.wpi.first.util.MsvcRuntimeException;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import frc.robot.Constants.FieldConstants;
 import frc.robot.Constants.TurretConstants;
 import frc.robot.Constants.shooterConstants;
 import frc.robot.Subsystems.FieldInfo;
@@ -42,9 +37,9 @@ public class TurretLogic {
     }
 
     public TurretAimPose getAimPose(Translation3d targetPose, double distanceToTarget){
-        double robotFieldXVel = mSwerve.getRobotRelativeSpeeds().vxMetersPerSecond * Math.cos(SwerveSubsystem.getgyro0to360(270).getRadians()) - mSwerve.getRobotRelativeSpeeds().vyMetersPerSecond * Math.sin(SwerveSubsystem.getgyro0to360(270).getRadians());
-        double robotFieldYVel = mSwerve.getRobotRelativeSpeeds().vxMetersPerSecond * Math.sin(SwerveSubsystem.getgyro0to360(270).getRadians()) + mSwerve.getRobotRelativeSpeeds().vyMetersPerSecond * Math.cos(SwerveSubsystem.getgyro0to360(270).getRadians());
-        double robotSpeed = Math.sqrt(Math.pow(robotFieldXVel, 2) + Math.pow(robotFieldYVel, 2));//mps
+        //double robotFieldXVel = mSwerve.getRobotRelativeSpeeds().vxMetersPerSecond * Math.cos(SwerveSubsystem.getgyro0to360(270).getRadians()) - mSwerve.getRobotRelativeSpeeds().vyMetersPerSecond * Math.sin(SwerveSubsystem.getgyro0to360(270).getRadians());
+        //double robotFieldYVel = mSwerve.getRobotRelativeSpeeds().vxMetersPerSecond * Math.sin(SwerveSubsystem.getgyro0to360(270).getRadians()) + mSwerve.getRobotRelativeSpeeds().vyMetersPerSecond * Math.cos(SwerveSubsystem.getgyro0to360(270).getRadians());
+        //double robotSpeed = Math.sqrt(Math.pow(robotFieldXVel, 2) + Math.pow(robotFieldYVel, 2));//mps
 
         //this block of code calculates the velocity and speed of the Turret relative to the field using the velocity of the robot and some math
         //Because the turret isn't in the center of the robot, we need to calculate its velocity when we are turning
@@ -129,7 +124,7 @@ public class TurretLogic {
         double vUnajustedZ = Math.sin(trueAngle) * flattenedInitialVel;
 
         //add a velocity offset for a little extra tuning
-        double velocityOffset = distanceToTarget*flattenedRobotVel*2;
+       // double velocityOffset = distanceToTarget*flattenedRobotVel*2;
 
         //creates a new varial of type TurretAimPose that holds the Translation3d and double for the aimpose and the turret velocity
         TurretAimPose turretAimPose = new TurretAimPose();
@@ -162,7 +157,7 @@ public class TurretLogic {
         //lastly, we get the field relative velocities using the angle of the gyro and calculate the speed of the turret using those values
         //double turretFieldXVel = turretRelativeXVel * Math.cos(SwerveSubsystem.getgyro0to360(270).getRadians()) - turretRelativeYVel * Math.sin(SwerveSubsystem.getgyro0to360(270).getRadians());
         //double turretFieldYVel = turretRelativeXVel * Math.sin(SwerveSubsystem.getgyro0to360(270).getRadians()) + turretRelativeYVel * Math.cos(SwerveSubsystem.getgyro0to360(270).getRadians());
-        double turretSpeed = Math.sqrt(Math.pow(fieldRelTurXVel, 2) + Math.pow(fieldRelTurYVel, 2));//mps
+        //double turretSpeed = Math.sqrt(Math.pow(fieldRelTurXVel, 2) + Math.pow(fieldRelTurYVel, 2));//mps
 
         double targetPoseXRelativeToTurret = targetPose.getX() - turretFieldPose.getX();
         double targetPoseYRelativeToTurret = targetPose.getY() - turretFieldPose.getY();
@@ -170,10 +165,10 @@ public class TurretLogic {
         double targetPoseRelativeToTurretVelX = targetPoseXRelativeToTurret - fieldRelTurXVel;
         double targetPoseRelativeToTurretVelY = targetPoseYRelativeToTurret - fieldRelTurYVel;
 
-        double angleRelativeToAjustedTarget = Math.atan2(targetPoseRelativeToTurretVelY, targetPoseRelativeToTurretVelX);
+        //double angleRelativeToAjustedTarget = Math.atan2(targetPoseRelativeToTurretVelY, targetPoseRelativeToTurretVelX);
         double distanceToAdjustedTarget = Math.sqrt(Math.pow(targetPoseRelativeToTurretVelX, 2) + Math.pow(targetPoseRelativeToTurretVelY, 2));
 
-        double flattenedRobotVel = turretSpeed * Math.cos(angleRelativeToAjustedTarget);
+        //double flattenedRobotVel = turretSpeed * Math.cos(angleRelativeToAjustedTarget);
         double shooterVel;
 
         shooterVel = 0.5*Math.pow(distanceToAdjustedTarget, 1.8) + 53;//- 2*Math.abs(Math.cos(Math.PI*distanceToAdjustedTarget/15));//5*distanceToAdjustedTarget + 50;//distance to target in meters + 50 just because (idk I'll make a better function later)
@@ -227,7 +222,7 @@ public class TurretLogic {
         TurretAimPose returnPose = new TurretAimPose();
         returnPose.vel = Math.min(shooterVel, shooterConstants.maxSpeed);
         returnPose.aimPose = new Translation3d(aimPoseFieldX, aimPoseFieldY, flattenedY);
-        if(useGreater && shooterVel < 90){
+        if(useGreater && shooterVel < 90){//TODO: remove "shooterVel < 90"
             if(distanceToAdjustedTarget > 2){
                 returnPose.elevationAngleDegrees = Math.toDegrees(theta);//+ distanceToAdjustedTarget;//0.5
             }else{
@@ -238,6 +233,87 @@ public class TurretLogic {
             returnPose.elevationAngleDegrees = Math.toDegrees(theta2);
         }
         
+
+        return returnPose;
+    }
+
+    public TurretAimPose getOptimizedAimpose(Translation3d targetPose, boolean useGreater){
+        TurretAimPose returnPose = new TurretAimPose();
+        Pose2d turretFieldPose = SwerveSubsystem.turretToField();
+        //this block of code calculates the velocity and speed of the Turret relative to the field using the velocity of the robot and some math
+        //Because the turret isn't in the center of the robot, we need to calculate its velocity when we are turning
+
+        double tangentialVelocityX = -SwerveSubsystem.gyro.getAngularVelocityZWorld().getValueAsDouble() * (Math.PI/180) * TurretConstants.RobotToTurret.getY();
+        double tangentialVelocityY = SwerveSubsystem.gyro.getAngularVelocityZWorld().getValueAsDouble() * (Math.PI/180) * TurretConstants.RobotToTurret.getX();
+
+        //next, we calculated the turret's robot relative veolicty using the robots xy velocity and adding the tangetial velocities respectively
+        double turretRelativeXVel = mSwerve.getRobotRelativeSpeeds().vxMetersPerSecond + tangentialVelocityX;
+        double turretRelativeYVel = mSwerve.getRobotRelativeSpeeds().vyMetersPerSecond + tangentialVelocityY;
+
+        double fieldRelTurXVel = turretRelativeXVel*Math.cos(SwerveSubsystem.getgyro0to360(270).getRadians()) - turretRelativeYVel*Math.sin(SwerveSubsystem.getgyro0to360(270).getRadians());
+        double fieldRelTurYVel = turretRelativeXVel*Math.sin(SwerveSubsystem.getgyro0to360(270).getRadians()) + turretRelativeYVel*Math.cos(SwerveSubsystem.getgyro0to360(270).getRadians());
+
+        //lastly, we get the field relative velocities using the angle of the gyro and calculate the speed of the turret using those values
+        //double turretSpeed = Math.sqrt(Math.pow(fieldRelTurXVel, 2) + Math.pow(fieldRelTurYVel, 2));//mps
+
+        double targetPoseXRelativeToTurret = targetPose.getX() - turretFieldPose.getX();
+        double targetPoseYRelativeToTurret = targetPose.getY() - turretFieldPose.getY();
+
+        double targetPoseRelativeToTurretVelX = targetPoseXRelativeToTurret - fieldRelTurXVel;
+        double targetPoseRelativeToTurretVelY = targetPoseYRelativeToTurret - fieldRelTurYVel;
+
+        //double angleRelativeToAjustedTarget = Math.atan2(targetPoseRelativeToTurretVelY, targetPoseRelativeToTurretVelX);
+        double distanceToAdjustedTarget = Math.sqrt(Math.pow(targetPoseRelativeToTurretVelX, 2) + Math.pow(targetPoseRelativeToTurretVelY, 2));
+        SmartDashboard.putNumber("Distance to adjusted target", distanceToAdjustedTarget);
+
+        //double flattenedRobotVel = turretSpeed * Math.cos(angleRelativeToAjustedTarget);
+
+        double aimPoseFieldX = turretFieldPose.getX() + targetPoseRelativeToTurretVelX;
+        double aimPoseFieldY = turretFieldPose.getY() + targetPoseRelativeToTurretVelY;
+
+        double g = 9.81;
+        double flattenedY = targetPose.getZ() - TurretConstants.TurretVerticalOffset;
+
+        if(distanceToAdjustedTarget < 2){
+            double exitVelocity = Math.sqrt((g*Math.pow(distanceToAdjustedTarget, 2)) / (2 * Math.pow(Math.cos(TurretConstants.ElevationMaxAngle.getRadians()), 2) * (distanceToAdjustedTarget * Math.tan(TurretConstants.ElevationMaxAngle.getRadians()) - flattenedY)));
+
+            double shooterVel = exitVelocity / (0.08255 * Math.PI * 0.5 * 20/18);
+
+            returnPose.vel = Math.min(shooterVel, shooterConstants.maxSpeed);
+            returnPose.aimPose = new Translation3d(aimPoseFieldX, aimPoseFieldY, flattenedY);
+
+            returnPose.elevationAngleDegrees = TurretConstants.ElevationMaxAngle.getDegrees();
+        }
+        else
+        {
+            double shooterVel = 0.5*Math.pow(distanceToAdjustedTarget, 1.8) + 50;
+
+            double launchSpeed = 0.08255 * Math.PI *0.5* shooterVel * 20/18;//TODO: change 0.5 to 0.485
+
+            double a = (g*Math.pow(distanceToAdjustedTarget, 2)) / (2*Math.pow(launchSpeed, 2));
+            double b = -distanceToAdjustedTarget;
+            double c = flattenedY + a;
+
+            double theta = Math.atan2(-b + Math.sqrt(Math.pow(b, 2) - 4*a*c), 2*a);
+            double theta2 = Math.atan2(-b - Math.sqrt(Math.pow(b, 2) - 4*a*c),  2*a);
+
+            theta = Math.max(TurretConstants.ElevationMinAngle.getRadians(), Math.min(theta, TurretConstants.ElevationMaxAngle.getRadians()));
+            theta2 = Math.max(TurretConstants.ElevationMinAngle.getRadians(), Math.min(theta2, TurretConstants.ElevationMaxAngle.getRadians()));
+
+            SmartDashboard.putNumber("aimTheta1", theta);
+            SmartDashboard.putNumber("aimTheta2", theta2);
+
+            returnPose.vel = Math.min(shooterVel, shooterConstants.maxSpeed);
+            returnPose.aimPose = new Translation3d(aimPoseFieldX, aimPoseFieldY, flattenedY);
+
+            if(useGreater /*&& shooterVel < 90*/){
+                returnPose.elevationAngleDegrees = Math.toDegrees(theta);
+            }else{
+                returnPose.elevationAngleDegrees = Math.toDegrees(theta2);
+            }
+        }
+
+        SwerveSubsystem.field.getObject("Jacob's AimPose").setPose(new Pose2d(aimPoseFieldX, aimPoseFieldY, new Rotation2d()));
 
         return returnPose;
     }

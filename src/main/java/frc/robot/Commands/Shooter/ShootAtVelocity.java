@@ -48,7 +48,7 @@ public class ShootAtVelocity extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    TurretAimPose aimpose = mSwerve.getTurretPointTowardsPoseJacobMethod(TurretSubsystem.activeAimPoint.aimPoint);
+    TurretAimPose aimpose = mSwerve.getOptimizedTurretPointTowardsPose(TurretSubsystem.activeAimPoint.aimPoint);
     vel = aimpose.vel;
     usingLower = aimpose.usingLower;
     ShooterSubsystem.shootWithVelocity(vel);

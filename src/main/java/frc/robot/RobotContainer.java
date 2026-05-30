@@ -167,13 +167,15 @@ public class RobotContainer {
     operator.rightBumper().onTrue(new SetDriveNeutralMode(mSwerve, NeutralModeValue.Coast));
 
     operator.povDown().toggleOnTrue(new RunSystemsCheck(mTurretSubsystem, mShooterSubsystem, mUptakeSubsystem, mSpindexerSubsystem));
+    operator.povLeft().onTrue(Commands.runOnce(()-> TurretSubsystem.isShooting = true, mTurretSubsystem));
   }
 
   public Command getAutonomousCommand() {
-    if(dotChooser.getSelected() != null && dotChooser.getSelected() != Dot.NONE){
-      return Commands.race(new WaitCommand(15), autoChooser.getSelected()).andThen(Commands.runOnce(()-> mSwerve.drive(new Translation2d(0,0), 0, true, false), mSwerve)).andThen(new FindADot(mSwerve, ()-> (SwerveSubsystem.poseEstimator.getEstimatedPosition().getY() > FieldConstants.dot1to2Y ? FieldConstants.dot1Pose : SwerveSubsystem.poseEstimator.getEstimatedPosition().getY() > FieldConstants.dot2to3Y ? FieldConstants.dot2Pose : FieldConstants.dot3Pose), ()-> (dotChooser.getSelected() == Dot.STAND_GROUND ? false : true)));
-    }else{
-      return autoChooser.getSelected();
-    }
+    // if(dotChooser.getSelected() != null && dotChooser.getSelected() != Dot.NONE){
+    //   return Commands.race(new WaitCommand(15), autoChooser.getSelected()).andThen(Commands.runOnce(()-> mSwerve.drive(new Translation2d(0,0), 0, true, false), mSwerve)).andThen(new FindADot(mSwerve, ()-> (SwerveSubsystem.poseEstimator.getEstimatedPosition().getY() > FieldConstants.dot1to2Y ? FieldConstants.dot1Pose : SwerveSubsystem.poseEstimator.getEstimatedPosition().getY() > FieldConstants.dot2to3Y ? FieldConstants.dot2Pose : FieldConstants.dot3Pose), ()-> (dotChooser.getSelected() == Dot.STAND_GROUND ? false : true)));
+    // }else{
+    //   return autoChooser.getSelected();
+    // }
+    return autoChooser.getSelected();
   }
 }
