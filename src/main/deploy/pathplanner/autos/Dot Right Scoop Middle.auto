@@ -1,0 +1,31 @@
+{
+  "version": "2025.0",
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Dot Right To Neutral"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Right To Dot Middle"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Stand Middle"
+          }
+        }
+      ]
+    }
+  },
+  "resetOdom": true,
+  "folder": "Right Autos",
+  "choreoAuto": false
+}

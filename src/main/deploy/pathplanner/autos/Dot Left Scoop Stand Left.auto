@@ -1,0 +1,31 @@
+{
+  "version": "2025.0",
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Dot Fast Neutral Scoop Left"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Left to Dot Feed"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Stand Top"
+          }
+        }
+      ]
+    }
+  },
+  "resetOdom": true,
+  "folder": "Left Autos",
+  "choreoAuto": false
+}

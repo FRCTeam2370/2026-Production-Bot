@@ -8,6 +8,7 @@ import java.util.function.BooleanSupplier;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants.TurretConstants;
@@ -16,6 +17,7 @@ import frc.robot.Subsystems.ShooterSubsystem;
 import frc.robot.Subsystems.SwerveSubsystem;
 import frc.robot.Subsystems.TurretSubsystem;
 import frc.robot.Subsystems.LEDSubsystem.LEDState;
+import frc.robot.Utils.TurretLogic.TurretAimPose;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class AimAtActiveAimPoint2 extends Command {
@@ -38,18 +40,18 @@ public class AimAtActiveAimPoint2 extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    TurretAimPose aimPose =  mSwerve.getOptimizedTurretPointTowardsPose(TurretSubsystem.activeAimPoint.aimPoint);
+
     if(shouldTurret.getAsBoolean()){
       TurretSubsystem.aimTurretAtPoint(
             new Pose2d(
-              mSwerve.getOptimizedTurretPointTowardsPose(//getTurretPointTowardsPoseJacobMethod
-                TurretSubsystem.activeAimPoint.aimPoint).aimPose.getX(),
-                mSwerve.getOptimizedTurretPointTowardsPose(TurretSubsystem.activeAimPoint.aimPoint).aimPose.getY(), 
+              aimPose.aimPose.getX(),
+                aimPose.aimPose.getY(), 
                 new Rotation2d()), 
                 false);
       if(TurretSubsystem.canElevate && TurretSubsystem.isShooting){
         TurretSubsystem.setElevation(
-          mSwerve.getOptimizedTurretPointTowardsPose(//getTurretPointTowardsPoseJacobMethod
-            TurretSubsystem.activeAimPoint.aimPoint).elevationAngleDegrees);
+          aimPose.elevationAngleDegrees);
       }else{
         TurretSubsystem.setElevation(TurretConstants.ElevationMaxAngle.getDegrees());
       }
@@ -57,8 +59,6 @@ public class AimAtActiveAimPoint2 extends Command {
       TurretSubsystem.aimTurretAtDegree(360);
       TurretSubsystem.setElevation(TurretConstants.ElevationMaxAngle.getDegrees());
     }
-      
-      
   }
 
   // Called once the command ends or is interrupted.

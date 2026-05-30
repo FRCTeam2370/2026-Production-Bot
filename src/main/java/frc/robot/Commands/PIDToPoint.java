@@ -45,7 +45,7 @@ public class PIDToPoint extends Command {
   @Override
   public void execute() {
     mSwerve.drive(new Translation2d(Math.max(-1, Math.min(SwerveSubsystem.poseEstimator.getEstimatedPosition().getY() - pointah.get().getY(), 1)),
-          -Math.max(-1, Math.min(SwerveSubsystem.poseEstimator.getEstimatedPosition().getX() - pointah.get().getX(), 1))).times(1/*SwerveConstants.maxSpeed*/), 
+          -Math.max(-1, Math.min(SwerveSubsystem.poseEstimator.getEstimatedPosition().getX() - pointah.get().getX(), 1))).times(2/*SwerveConstants.maxSpeed*/), 
           SwerveSubsystem.poseEstimator.getEstimatedPosition().getRotation().getRotations() - pointah.get().getRotation().getRotations(), 
           true,
           false);

@@ -279,16 +279,26 @@ public class TurretLogic {
 
             double shooterVel = exitVelocity / (0.08255 * Math.PI * 0.5 * 20/18);
 
-            returnPose.vel = Math.min(shooterVel, shooterConstants.maxSpeed);
+            returnPose.vel = Math.max(40, Math.min(shooterVel, shooterConstants.maxSpeed));
             returnPose.aimPose = new Translation3d(aimPoseFieldX, aimPoseFieldY, flattenedY);
 
             returnPose.elevationAngleDegrees = TurretConstants.ElevationMaxAngle.getDegrees();
+        }else if(distanceToAdjustedTarget < 2.5){
+            double elevationDegrees = 70;
+            double exitVelocity = Math.sqrt((g*Math.pow(distanceToAdjustedTarget, 2)) / (2 * Math.pow(Math.cos(Math.toRadians(elevationDegrees)), 2) * (distanceToAdjustedTarget * Math.tan(Math.toRadians(elevationDegrees)) - flattenedY)));
+
+            double shooterVel = exitVelocity / (0.08255 * Math.PI * 0.5 * 20/18);
+
+            returnPose.vel = Math.max(40, Math.min(shooterVel, shooterConstants.maxSpeed));
+            returnPose.aimPose = new Translation3d(aimPoseFieldX, aimPoseFieldY, flattenedY);
+
+            returnPose.elevationAngleDegrees = elevationDegrees;
         }
         else
         {
-            double shooterVel = 0.5*Math.pow(distanceToAdjustedTarget, 1.8) + 50;
+            double shooterVel = 0.5*Math.pow(distanceToAdjustedTarget, 1.8) + 56;
 
-            double launchSpeed = 0.08255 * Math.PI *0.5* shooterVel * 20/18;//TODO: change 0.5 to 0.485
+            double launchSpeed = 0.08255 * Math.PI *0.44* shooterVel * 20/18;//TODO: change 0.5 to 0.485
 
             double a = (g*Math.pow(distanceToAdjustedTarget, 2)) / (2*Math.pow(launchSpeed, 2));
             double b = -distanceToAdjustedTarget;
@@ -303,7 +313,7 @@ public class TurretLogic {
             SmartDashboard.putNumber("aimTheta1", theta);
             SmartDashboard.putNumber("aimTheta2", theta2);
 
-            returnPose.vel = Math.min(shooterVel, shooterConstants.maxSpeed);
+            returnPose.vel = Math.max(40, Math.min(shooterVel, shooterConstants.maxSpeed));
             returnPose.aimPose = new Translation3d(aimPoseFieldX, aimPoseFieldY, flattenedY);
 
             if(useGreater /*&& shooterVel < 90*/){

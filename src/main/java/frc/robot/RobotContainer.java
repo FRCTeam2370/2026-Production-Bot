@@ -19,6 +19,7 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.GenericHID;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -108,6 +109,10 @@ public class RobotContainer {
     NamedCommands.registerCommand("Feed Right", new PointTurretAndShootForTime( 2.5, mTurretSubsystem, mSwerve, mUptakeSubsystem, mSpindexerSubsystem, mShooterSubsystem));
     NamedCommands.registerCommand("Jiggle Intake", new SetIntakePosAndSpeed(Rotation2d.fromDegrees(-67).getRotations(), 60, mIntakeSubsystem, mSwerve));
     NamedCommands.registerCommand("Coast", new SetDriveNeutralMode(mSwerve, NeutralModeValue.Coast));
+    NamedCommands.registerCommand("Dot Hop", new FindADot(mSwerve, ()-> (SwerveSubsystem.poseEstimator.getEstimatedPosition().getY() > FieldConstants.dot1to2Y ? FieldConstants.dot1Pose : SwerveSubsystem.poseEstimator.getEstimatedPosition().getY() > FieldConstants.dot2to3Y ? FieldConstants.dot2Pose : FieldConstants.dot3Pose), ()->true));
+    NamedCommands.registerCommand("Stand Middle", new FindADot(mSwerve, ()-> FieldConstants.dot2Pose, ()-> false));
+    NamedCommands.registerCommand("Stand Top", new FindADot(mSwerve, ()-> SwerveSubsystem.color.get() == Alliance.Blue ? FieldConstants.dot1Pose : FieldConstants.dot3Pose, ()-> false));
+    NamedCommands.registerCommand("Stand Bottom", new FindADot(mSwerve, ()-> SwerveSubsystem.color.get() == Alliance.Blue ? FieldConstants.dot3Pose : FieldConstants.dot1Pose, ()-> false));
 
     autoChooser = AutoBuilder.buildAutoChooser();
     SmartDashboard.putData("Auto Chooser", autoChooser);
@@ -144,8 +149,8 @@ public class RobotContainer {
     driver.povDown().whileTrue(mSwerve.PathfindToPose(()-> FieldConstants.dot1Pose));
     driver.rightStick().toggleOnTrue(new DriveOnX(mSwerve, ()-> -driver.getRawAxis(0)));
 
-    //driver.povLeft().whileTrue(new PIDToPoint(FieldConstants.dot2Pose, mSwerve, false));
-    driver.povLeft().whileTrue(new FindADot(mSwerve, ()-> (SwerveSubsystem.poseEstimator.getEstimatedPosition().getY() > FieldConstants.dot1to2Y ? FieldConstants.dot1Pose : SwerveSubsystem.poseEstimator.getEstimatedPosition().getY() > FieldConstants.dot2to3Y ? FieldConstants.dot2Pose : FieldConstants.dot3Pose), ()-> true));
+    driver.povLeft().whileTrue(new PIDToPoint(()-> (SwerveSubsystem.poseEstimator.getEstimatedPosition().getY() > FieldConstants.dot1to2Y ? FieldConstants.dot1Pose : SwerveSubsystem.poseEstimator.getEstimatedPosition().getY() > FieldConstants.dot2to3Y ? FieldConstants.dot2Pose : FieldConstants.dot3Pose), mSwerve, ()->false));
+    //driver.povLeft().whileTrue(new FindADot(mSwerve, ()-> (SwerveSubsystem.poseEstimator.getEstimatedPosition().getY() > FieldConstants.dot1to2Y ? FieldConstants.dot1Pose : SwerveSubsystem.poseEstimator.getEstimatedPosition().getY() > FieldConstants.dot2to3Y ? FieldConstants.dot2Pose : FieldConstants.dot3Pose), ()-> true));
     //driver.leftTrigger().whileTrue(mSwerve.driveThroughBalls());
     //driver.povUp().whileTrue(mSwerve.driveToClosestBall(()-> mSwerve.getClosestBall()));
     //driver.povLeft().whileTrue(mSwerve.PathfindToPose(()-> FieldInfo.fieldPoints.ClimbLeft));
