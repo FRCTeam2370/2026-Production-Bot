@@ -98,6 +98,7 @@ public class LEDSubsystem extends SubsystemBase {
     }
   
     public static LEDState mLEDState = LEDState.Off;
+    private LEDState lastLEDState = mLEDState;
   
     public LEDSubsystem() {
       TurretLED.setLength(turretLedBuffer.getLength());
@@ -109,53 +110,44 @@ public class LEDSubsystem extends SubsystemBase {
     @Override
     public void periodic() {
       // This method will be called once per scheduler run
-      switch (mLEDState) {
-        case Idle:
-          idlePattern.applyTo(turretLedBuffer);
-          TurretLED.setData(turretLedBuffer);
-          break;
-        case Hub:
-          hubPattern.applyTo(turretLedBuffer);
-          TurretLED.setData(turretLedBuffer);
-          break;
-        case Point:
-          pointPattern.applyTo(turretLedBuffer);
-          TurretLED.setData(turretLedBuffer);
-          break;
-        case Red:
-          redPattern.applyTo(turretLedBuffer);
-          TurretLED.setData(turretLedBuffer);
-          break;
-        case Blue:
-          bluePattern.applyTo(turretLedBuffer);
-          TurretLED.setData(turretLedBuffer);
-          break;
-        case EndgameRed:
-          redEndPattern.applyTo(endgameBuffer);
-          TurretLED.setData(endgameBuffer);
-          break;
-        case EndgameBlue:
-          blueEndPattern.applyTo(endgameBuffer);
-          TurretLED.setData(endgameBuffer);
-          break;
-        case PrepareRed:
-          redPreparePattern.applyTo(turretLedBuffer);
-          TurretLED.setData(turretLedBuffer);
-          break;
-        case PrepareBlue:
-          bluePreparePattern.applyTo(turretLedBuffer);
-          TurretLED.setData(turretLedBuffer);
-          break;
-        case Off:
-          offPattern.applyTo(turretLedBuffer);
-          TurretLED.setData(turretLedBuffer);
-        case Coral:
-          coralConnected.applyTo(turretLedBuffer);
-          TurretLED.setData(turretLedBuffer);
-        default:
-          break;  
+        switch (mLEDState) {
+          case Idle:
+            idlePattern.applyTo(turretLedBuffer);
+            break;
+          case Hub:
+            hubPattern.applyTo(turretLedBuffer);
+            break;
+          case Point:
+            pointPattern.applyTo(turretLedBuffer);
+            break;
+          case Red:
+            redPattern.applyTo(turretLedBuffer);
+            break;
+          case Blue:
+            bluePattern.applyTo(turretLedBuffer);
+            break;
+          case EndgameRed:
+            redEndPattern.applyTo(endgameBuffer);
+            break;
+          case EndgameBlue:
+            blueEndPattern.applyTo(endgameBuffer);
+            break;
+          case PrepareRed:
+            redPreparePattern.applyTo(turretLedBuffer);
+            break;
+          case PrepareBlue:
+            bluePreparePattern.applyTo(turretLedBuffer);
+            break;
+          case Off:
+            offPattern.applyTo(turretLedBuffer);
+          case Coral:
+            coralConnected.applyTo(turretLedBuffer);
+          default:
+            break;  
         }
+        
 
+        TurretLED.setData(turretLedBuffer);
         SmartDashboard.putString("LED State", mLEDState.toString());
     }
   

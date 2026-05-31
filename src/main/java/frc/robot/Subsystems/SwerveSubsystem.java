@@ -170,7 +170,7 @@ public class SwerveSubsystem extends SubsystemBase {
     // SmartDashboard.putNumber("pose y", poseEstimator.getEstimatedPosition().getY());
     //SmartDashboard.putNumber("pose rot", poseEstimator.getEstimatedPosition().getRotation().getDegrees());
 
-    nextClosestBall.setPose(getClosestBall());
+    //nextClosestBall.setPose(getClosestBall());
 
     SmartDashboard.putNumber("robot relative x Vel", getRobotRelativeSpeeds().vxMetersPerSecond);
     SmartDashboard.putNumber("robot relative y Vel", getRobotRelativeSpeeds().vyMetersPerSecond);

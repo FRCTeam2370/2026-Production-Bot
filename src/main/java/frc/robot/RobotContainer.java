@@ -62,7 +62,6 @@ import frc.robot.Utils.BallLogic;
 
 public class RobotContainer {
   private ArrayList<Pose2d> dots = new ArrayList<Pose2d>(List.of(FieldConstants.dot1Pose, FieldConstants.dot2Pose, FieldConstants.dot3Pose));
-  private Robot robot;
   public static final CommandXboxController driver = new CommandXboxController(0);
   public static final CommandXboxController operator = new CommandXboxController(1);
   public static final GenericHID dial = new GenericHID(2);
@@ -79,7 +78,7 @@ public class RobotContainer {
   private final ShooterSubsystem mShooterSubsystem = new ShooterSubsystem();
   private final Vision mVision = new Vision();
   private final LEDSubsystem mcLedSubsystem = new LEDSubsystem();
-  private final OperatorTargetingSubsystem mcOperatorTargetingSubsystem = new OperatorTargetingSubsystem();
+  //private final OperatorTargetingSubsystem mcOperatorTargetingSubsystem = new OperatorTargetingSubsystem();
 
   public final SendableChooser<Command> autoChooser;
   public final SendableChooser<Dot> dotChooser; 
