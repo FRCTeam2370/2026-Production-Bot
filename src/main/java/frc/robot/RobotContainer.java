@@ -30,6 +30,7 @@ import frc.robot.Constants.FieldConstants;
 import frc.robot.Constants.intakeConstants;
 import frc.robot.Commands.DriveOnX;
 import frc.robot.Commands.FindADot;
+import frc.robot.Commands.FindADotHop;
 import frc.robot.Commands.PIDToPoint;
 import frc.robot.Commands.ResetGyro;
 import frc.robot.Commands.RunSystemsCheck;
@@ -112,6 +113,7 @@ public class RobotContainer {
     NamedCommands.registerCommand("Stand Middle", new FindADot(mSwerve, ()-> FieldConstants.dot2Pose, ()-> false));
     NamedCommands.registerCommand("Stand Top", new FindADot(mSwerve, ()-> SwerveSubsystem.color.get() == Alliance.Blue ? FieldConstants.dot1Pose : FieldConstants.dot3Pose, ()-> false));
     NamedCommands.registerCommand("Stand Bottom", new FindADot(mSwerve, ()-> SwerveSubsystem.color.get() == Alliance.Blue ? FieldConstants.dot3Pose : FieldConstants.dot1Pose, ()-> false));
+    NamedCommands.registerCommand("Hop Middle", new FindADotHop(mSwerve, ()->FieldConstants.dot2Pose, ()->true));
 
     autoChooser = AutoBuilder.buildAutoChooser();
     SmartDashboard.putData("Auto Chooser", autoChooser);

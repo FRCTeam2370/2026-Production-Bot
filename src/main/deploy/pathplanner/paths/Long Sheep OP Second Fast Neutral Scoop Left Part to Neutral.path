@@ -1,0 +1,117 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 6.2,
+        "y": 5.555
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 5.785962910128387,
+        "y": 5.542061340941514
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 3.430941512125534,
+        "y": 5.568231098430813
+      },
+      "prevControl": {
+        "x": 4.388535188401178,
+        "y": 5.547856764893032
+      },
+      "nextControl": {
+        "x": 2.8228245363766047,
+        "y": 5.5811697574893016
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 2.3570328102710407,
+        "y": 6.784465049928674
+      },
+      "prevControl": {
+        "x": 2.3699714693295286,
+        "y": 6.176348074179744
+      },
+      "nextControl": {
+        "x": 2.3405191105746477,
+        "y": 7.560608935659138
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 3.754,
+        "y": 7.418
+      },
+      "prevControl": {
+        "x": 3.133352353780314,
+        "y": 7.41845934379458
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": null
+    }
+  ],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 1.3027718550106737,
+      "rotationDegrees": 39.5
+    }
+  ],
+  "constraintZones": [
+    {
+      "name": "Slow for shoot",
+      "minWaypointRelativePos": 1.0776502363268168,
+      "maxWaypointRelativePos": 3.0,
+      "constraints": {
+        "maxVelocity": 0.75,
+        "maxAcceleration": 0.75,
+        "maxAngularVelocity": 540.0,
+        "maxAngularAcceleration": 720.0,
+        "nominalVoltage": 12.0,
+        "unlimited": false
+      }
+    }
+  ],
+  "pointTowardsZones": [],
+  "eventMarkers": [
+    {
+      "name": "2 Aim and Shoot",
+      "waypointRelativePos": 0.9561107359892007,
+      "endWaypointRelativePos": null,
+      "command": {
+        "type": "named",
+        "data": {
+          "name": "2 Aim and Shoot"
+        }
+      }
+    }
+  ],
+  "globalConstraints": {
+    "maxVelocity": 3.0,
+    "maxAcceleration": 3.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": 0.9391909457355173
+  },
+  "reversed": false,
+  "folder": "Left Paths",
+  "idealStartingState": {
+    "velocity": 0,
+    "rotation": 39.5
+  },
+  "useDefaultConstraints": false
+}

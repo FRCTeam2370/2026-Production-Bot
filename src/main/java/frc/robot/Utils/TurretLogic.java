@@ -274,7 +274,7 @@ public class TurretLogic {
         double g = 9.81;
         double flattenedY = targetPose.getZ() - TurretConstants.TurretVerticalOffset;
 
-        if(distanceToAdjustedTarget < 2){
+        if(distanceToAdjustedTarget < 2.2){
             double exitVelocity = Math.sqrt((g*Math.pow(distanceToAdjustedTarget, 2)) / (2 * Math.pow(Math.cos(TurretConstants.ElevationMaxAngle.getRadians()), 2) * (distanceToAdjustedTarget * Math.tan(TurretConstants.ElevationMaxAngle.getRadians()) - flattenedY)));
 
             double shooterVel = exitVelocity / (0.08255 * Math.PI * 0.5 * 20/18);
@@ -284,7 +284,7 @@ public class TurretLogic {
 
             returnPose.elevationAngleDegrees = TurretConstants.ElevationMaxAngle.getDegrees();
         }else if(distanceToAdjustedTarget < 2.5){
-            double elevationDegrees = 70;
+            double elevationDegrees = 71;
             double exitVelocity = Math.sqrt((g*Math.pow(distanceToAdjustedTarget, 2)) / (2 * Math.pow(Math.cos(Math.toRadians(elevationDegrees)), 2) * (distanceToAdjustedTarget * Math.tan(Math.toRadians(elevationDegrees)) - flattenedY)));
 
             double shooterVel = exitVelocity / (0.08255 * Math.PI * 0.5 * 20/18);
