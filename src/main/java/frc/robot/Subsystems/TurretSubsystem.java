@@ -65,6 +65,7 @@ public class TurretSubsystem extends SubsystemBase {
     configTurretCANCoder();
     configTurret();
     turretElevationConfiguration();
+    //activeAimPoint = new ActiveAimPose(new Translation3d(0,0, 1.8-TurretConstants.TurretVerticalOffset), LEDState.Red);
   }
 
   @Override
