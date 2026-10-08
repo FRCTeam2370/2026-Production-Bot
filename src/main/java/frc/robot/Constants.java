@@ -48,7 +48,7 @@ public class Constants {
   public static class spindexerConstants{
     public static final int spindexerMotorID = 5;
 
-    public static final double spindexerSpeed = 129.5;//85;//75, 90 works really well for throughput but is prone to jamming
+    public static final double spindexerSpeed = 100;//129.5;//85;//75, 90 works really well for throughput but is prone to jamming
   }
 
   public static class intakeConstants{
@@ -80,6 +80,9 @@ public class Constants {
     }
 
     public static class TurretConstants{
+        public static final double closerDistance = 2.7;//first distance used in the turret logic, if we are less than this distance to the hub then we put the elevation all the way down
+        public static final double middleDistance = 3;//second distance used in the turret logic, if we are greater than the first distance and less than this distance to the hub then we use another predetermined elevation slightly lower
+
         public static final int TurretRotationID = 7;
         public static final int shooterElevationMotorID = 26;
         public static final int turretEncoderID = 27;

@@ -4,9 +4,11 @@
 
 package frc.robot.Subsystems;
 
+import static edu.wpi.first.units.Units.PoundInch;
 import static edu.wpi.first.units.Units.Rotation;
 
 import java.io.IOException;
+import java.security.spec.ECPublicKeySpec;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -100,6 +102,7 @@ public class SwerveSubsystem extends SubsystemBase {
   private static FieldObject2d nextClosestBall = field.getObject("next closest ball");
 
   private static double lastTurretTheta = 0;
+  private static double lastTurretTheta1 = 0;
 
   public static boolean shouldAutoTrench = true;
   public static boolean shouldAutoTurret = true;
@@ -280,9 +283,10 @@ public class SwerveSubsystem extends SubsystemBase {
     - Math.toRadians(gyro.getAngularVelocityZWorld().getValueAsDouble()) * 0.175;//adding angular velocity lookahead
     thetaTurretToTarget = (((thetaTurretToTarget % (2*Math.PI)) + (2*Math.PI)) % (2*Math.PI));//Returns the thetaTurretToTarget value in the range of 0-360 degrees
 
+    SmartDashboard.putNumber("thetaTurretToTarget", thetaTurretToTarget*180/Math.PI);
     double returnTheta;
-    if(thetaTurretToTarget + 2*Math.PI < TurretConstants.TurretMax.getRadians()){
-      if(Math.abs(lastTurretTheta - thetaTurretToTarget) < Math.abs(lastTurretTheta - thetaTurretToTarget - 2*Math.PI) && thetaTurretToTarget > TurretConstants.TurretMin.getRadians()){
+    if(thetaTurretToTarget + 2*Math.PI < (540*Math.PI)/180){
+      if((Math.abs(lastTurretTheta1 - thetaTurretToTarget) < Math.abs(lastTurretTheta1 - (thetaTurretToTarget + 2*Math.PI))) && thetaTurretToTarget > (90*Math.PI)/180){
         returnTheta = thetaTurretToTarget;
       }else{
         returnTheta = thetaTurretToTarget + 2*Math.PI;
@@ -291,7 +295,19 @@ public class SwerveSubsystem extends SubsystemBase {
       returnTheta = thetaTurretToTarget;
     }
 
-    lastTurretTheta = returnTheta;
+    SmartDashboard.putNumber("returnTheta", (returnTheta*180)/Math.PI);
+    // if(thetaTurretToTarget + 2*Math.PI < TurretConstants.TurretMax.getRadians()){
+    //   if(Math.abs(lastTurretTheta - thetaTurretToTarget) < Math.abs(lastTurretTheta - thetaTurretToTarget - 2*Math.PI) && thetaTurretToTarget > TurretConstants.TurretMin.getRadians()){
+    //     returnTheta = thetaTurretToTarget;
+    //   }else{
+    //     returnTheta = thetaTurretToTarget + 2*Math.PI;
+    //   }
+    // }else{
+    //   returnTheta = thetaTurretToTarget;
+    // }
+    //returnTheta = thetaTurretToTarget;
+
+    lastTurretTheta1 = returnTheta;
     return Rotation2d.fromRadians(returnTheta);
   }
 
