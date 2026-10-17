@@ -27,6 +27,7 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Constants.FieldConstants;
+import frc.robot.Constants.TurretConstants;
 import frc.robot.Constants.intakeConstants;
 import frc.robot.Commands.DriveOnX;
 import frc.robot.Commands.FindADot;
@@ -46,6 +47,7 @@ import frc.robot.Commands.Shooter.SimpleShootAtVelocity;
 import frc.robot.Commands.TurretCommands.AimAtActiveAimPoint2;
 import frc.robot.Commands.TurretCommands.PointTurretAndShootForTime;
 import frc.robot.Commands.TurretCommands.PointTurretAndShootForTime2;
+import frc.robot.Commands.TurretCommands.SetElevationPos;
 import frc.robot.Commands.TurretCommands.ZeroTurret;
 import frc.robot.Subsystems.FieldInfo;
 import frc.robot.Subsystems.FieldInfo.Dot;
@@ -174,6 +176,9 @@ public class RobotContainer {
 
     operator.povDown().toggleOnTrue(new RunSystemsCheck(mTurretSubsystem, mShooterSubsystem, mUptakeSubsystem, mSpindexerSubsystem));
     operator.povLeft().onTrue(Commands.runOnce(()-> TurretSubsystem.isShooting = true, mTurretSubsystem));
+
+    operator.leftStick().onTrue(new SetElevationPos(TurretConstants.ElevationMaxAngle.getDegrees(), mTurretSubsystem));
+    operator.rightStick().onTrue(new SetElevationPos(60, mTurretSubsystem));
   }
 
   public Command getAutonomousCommand() {

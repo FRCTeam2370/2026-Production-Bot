@@ -225,7 +225,7 @@ public class TurretSubsystem extends SubsystemBase {
 
   private static void configTurretCANCoder(){
     turretCANCoderConfig.MagnetSensor.AbsoluteSensorDiscontinuityPoint = 0.4;
-    turretCANCoderConfig.MagnetSensor.MagnetOffset = -0.14892578125;//0.39501953125;//0.593017578125;//0.47119140625 + 0.04638671875;//-0.65771484375;//-(0.338134765625-0.012939453125 + 0.01220703125);//-0.110595703125;
+    turretCANCoderConfig.MagnetSensor.MagnetOffset = 0.425048828125;//-0.14892578125;//0.39501953125;//0.593017578125;//0.47119140625 + 0.04638671875;//-0.65771484375;//-(0.338134765625-0.012939453125 + 0.01220703125);//-0.110595703125;
 
     turretCANcoder.getConfigurator().apply(turretCANCoderConfig);
   }
@@ -261,8 +261,8 @@ public class TurretSubsystem extends SubsystemBase {
 
     elevationMotor.setPosition(elevationRotationsToKraken(TurretConstants.TurretStartElevation.getRotations()));
 
-    turretElevationMotorConfig.Slot0.kP = 0.2;//1.8
-    turretElevationMotorConfig.Slot0.kI = 0.001;//0.12
+    turretElevationMotorConfig.Slot0.kP = 0.3;//1.8
+    turretElevationMotorConfig.Slot0.kI = 0.002;//0.12
     turretElevationMotorConfig.Slot0.kD = 0.0;//0.01
 
     turretElevationMotorConfig.MotionMagic.MotionMagicAcceleration = 300;

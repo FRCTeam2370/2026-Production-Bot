@@ -81,7 +81,7 @@ public class Constants {
 
     public static class TurretConstants{
         public static final double closerDistance = 2.7;//first distance used in the turret logic, if we are less than this distance to the hub then we put the elevation all the way down
-        public static final double middleDistance = 3;//second distance used in the turret logic, if we are greater than the first distance and less than this distance to the hub then we use another predetermined elevation slightly lower
+        public static final double middleDistance = 0;//second distance used in the turret logic, if we are greater than the first distance and less than this distance to the hub then we use another predetermined elevation slightly lower
 
         public static final int TurretRotationID = 7;
         public static final int shooterElevationMotorID = 26;
