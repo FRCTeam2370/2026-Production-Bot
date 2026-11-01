@@ -220,7 +220,7 @@ public class TurretSubsystem extends SubsystemBase {
 
     double returnDegrees = Math.max(Math.min(degrees, TurretConstants.ElevationMaxAngle.getDegrees()), TurretConstants.ElevationMinAngle.getDegrees());
     
-    elevationMotor.setControl(elevationMagicCycle.withPosition(elevationRotationsToKraken(returnDegrees / 360)));
+    elevationMotor.setControl(elevationMagicCycle.withPosition(elevationRotationsToKraken(returnDegrees / 360)).withSlot(0));
   }
 
   private static void configTurretCANCoder(){
@@ -261,7 +261,7 @@ public class TurretSubsystem extends SubsystemBase {
 
     elevationMotor.setPosition(elevationRotationsToKraken(TurretConstants.TurretStartElevation.getRotations()));
 
-    turretElevationMotorConfig.Slot0.kP = 0.3;//1.8
+    turretElevationMotorConfig.Slot0.kP = 0.4;//1.8
     turretElevationMotorConfig.Slot0.kI = 0.002;//0.12
     turretElevationMotorConfig.Slot0.kD = 0.0;//0.01
 

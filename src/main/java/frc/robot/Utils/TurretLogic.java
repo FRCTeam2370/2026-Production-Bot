@@ -277,7 +277,7 @@ public class TurretLogic {
         if(distanceToAdjustedTarget < TurretConstants.closerDistance){
             double exitVelocity = Math.sqrt((g*Math.pow(distanceToAdjustedTarget, 2)) / (2 * Math.pow(Math.cos(TurretConstants.ElevationMaxAngle.getRadians()), 2) * (distanceToAdjustedTarget * Math.tan(TurretConstants.ElevationMaxAngle.getRadians()) - flattenedY)));
 
-            double shooterVel = exitVelocity / (0.08255 * Math.PI * 0.5 * 20/18);
+            double shooterVel = exitVelocity / (0.08255 * Math.PI * 0.52 * 20/18);
 
             returnPose.vel = Math.max(40, Math.min(shooterVel, shooterConstants.maxSpeed));
             returnPose.aimPose = new Translation3d(aimPoseFieldX, aimPoseFieldY, flattenedY);
@@ -298,7 +298,7 @@ public class TurretLogic {
         {
             double shooterVel = 0.5*Math.pow(distanceToAdjustedTarget, 1.8) + 56;
 
-            double launchSpeed = 0.08255 * Math.PI *0.44* shooterVel * 20/18;//TODO: change 0.5 to 0.485
+            double launchSpeed = 0.08255 * Math.PI *0.46* shooterVel * 20/18;//TODO: change 0.5 to 0.485
 
             double a = (g*Math.pow(distanceToAdjustedTarget, 2)) / (2*Math.pow(launchSpeed, 2));
             double b = -distanceToAdjustedTarget;
