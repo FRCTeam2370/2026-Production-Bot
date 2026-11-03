@@ -11,6 +11,9 @@ import java.util.List;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
+import com.pathplanner.lib.commands.PathPlannerAuto;
+import com.pathplanner.lib.path.PathPlannerPath;
+import com.pathplanner.lib.util.PathPlannerLogging;
 
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -117,7 +120,35 @@ public class RobotContainer {
     NamedCommands.registerCommand("Stand Bottom", new FindADot(mSwerve, ()-> SwerveSubsystem.color.get() == Alliance.Blue ? FieldConstants.dot3Pose : FieldConstants.dot1Pose, ()-> false));
     NamedCommands.registerCommand("Hop Middle", new FindADotHop(mSwerve, ()->FieldConstants.dot2Pose, ()->true));
 
-    autoChooser = AutoBuilder.buildAutoChooser();
+
+    autoChooser = AutoBuilder.buildAutoChooserWithOptionsModifier(
+      "190 Right Double Scoop",
+      autoStream -> autoStream.filter(auto -> {
+        return Constants.GBTG ? auto.getName().startsWith("GBTG") : true;
+      })
+    );
+
+    //TODO: look at this logic for next year
+//     SendableChooser<String> nameChooser = new SendableChooser<>();
+// for (String name : AutoBuilder.getAllAutoNames()) {
+//     nameChooser.addOption(name, name);
+// }
+// SmartDashboard.putData("Auto Name Chooser", nameChooser);
+
+// // To get the string name later:
+// String selectedAutoName = nameChooser.getSelected();
+// Command autoCommand = AutoBuilder.buildAutoAuto(selectedAutoName); // or buildAuto(selectedAutoName)
+
+    try{
+      PathPlannerAuto autoAuto = (PathPlannerAuto) PathPlannerAuto.getPathGroupFromAutoFile(autoChooser.getSelected().getName().toString());
+
+      Pose2d startingPose = autoAuto.getStartingPose();
+
+      SwerveSubsystem.field.getObject("Auto Starting Pose").setPose(startingPose);
+    }catch (Exception e){
+      System.out.println(e);
+    }
+
     SmartDashboard.putData("Auto Chooser", autoChooser);
 
     dotChooser = new SendableChooser<>();

@@ -136,11 +136,6 @@ public class SwerveSubsystem extends SubsystemBase {
     //resetOdometry(new Pose2d(poseEstimator.getEstimatedPosition().getTranslation(), readGyro()));
 
     configurePathPlanner();
-
-    //Logging
-    PathPlannerLogging.setLogActivePathCallback((poses) -> field.getObject("path").setPoses(poses));
-    SmartDashboard.putData("Field", field);
-
   }
 
   @Override
@@ -196,6 +191,11 @@ public class SwerveSubsystem extends SubsystemBase {
     //detectorCam.setPose(detectionCamToField());
 
     publisher.set(poseEstimator.getEstimatedPosition());
+
+    PathPlannerLogging.setLogTargetPoseCallback((pose) -> {
+            // Do whatever you want with the pose here
+            field.getObject("target pose").setPose(pose);
+    });
   }
 
   public void makeOdometry(){
