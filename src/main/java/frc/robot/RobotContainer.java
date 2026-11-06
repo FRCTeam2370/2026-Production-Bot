@@ -120,9 +120,9 @@ public class RobotContainer {
     NamedCommands.registerCommand("Stand Bottom", new FindADot(mSwerve, ()-> SwerveSubsystem.color.get() == Alliance.Blue ? FieldConstants.dot3Pose : FieldConstants.dot1Pose, ()-> false));
     NamedCommands.registerCommand("Hop Middle", new FindADotHop(mSwerve, ()->FieldConstants.dot2Pose, ()->true));
 
-
+    
     autoChooser = AutoBuilder.buildAutoChooserWithOptionsModifier(
-      "190 Right Double Scoop",
+      "GBTG Close Right Double Scoop",
       autoStream -> autoStream.filter(auto -> {
         return Constants.GBTG ? auto.getName().startsWith("GBTG") : true;
       })
@@ -139,15 +139,15 @@ public class RobotContainer {
 // String selectedAutoName = nameChooser.getSelected();
 // Command autoCommand = AutoBuilder.buildAutoAuto(selectedAutoName); // or buildAuto(selectedAutoName)
 
-    try{
-      PathPlannerAuto autoAuto = (PathPlannerAuto) PathPlannerAuto.getPathGroupFromAutoFile(autoChooser.getSelected().getName().toString());
+    // try{
+    //   PathPlannerAuto autoAuto = (PathPlannerAuto) PathPlannerAuto.getPathGroupFromAutoFile(autoChooser.getSelected().getName().toString());
 
-      Pose2d startingPose = autoAuto.getStartingPose();
+    //   Pose2d startingPose = autoAuto.getStartingPose();
 
-      SwerveSubsystem.field.getObject("Auto Starting Pose").setPose(startingPose);
-    }catch (Exception e){
-      System.out.println(e);
-    }
+    //   SwerveSubsystem.field.getObject("Auto Starting Pose").setPose(startingPose);
+    // }catch (Exception e){
+    //   System.out.println(e);
+    // }
 
     SmartDashboard.putData("Auto Chooser", autoChooser);
 

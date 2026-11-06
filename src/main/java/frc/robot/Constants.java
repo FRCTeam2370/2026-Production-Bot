@@ -19,7 +19,7 @@ import frc.robot.Utils.SwerveModuleConstants;
 /** Add your docs here. */
 public class Constants {
 
-  public static final boolean GBTG = true;
+  public static final boolean GBTG = false;
 
     public static class OperatorConstants {
     public static final int driverController = 0;
