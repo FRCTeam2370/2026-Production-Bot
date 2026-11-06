@@ -285,8 +285,17 @@ public class SwerveSubsystem extends SubsystemBase {
 
     SmartDashboard.putNumber("thetaTurretToTarget", thetaTurretToTarget*180/Math.PI);
     double returnTheta;
-    if(thetaTurretToTarget + 2*Math.PI < (540*Math.PI)/180){
-      if((Math.abs(lastTurretTheta1 - thetaTurretToTarget) < Math.abs(lastTurretTheta1 - (thetaTurretToTarget + 2*Math.PI))) && thetaTurretToTarget > (90*Math.PI)/180){
+    // if(thetaTurretToTarget + 2*Math.PI < (540*Math.PI)/180){
+    //   if((Math.abs(lastTurretTheta1 - thetaTurretToTarget) < Math.abs(lastTurretTheta1 - (thetaTurretToTarget + 2*Math.PI))) && thetaTurretToTarget > (90*Math.PI)/180){
+    //     returnTheta = thetaTurretToTarget;
+    //   }else{
+    //     returnTheta = thetaTurretToTarget + 2*Math.PI;
+    //   }
+    // }else{
+    //   returnTheta = thetaTurretToTarget;
+    // }
+    if(thetaTurretToTarget + 2*Math.PI < (TurretConstants.TurretMax.getDegrees()*Math.PI)/180){
+      if((Math.abs(lastTurretTheta1 - thetaTurretToTarget) < Math.abs(lastTurretTheta1 - (thetaTurretToTarget + 2*Math.PI))) && thetaTurretToTarget > (TurretConstants.TurretMin.getDegrees()*Math.PI)/180){
         returnTheta = thetaTurretToTarget;
       }else{
         returnTheta = thetaTurretToTarget + 2*Math.PI;

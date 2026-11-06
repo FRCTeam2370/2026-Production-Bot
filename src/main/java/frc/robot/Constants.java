@@ -102,8 +102,8 @@ public class Constants {
 
         public static final Rotation2d TurretStartOffset = Rotation2d.fromDegrees(230);//relative to the cable chain (counterclockwise positive)
         public static final Rotation2d TurretCableChainPoint = Rotation2d.fromDegrees(590);//Relative to the front of the robot (clockwise positive)
-        public static final Rotation2d TurretMin = Rotation2d.fromDegrees(90);
-        public static final Rotation2d TurretMax = Rotation2d.fromDegrees(540);
+        public static final Rotation2d TurretMin = Rotation2d.fromDegrees(110);//90 aboslute
+        public static final Rotation2d TurretMax = Rotation2d.fromDegrees(520);//540 absolute
 
         public static final double TurretVerticalOffset = 0.425;//meters
         public static final Rotation2d ElevationMaxAngle = Rotation2d.fromDegrees(75);//from horizontal, old: 65
